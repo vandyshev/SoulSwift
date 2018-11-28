@@ -43,7 +43,7 @@
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		7BEFF74E7D8D958AD3648074 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		AC2CD5BDA3D29CB693EEAA56 /* Pods_SoulSwift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSwift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE9475118BBE221A369061AC /* SoulSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SoulSwift.podspec; path = ../SoulSwift.podspec; sourceTree = "<group>"; };
+		AE9475118BBE221A369061AC /* SoulSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SoulSwift.podspec; path = ../SoulSwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		C3E1DE2AEEB2304281EFC3B5 /* Pods_SoulSwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E3605AA3183EDF90604DB8CA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F61AA9F30CFBE949F522525D /* Pods-SoulSwift_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSwift_Tests.debug.xcconfig"; path = "Target Support Files/Pods-SoulSwift_Tests/Pods-SoulSwift_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -298,12 +298,18 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SoulSwift_Example/Pods-SoulSwift_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
+				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/SoulSwift/SoulSwift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SoulSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

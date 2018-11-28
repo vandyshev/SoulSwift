@@ -1,11 +1,11 @@
 PODS:
-  - Nimble (7.0.3)
-  - Quick (1.2.0)
+  - Nimble (7.3.1)
+  - Quick (1.3.2)
   - SoulSwift (0.1.0)
 
 DEPENDENCIES:
-  - Nimble (~> 7.0.2)
-  - Quick (~> 1.2.0)
+  - Nimble
+  - Quick
   - SoulSwift (from `../`)
 
 SPEC REPOS:
@@ -18,10 +18,10 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
-  Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
+  Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
+  Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
   SoulSwift: 9595483fd03488ad792d0f4af5a169826cd9ed9c
 
-PODFILE CHECKSUM: baaa00ce2a1cb4fa0ad55cc76ec27ebfcc25ab82
+PODFILE CHECKSUM: 28bc669d2950449b647ba4ab57e8e50bd5888615
 
 COCOAPODS: 1.6.0.beta.2

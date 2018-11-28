@@ -1,0 +1,22 @@
+{
+  "name": "SoulSwift",
+  "version": "0.1.0",
+  "summary": "A short description of SoulSwift.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/Evgeny Vandyshev/SoulSwift",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Evgeny Vandyshev": "evgeny.vandyshev@soulplatform.com"
+  },
+  "source": {
+    "git": "https://github.com/Evgeny Vandyshev/SoulSwift.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "SoulSwift/Classes/**/*"
+}

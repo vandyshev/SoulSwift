@@ -1,6 +1,0 @@
-framework module Pods_SoulSwift_Example {
-  umbrella header "Pods-SoulSwift_Example-umbrella.h"
-
-  export *
-  module * { export * }
-}

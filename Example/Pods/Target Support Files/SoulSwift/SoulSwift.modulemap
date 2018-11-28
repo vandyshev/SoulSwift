@@ -1,6 +1,0 @@
-framework module SoulSwift {
-  umbrella header "SoulSwift-umbrella.h"
-
-  export *
-  module * { export * }
-}

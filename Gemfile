@@ -10,3 +10,4 @@ gem 'fastlane'
 
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'danger'
+gem 'danger-swiftlint'

@@ -41,11 +41,11 @@
 		607FACE51AFB9204008FA782 /* SoulSwift_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoulSwift_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
-		7BEFF74E7D8D958AD3648074 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		7BEFF74E7D8D958AD3648074 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		AC2CD5BDA3D29CB693EEAA56 /* Pods_SoulSwift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSwift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-        AE9475118BBE221A369061AC /* SoulSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = SoulSwift.podspec; path = ../SoulSwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AE9475118BBE221A369061AC /* SoulSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = SoulSwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		C3E1DE2AEEB2304281EFC3B5 /* Pods_SoulSwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E3605AA3183EDF90604DB8CA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		E3605AA3183EDF90604DB8CA /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		F61AA9F30CFBE949F522525D /* Pods-SoulSwift_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSwift_Tests.debug.xcconfig"; path = "Target Support Files/Pods-SoulSwift_Tests/Pods-SoulSwift_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,7 +132,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				AE9475118BBE221A369061AC /*  */,
+				AE9475118BBE221A369061AC /* SoulSwift.podspec */,
 				E3605AA3183EDF90604DB8CA /* README.md */,
 				7BEFF74E7D8D958AD3648074 /* LICENSE */,
 			);

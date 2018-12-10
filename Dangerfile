@@ -17,5 +17,5 @@ swiftlint.verbose = true
 swiftlint.config_file = '.swiftlint.yml'
 swiftlint.lint_files
 
-junit.parse "./fastlane/test_output/report.junit"
-junit.report
+#junit.parse "./fastlane/test_output/report.junit"
+#junit.report

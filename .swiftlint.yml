@@ -1,5 +1,6 @@
 included:
-  - SoulSwift
-  - ../SoulSwift
+  - Sources
+  - Examples
+  - Tests
 reporter: "xcode"
 line_length: 150

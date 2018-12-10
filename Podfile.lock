@@ -15,7 +15,7 @@ PODS:
 DEPENDENCIES:
   - Nimble
   - Quick
-  - SoulSwift (from `../`)
+  - SoulSwift (from `.`)
   - SwiftLint
 
 SPEC REPOS:
@@ -29,7 +29,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   SoulSwift:
-    :path: "../"
+    :path: "."
 
 SPEC CHECKSUMS:
   Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
@@ -37,9 +37,9 @@ SPEC CHECKSUMS:
   Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
   Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
   Result: 7645bb3f50c2ce726dd0ff2fa7b6f42bbe6c3713
-  SoulSwift: 050bcec76c45c28d497212126077c4db3a4b9350
+  SoulSwift: 0c596a90b4ff52e3b168c82bd3ff4e40af278f70
   SwiftLint: d4e7443d93e2bbe868dc302e6c7ac30b469d6a14
 
-PODFILE CHECKSUM: 15eb0bf9ab883ef6f7b81eaef57906a49a0833d5
+PODFILE CHECKSUM: 5964006f16829afaf5c732370460c777f090b08e
 
 COCOAPODS: 1.6.0.beta.2

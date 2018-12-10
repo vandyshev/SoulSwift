@@ -8,6 +8,8 @@ platform :ios do
 
   lane :tests do
     run_tests(workspace: "SoulSwift.xcworkspace",
+              formatter: "xcpretty-json-formatter",
+              output_types: "html,junit",
               scheme: "SoulSwift-Example")
   end
 end

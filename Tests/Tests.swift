@@ -9,7 +9,7 @@ class TableOfContentsSpec: QuickSpec {
         describe("these will fail") {
 
             it("can do maths") {
-                expect(1) != 2
+                expect(1) == 2
             }
 
             it("can read") {

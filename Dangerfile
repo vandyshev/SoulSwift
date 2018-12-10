@@ -14,4 +14,5 @@ warn("Big PR") if git.lines_of_code > 500
 
 # swiftlint.lint_files
 
-xcodebuild.json_file = "./build/reports/errors.json"
+junit.parse "./fastlane/test_output/report.junit"
+junit.report

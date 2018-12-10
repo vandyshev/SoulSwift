@@ -11,5 +11,5 @@ gem 'fastlane'
 gem 'dotenv-rails', groups: [:development, :test]
 gem 'danger'
 gem 'danger-swiftlint'
-gem 'danger-xcode_summary'
+gem 'danger-xcodebuild'
 gem 'xcpretty-json-formatter'

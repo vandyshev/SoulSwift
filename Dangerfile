@@ -15,7 +15,7 @@ warn("Big PR") if git.lines_of_code > 500
 # Run SwiftLint
 swiftlint.verbose = true
 swiftlint.config_file = '.swiftlint.yml'
-swiftlint.lint_files
+swiftlint.lint_files inline_mode: true
 
 #junit.parse "./fastlane/test_output/report.junit"
 #junit.report

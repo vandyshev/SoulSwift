@@ -80,7 +80,7 @@ GEM
     cork (0.3.0)
       colored2 (~> 3.1)
     crass (1.0.4)
-    danger (5.9.0)
+    danger (5.10.1)
       claide (~> 1.0)
       claide-plugins (>= 0.9.2)
       colored2 (~> 3.1)
@@ -92,15 +92,17 @@ GEM
       no_proxy_fix
       octokit (~> 4.7)
       terminal-table (~> 1)
-    danger-junit (0.7.4)
+    danger-plugin-api (1.0.0)
       danger (> 2.0)
-      ox (~> 2.0)
     danger-swiftlint (0.18.0)
       danger
       rake (> 10)
       thor (~> 0.19)
+    danger-xcode_summary (0.5.0)
+      danger-plugin-api (~> 1.0)
     declarative (0.0.10)
     declarative-option (0.1.0)
+    digest-crc (0.4.1)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (2.5.0)
@@ -121,7 +123,7 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     fastimage (2.1.5)
-    fastlane (2.109.1)
+    fastlane (2.110.0)
       CFPropertyList (>= 2.3, < 4.0.0)
       addressable (>= 2.3, < 3.0.0)
       babosa (>= 1.0.2, < 2.0.0)
@@ -137,6 +139,7 @@ GEM
       fastimage (>= 2.1.0, < 3.0.0)
       gh_inspector (>= 1.1.2, < 2.0.0)
       google-api-client (>= 0.21.2, < 0.24.0)
+      google-cloud-storage (>= 1.15.0, < 2.0.0)
       highline (>= 1.7.2, < 2.0.0)
       json (< 3.0.0)
       mini_magick (~> 4.5.1)
@@ -172,6 +175,15 @@ GEM
       representable (~> 3.0)
       retriable (>= 2.0, < 4.0)
       signet (~> 0.9)
+    google-cloud-core (1.2.7)
+      google-cloud-env (~> 1.0)
+    google-cloud-env (1.0.5)
+      faraday (~> 0.11)
+    google-cloud-storage (1.15.0)
+      digest-crc (~> 0.4)
+      google-api-client (~> 0.23)
+      google-cloud-core (~> 1.2)
+      googleauth (~> 0.6.2)
     googleauth (0.6.7)
       faraday (~> 0.12)
       jwt (>= 1.4, < 3.0)
@@ -216,7 +228,6 @@ GEM
     os (1.0.0)
     osx_keychain (1.0.2)
       RubyInline (~> 3)
-    ox (2.10.0)
     plist (3.4.0)
     public_suffix (2.0.5)
     rack (1.6.11)
@@ -297,8 +308,8 @@ DEPENDENCIES
   cocoapods (~> 1.6.0.beta.2)
   cocoapods-keys
   danger
-  danger-junit
   danger-swiftlint
+  danger-xcode_summary
   dotenv-rails
   fastlane
   fui (~> 0.3.0)

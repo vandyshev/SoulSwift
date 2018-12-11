@@ -13,9 +13,8 @@ warn("Big PR") if git.lines_of_code > 500
 # fail("fit left in tests") if `grep -r fit specs/ `.length > 1
 
 # Run SwiftLint
-swiftlint.verbose = true
 swiftlint.config_file = '.swiftlint.yml'
-swiftlint.lint_files inline_mode: true
+swiftlint.lint_files
 
-#junit.parse "./fastlane/test_output/report.junit"
-#junit.report
+# Run Xcode Summary
+xcode_summary.report './build/reports/errors.json'

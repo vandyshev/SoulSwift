@@ -13,16 +13,16 @@ warn("Big PR") if git.lines_of_code > 500
 # fail("fit left in tests") if `grep -r fit specs/ `.length > 1
 
 # Run SwiftLint
-message("Static code analysis")
+#message("Static code analysis")
 swiftlint.config_file = '.swiftlint.yml'
 swiftlint.lint_files
 
 # Run Xcode Summary
-message("Test Results")
+#message("Test Results")
 xcode_summary.report './build/reports/errors.json'
 
 # Run Xcov
-message("Code coverage")
+#message("Code coverage")
 xcov.report(
    scheme: 'SoulSwift-Example',
    workspace: 'SoulSwift.xcworkspace',

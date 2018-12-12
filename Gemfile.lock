@@ -95,6 +95,9 @@ GEM
       terminal-table (~> 1)
     danger-plugin-api (1.0.0)
       danger (> 2.0)
+    danger-slather (0.0.6)
+      danger-plugin-api (~> 1.0)
+      slather (~> 2.3)
     danger-swiftlint (0.18.0)
       danger
       rake (> 10)
@@ -315,6 +318,7 @@ DEPENDENCIES
   cocoapods (~> 1.6.0.beta.2)
   cocoapods-keys
   danger
+  danger-slather
   danger-swiftlint
   danger-xcode_summary
   dotenv-rails

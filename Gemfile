@@ -14,3 +14,4 @@ gem 'dotenv-rails', groups: [:development, :test]
 gem 'danger'
 gem 'danger-swiftlint'
 gem 'danger-xcode_summary'
+gem 'danger-slather'

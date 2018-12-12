@@ -11,12 +11,7 @@ platform :ios do
               formatter: "xcpretty-json-formatter",
               output_types: "html,junit",
               scheme: "SoulSwift-Example")
-    slather(scheme: "SoulSwift-Example",
-            proj: "SoulSwift.xcodeproj",
-            workspace: "SoulSwift.xcworkspace",
-            source_directory: "Sources/Classes",
-            binary_basename: "SoulSwift",
-            teamcity: true)
+    # slather(teamcity: true)
   end
 
 end

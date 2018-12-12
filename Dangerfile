@@ -31,6 +31,5 @@ xcode_summary.report './build/reports/errors.json'
 xcov.report(
    scheme: 'SoulSwift-Example',
    workspace: 'SoulSwift.xcworkspace',
-   include_targets: "SoulSwift.framework",
-   minimum_coverage_percentage: 90
+   include_targets: "SoulSwift.framework"
 )

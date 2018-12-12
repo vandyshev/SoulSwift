@@ -2,5 +2,4 @@ included:
   - Sources
   - Examples
   - Tests
-reporter: "json"
 line_length: 150

@@ -1,5 +1,0 @@
-workspace: SoulSwift.xcworkspace
-scheme: SoulSwift-Example
-xcodeproj: SoulSwift.xcodeproj
-source_directory: Sources/Classes
-binary_basename: SoulSwift

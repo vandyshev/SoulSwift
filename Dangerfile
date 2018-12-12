@@ -13,21 +13,16 @@ warn("Big PR") if git.lines_of_code > 500
 # fail("fit left in tests") if `grep -r fit specs/ `.length > 1
 
 # Run SwiftLint
+message("Static code analysis")
 swiftlint.config_file = '.swiftlint.yml'
 swiftlint.lint_files
 
 # Run Xcode Summary
+message("Test Results")
 xcode_summary.report './build/reports/errors.json'
 
-# Run Slather
-# slather.configure("SoulSwift.xcodeproj", "SoulSwift-Example", options: {
-#   workspace: 'SoulSwift.xcworkspace',
-#   ci_service: :teamcity,
-#   source_directory: 'Sources/Classes',
-#   binary_file: 'SoulSwift',
-# })
-# slather.show_coverage
-
+# Run Xcov
+message("Code coverage")
 xcov.report(
    scheme: 'SoulSwift-Example',
    workspace: 'SoulSwift.xcworkspace',

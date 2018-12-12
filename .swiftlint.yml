@@ -1,0 +1,5 @@
+included:
+  - Sources
+  - Examples
+  - Tests
+line_length: 150

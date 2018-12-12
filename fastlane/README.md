@@ -26,6 +26,11 @@ fastlane ios lint
 fastlane ios tests
 ```
 
+### ios coverage
+```
+fastlane ios coverage
+```
+
 
 ----
 

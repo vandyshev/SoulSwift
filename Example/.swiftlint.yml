@@ -1,5 +1,0 @@
-included:
-  - SoulSwift
-  - ../SoulSwift
-reporter: "xcode"
-line_length: 150

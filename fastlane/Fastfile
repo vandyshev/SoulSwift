@@ -11,7 +11,11 @@ platform :ios do
               formatter: "xcpretty-json-formatter",
               output_types: "html,junit",
               scheme: "SoulSwift-Example")
-    slather(teamcity: true)
+    # slather(teamcity: true)
+    xcov(workspace: "SoulSwift.xcworkspace",
+         scheme: "SoulSwift-Example",
+         include_targets: "SoulSwift.framework",
+         output_directory: "xcov_output")
   end
 
 end

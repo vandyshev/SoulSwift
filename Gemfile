@@ -8,6 +8,7 @@ gem 'xcpretty'
 gem 'xcpretty-json-formatter'
 gem 'second_curtain', '~> 0.2.3'
 gem 'slather'
+gem 'xcov'
 gem 'fastlane'
 
 gem 'dotenv-rails', groups: [:development, :test]
@@ -15,3 +16,4 @@ gem 'danger'
 gem 'danger-swiftlint'
 gem 'danger-xcode_summary'
 gem 'danger-slather'
+gem 'danger-xcov'

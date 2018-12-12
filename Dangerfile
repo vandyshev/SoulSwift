@@ -20,10 +20,17 @@ swiftlint.lint_files
 xcode_summary.report './build/reports/errors.json'
 
 # Run Slather
-slather.configure("SoulSwift.xcodeproj", "SoulSwift-Example", options: {
-  workspace: 'SoulSwift.xcworkspace',
-  ci_service: :teamcity,
-  source_directory: 'Sources/Classes',
-  binary_file: 'SoulSwift',
-})
-slather.show_coverage
+# slather.configure("SoulSwift.xcodeproj", "SoulSwift-Example", options: {
+#   workspace: 'SoulSwift.xcworkspace',
+#   ci_service: :teamcity,
+#   source_directory: 'Sources/Classes',
+#   binary_file: 'SoulSwift',
+# })
+# slather.show_coverage
+
+xcov.report(
+   scheme: 'SoulSwift-Example',
+   workspace: 'SoulSwift.xcworkspace',
+   include_targets: "SoulSwift.framework",
+   minimum_coverage_percentage: 90
+)

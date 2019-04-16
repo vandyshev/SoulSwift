@@ -26,7 +26,7 @@ TODO: Add long description of the pod here.
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Evgeny Vandyshev' => 'evgeny.vandyshev@soulplatform.com' }
   s.source           = { :git => 'https://github.com/Evgeny Vandyshev/SoulSwift.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  # s.social_media_url = 'https://twitter.com/e_vandyshev'
 
   s.ios.deployment_target = '8.0'
 
@@ -38,5 +38,7 @@ TODO: Add long description of the pod here.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'Moya', '~> 12.0'
+  s.dependency 'Moya', '~> 13.0'
+  s.dependency 'Swinject', '~> 2.5'
+  s.dependency 'SwinjectAutoregistration', '~> 2.5'
 end

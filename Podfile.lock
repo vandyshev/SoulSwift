@@ -1,16 +1,21 @@
 PODS:
-  - Alamofire (4.8.0)
-  - Moya (12.0.1):
-    - Moya/Core (= 12.0.1)
-  - Moya/Core (12.0.1):
+  - Alamofire (4.8.2)
+  - Moya (13.0.0):
+    - Moya/Core (= 13.0.0)
+  - Moya/Core (13.0.0):
     - Alamofire (~> 4.1)
-    - Result (~> 4.0)
-  - Nimble (7.3.1)
-  - Quick (1.3.2)
-  - Result (4.0.0)
+    - Result (~> 4.1)
+  - Nimble (8.0.1)
+  - Quick (2.0.0)
+  - Result (4.1.0)
   - SoulSwift (0.1.0):
-    - Moya (~> 12.0)
-  - SwiftLint (0.29.0)
+    - Moya (~> 13.0)
+    - Swinject (~> 2.5)
+    - SwinjectAutoregistration (~> 2.5)
+  - SwiftLint (0.31.0)
+  - Swinject (2.6.0)
+  - SwinjectAutoregistration (2.6.0):
+    - Swinject (~> 2.6)
 
 DEPENDENCIES:
   - Nimble
@@ -26,20 +31,24 @@ SPEC REPOS:
     - Quick
     - Result
     - SwiftLint
+    - Swinject
+    - SwinjectAutoregistration
 
 EXTERNAL SOURCES:
   SoulSwift:
     :path: "."
 
 SPEC CHECKSUMS:
-  Alamofire: 3ec537f71edc9804815215393ae2b1a8ea33a844
-  Moya: cf730b3cd9e005401ef37a85143aa141a12fd38f
-  Nimble: 04f732da099ea4d153122aec8c2a88fd0c7219ae
-  Quick: 2623cb30d7a7f41ca62f684f679586558f483d46
-  Result: 7645bb3f50c2ce726dd0ff2fa7b6f42bbe6c3713
-  SoulSwift: 0c596a90b4ff52e3b168c82bd3ff4e40af278f70
-  SwiftLint: d4e7443d93e2bbe868dc302e6c7ac30b469d6a14
+  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  Moya: 161263550064ff8a4948e8ff63137fd72a876292
+  Nimble: 45f786ae66faa9a709624227fae502db55a8bdd0
+  Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
+  SoulSwift: 05ba31960614910109324c4b6b046e3f659752fa
+  SwiftLint: 7a0227733d786395817373b2d0ca799fd0093ff3
+  Swinject: 48a96cda93633cf2860697b4ce76ab5db9ebaca2
+  SwinjectAutoregistration: 93a908f7543c401b0c315305ac0ae501efdbce89
 
-PODFILE CHECKSUM: 5964006f16829afaf5c732370460c777f090b08e
+PODFILE CHECKSUM: fce1db7326f474b841791780cf08bc3e99a7ec8f
 
-COCOAPODS: 1.6.0.beta.2
+COCOAPODS: 1.6.0.rc.2

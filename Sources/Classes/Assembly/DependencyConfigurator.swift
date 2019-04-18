@@ -11,7 +11,9 @@ final class DependencyConfigurator {
 
     private init() {
         assembler = Assembler([
-            SoulServiceAssembly()
+            CoreComponents(),
+            SoulServiceAssembly(),
+            ChatAssembly()
         ])
     }
 }

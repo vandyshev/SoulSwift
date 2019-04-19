@@ -6,7 +6,7 @@ protocol AuthHelper {
     var userAgent: String { get }
 }
 
-public struct AuthData { // make private
+struct AuthData {
     let userID: String
     let sessionToken: String
     let date: Date

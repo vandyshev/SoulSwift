@@ -1,12 +1,4 @@
-import UIKit
-
-protocol Storage {
-
-    var userID: String? { get set }
-    var sessionToken: String? { get set }
-    var serverTimeDelta: Double? { get set }
-    
-}
+import Foundation
 
 private enum Constants {
     static let prefixKey = "SL"
@@ -15,9 +7,10 @@ private enum Constants {
     static let serverTimeDelta = "SERVER_TIME_DELTA"
 }
 
-class SoulSDKCommonStorage: Storage {
+/// This class receives data from the SoulSDK storage
+final class SoulSDKCommonStorage: Storage {
     private let internalStorage = UserDefaults.standard
-    
+
     var userID: String? {
         get {
             return internalStorage.string(forKey: fixedKey(Constants.userIDKey))
@@ -26,6 +19,7 @@ class SoulSDKCommonStorage: Storage {
             assertionFailure()
         }
     }
+
     var sessionToken: String? {
         get {
             return internalStorage.string(forKey: fixedKey(Constants.sessionIDKey))
@@ -34,7 +28,7 @@ class SoulSDKCommonStorage: Storage {
             assertionFailure()
         }
     }
-    
+
     var serverTimeDelta: Double? {
         get {
             guard let serverTimeString = internalStorage.string(forKey: fixedKey(Constants.serverTimeDelta)) else {
@@ -46,10 +40,10 @@ class SoulSDKCommonStorage: Storage {
             assertionFailure()
         }
     }
-    
-    
+
     private func fixedKey(_ key: String) -> String {
         return "\(Constants.prefixKey)/\(key)"
     }
     
 }
+

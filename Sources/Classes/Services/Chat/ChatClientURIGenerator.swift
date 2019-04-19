@@ -1,11 +1,12 @@
 import UIKit
 
+/// generates uri for ChatClient
 protocol ChatClientURIGenerator {
     var uri: URL? { get }
 }
 
 public struct ChatURIGeneratorConfig {
-    let baseUrlString: String // with scheme with port and with last /
+    let baseUrlString: String // should be declared with scheme, with port and with last `/` character
     let apiKey: String
     
     public init(baseUrlString: String, apiKey: String) {
@@ -14,7 +15,7 @@ public struct ChatURIGeneratorConfig {
     }
 }
 
-class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
+final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
     
     private enum Constants {
         static let wsAuthMethod = "GET"
@@ -25,28 +26,31 @@ class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
 
     private let config: ChatURIGeneratorConfig
     private let authHelper: AuthHelper
-    
+
     var uri: URL? { return buildURI() }
-    
+
     init(config: ChatURIGeneratorConfig, authHelper: AuthHelper) {
         self.authHelper = authHelper
         self.config = config
     }
-    
+
     private func buildURI() -> URL? {
         let generatedAuth = authHelper.authString(withEndpoint: Constants.wsAuthEndpoint,
                                                   method: Constants.wsAuthMethod,
                                                   body: "")
-        
+
+        let characterSet = Constants.allowedCharactersSet
+        let generateUserAgent = authHelper.userAgent
+
         guard let userAuth = generatedAuth,
-            let auth = userAuth.addingPercentEncoding(withAllowedCharacters: Constants.allowedCharactersSet),
-            let userAgent = authHelper.userAgent.addingPercentEncoding(withAllowedCharacters: Constants.allowedCharactersSet)else {
+            let auth = userAuth.addingPercentEncoding(withAllowedCharacters: characterSet),
+            let userAgent = generateUserAgent.addingPercentEncoding(withAllowedCharacters: characterSet) else {
                 assertionFailure()
                 return nil
         }
-        
+
         let urlString = config.baseUrlString + config.apiKey + Constants.wsApiVersion
-        
+
         let wsUri = urlString
             + "?auth=" + auth
             + "&user-agent=" + userAgent

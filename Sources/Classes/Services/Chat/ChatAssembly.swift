@@ -2,7 +2,7 @@ import UIKit
 import Swinject
 import SwinjectAutoregistration
 
-class ChatAssembly: Assembly {
+final class ChatAssembly: Assembly {
     
     func assemble(container: Container) {
         

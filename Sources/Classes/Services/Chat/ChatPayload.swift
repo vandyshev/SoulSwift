@@ -15,3 +15,16 @@ struct ChatMessage {
     let latitude: Double?  /// `lat` - latitude
     let longitude: Double? /// `lng` - longitude
 }
+
+extension ChatMessage: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case messageId = "id"
+        case userId = "u"
+        case timestamp = "t"
+        case message = "m"
+        case photoId = "p"
+        case albumName = "pa"
+        case latitude = "lat"
+        let longitude = "lng"
+    }
+}

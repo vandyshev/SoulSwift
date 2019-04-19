@@ -1,18 +1,19 @@
 import UIKit
 import Starscream
 
+// not implemented yet
 public final class ChatClientImpl: ChatClient {
 
     private let socket: WebSocket
     private let uriGenerator: ChatClientURIGenerator
-    
+
     init(uriGenerator: ChatClientURIGenerator) {
         self.uriGenerator = uriGenerator
-        
+
         guard let uri = uriGenerator.uri else {
             fatalError("impossible web socket url")
         }
-        
+
         socket = WebSocket(url: uri)
 
         socket.onConnect = {
@@ -20,8 +21,7 @@ public final class ChatClientImpl: ChatClient {
         }
         //websocketDidDisconnect
         socket.onDisconnect = { (error: Error?) in
-            print(error)
-            print("websocket is disconnected: \(error?.localizedDescription)")
+            print("websocket is disconnected: \(error)")
         }
         //websocketDidReceiveMessage
         socket.onText = { (text: String) in
@@ -31,10 +31,10 @@ public final class ChatClientImpl: ChatClient {
         socket.onData = { (data: Data) in
             print("got some data: \(data.count)")
         }
-        //you could do onPong as well.
+
         connect()
     }
-    
+
     public func connect() {
         socket.connect()
     }

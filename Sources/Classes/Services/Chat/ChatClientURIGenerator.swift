@@ -8,7 +8,7 @@ protocol ChatClientURIGenerator {
 public struct ChatURIGeneratorConfig {
     let baseUrlString: String // should be declared with scheme, with port and with last `/` character
     let apiKey: String
-    
+
     public init(baseUrlString: String, apiKey: String) {
         self.baseUrlString = baseUrlString
         self.apiKey = apiKey
@@ -16,7 +16,7 @@ public struct ChatURIGeneratorConfig {
 }
 
 final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
-    
+
     private enum Constants {
         static let wsAuthMethod = "GET"
         static let wsAuthEndpoint = "/me"
@@ -54,7 +54,7 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
         let wsUri = urlString
             + "?auth=" + auth
             + "&user-agent=" + userAgent
-        
+
         return URL(string: wsUri)
     }
 }

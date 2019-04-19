@@ -44,6 +44,4 @@ final class SoulSDKCommonStorage: Storage {
     private func fixedKey(_ key: String) -> String {
         return "\(Constants.prefixKey)/\(key)"
     }
-    
 }
-

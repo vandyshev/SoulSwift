@@ -13,5 +13,12 @@ final class ChatAssembly: Assembly {
         container.register(ChatClient.self) { ( resolver: Resolver, config: SoulConfiguration) in
             ChatClientImpl(uriGenerator: resolver ~> (ChatClientURIGenerator.self, argument: config))
         }
+        container.register(MessagesGenerator.self) { resolver in
+            MessagesGeneratorImpl(storage: resolver~>)
+        }
+        container.register(ChatService.self) { (resolver: Resolver, config: SoulConfiguration) in
+            let client = resolver ~> (ChatClient.self, argument: config)
+            return ChatServiceImpl(chatClient: client, messagesGenerator: resolver~>)
+        }
     }
 }

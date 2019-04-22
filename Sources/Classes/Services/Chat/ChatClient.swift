@@ -1,5 +1,6 @@
 import Foundation
 
-public protocol ChatClient {
+protocol ChatClient {
     func connect()
+    func sendMessage(_ messagePayload: MessagePayload) -> Bool // TODO: use decodable instead
 }

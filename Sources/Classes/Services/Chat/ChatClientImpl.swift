@@ -35,7 +35,17 @@ public final class ChatClientImpl: ChatClient {
         connect()
     }
 
-    public func connect() {
+    func connect() {
         socket.connect()
+    }
+
+    func sendMessage(_ messagePayload: MessagePayload) -> Bool {
+        if socket.isConnected {
+            guard let messageStr = messagePayload.asString else {
+                return false
+            }
+            socket.write(string: messageStr)
+        }
+        return socket.isConnected
     }
 }

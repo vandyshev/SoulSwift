@@ -11,7 +11,7 @@ final class MessagesGeneratorImpl: MessagesGenerator {
     private struct BaseMessageData {
         let messageId: String
         let userId: String
-        let timeStamp: Int
+        let timeStamp: UnixTimeStamp
     }
 
     private let storage: Storage
@@ -61,7 +61,7 @@ final class MessagesGeneratorImpl: MessagesGenerator {
 
     private func getBaseMessageData() -> BaseMessageData? {
         let messageId = UUID().uuidString
-        let timeStamp = Int(round(Date().timeIntervalSince1970)) // todo: check this. move to date service
+        let timeStamp = DateHelper.currentUnixTimestamp // todo: check this. move to date service
         guard let userId = storage.userID else { return nil }
         return BaseMessageData(messageId: messageId,
                                userId: userId,

@@ -1,6 +1,6 @@
 import UIKit
 
-protocol ChatService {
+public protocol ChatService {
 
     @discardableResult
     func sendMessage(withText text: String, channel: String) throws -> ChatMessage? // TODO: think about throws

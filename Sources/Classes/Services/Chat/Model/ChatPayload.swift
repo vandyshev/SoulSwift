@@ -5,9 +5,4 @@ struct MessagePayload {
     let message: ChatMessage
 }
 
-extension MessagePayload: Codable {
-    enum CodingKeys: String, CodingKey {
-        case channel
-        case message
-    }
-}
+extension MessagePayload: Codable { }

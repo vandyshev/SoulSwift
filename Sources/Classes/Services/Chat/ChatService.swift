@@ -21,10 +21,16 @@ final class ChatServiceImpl: ChatService {
 
     private let chatClient: ChatClient
     private let messageGenerator: MessagesGenerator
+    private let eventGenerator: EventGenerator
 
-    init(chatClient: ChatClient, messagesGenerator: MessagesGenerator) {
+    init(chatClient: ChatClient, messagesGenerator: MessagesGenerator, eventGenerator: EventGenerator) {
         self.chatClient = chatClient
         self.messageGenerator = messagesGenerator
+        self.eventGenerator = eventGenerator
+
+        self.chatClient.subscribe(self) { [weak self] data in
+            self?.onPayload(data)
+        }
     }
 
     func sendMessage(withText text: String, channel: String) throws -> ChatMessage? {
@@ -57,5 +63,13 @@ final class ChatServiceImpl: ChatService {
         if !sended {
             throw ChatServiceError.cannotSendMessage
         }
+    }
+
+    func onPayload(_ data: Data) {
+        guard let payload = try? JSONDecoder().decode(ChatPayload.self, from: data) else {
+            assertionFailure("impossible message")
+            return
+        }
+        print("payload \(payload)")
     }
 }

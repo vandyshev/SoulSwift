@@ -1,9 +1,9 @@
 import UIKit
 
-public typealias UnixTimeStamp = Int
+public typealias UnixTimeStamp = Double
 
 class DateHelper {
     static var currentUnixTimestamp: UnixTimeStamp {
-        return Int(round(Date().timeIntervalSince1970))
+        return Date().timeIntervalSince1970
     }
 }

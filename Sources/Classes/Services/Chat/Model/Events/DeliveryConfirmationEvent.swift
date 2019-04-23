@@ -8,16 +8,16 @@ struct DeliveryConfirmationEvent: Equatable {
     let time: UnixTimeStamp
 
     /// `u` - user id, who sent event
-    let userIdWhoSent: String
+    let userIdWhoSentEvent: String
 
     /// `d` - confirmation
-    private let confirmation: ConfirmationEvent /// `d` - confirmation
+    private let confirmation: ConfirmationEvent
 }
 
 extension DeliveryConfirmationEvent {
-    init(time: UnixTimeStamp, userIdWhoSent: String, deliveredMessageId: String, userId: String) {
+    init(time: UnixTimeStamp, userIdWhoSentEvent: String, deliveredMessageId: String, userId: String) {
         self.time = time
-        self.userIdWhoSent = userIdWhoSent
+        self.userIdWhoSentEvent = userIdWhoSentEvent
         self.confirmation = ConfirmationEvent(deliveredMessageId: deliveredMessageId,
                                               userId: userId)
     }
@@ -47,7 +47,7 @@ extension ConfirmationEvent: Codable {
 extension DeliveryConfirmationEvent: Codable {
     enum CodingKeys: String, CodingKey {
         case time = "t"
-        case userIdWhoSent = "u"
+        case userIdWhoSentEvent = "u"
         case confirmation = "d"
     }
 }

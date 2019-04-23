@@ -81,9 +81,13 @@ class ChatMapping: XCTestCase {
         let messageAcknowledgmentEvent = MessageAcknowledgmentEvent(time: 10,
                                                                     messageId: "messageID",
                                                                     userId: "userID")
-        let data = try! JSONEncoder().encode(messageAcknowledgmentEvent)
+        guard let data = try? JSONEncoder().encode(messageAcknowledgmentEvent) else {
+            fatalError()
+        }
 
-        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+        guard let eventType = try? JSONDecoder().decode(EventType.self, from: data) else {
+            fatalError()
+        }
 
         guard case .messageAcknowledgment(let event) = eventType else {
             fatalError()
@@ -101,8 +105,12 @@ class ChatMapping: XCTestCase {
                                                 userId: "userID",
                                                 deviceId: "deviceID",
                                                 message: message)
-        let data = try! JSONEncoder().encode(historySyncEvent)
-        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+        guard let data = try? JSONEncoder().encode(historySyncEvent) else {
+            fatalError()
+        }
+        guard let eventType = try? JSONDecoder().decode(EventType.self, from: data) else {
+            fatalError()
+        }
 
         guard case .historySync(let event) = eventType else {
             fatalError()
@@ -114,8 +122,12 @@ class ChatMapping: XCTestCase {
 
     func testReadEventMapping() {
         let readEvent = ReadEvent(time: 19, userId: "userId", lastReadMessageTimestamp: 10)
-        let data = try! JSONEncoder().encode(readEvent)
-        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+        guard let data = try? JSONEncoder().encode(readEvent) else {
+            fatalError()
+        }
+        guard let eventType = try? JSONDecoder().decode(EventType.self, from: data) else {
+            fatalError()
+        }
 
         guard case .readEvent(let event) = eventType else {
             fatalError()
@@ -126,12 +138,16 @@ class ChatMapping: XCTestCase {
 
     func testDeliveryConfirmationEventMapping() {
         let deliveryEvent = DeliveryConfirmationEvent(time: 10,
-                                                      userIdWhoSent: "userIdWhoSent",
+                                                      userIdWhoSentEvent: "userIdWhoSent",
                                                       deliveredMessageId: "deliveredMessageId",
                                                       userId: "userId")
 
-        let data = try! JSONEncoder().encode(deliveryEvent)
-        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+        guard let data = try? JSONEncoder().encode(deliveryEvent) else {
+            fatalError()
+        }
+        guard let eventType = try? JSONDecoder().decode(EventType.self, from: data) else {
+            fatalError()
+        }
 
         guard case .deliveryConfirmation(let event) = eventType else {
             fatalError()
@@ -145,12 +161,46 @@ class ChatMapping: XCTestCase {
                                              userId: "userId",
                                              error: "error")
 
-        let data = try! JSONEncoder().encode(failedEvent)
-        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+        guard let data = try? JSONEncoder().encode(failedEvent) else {
+            fatalError()
+        }
+        guard let eventType = try? JSONDecoder().decode(EventType.self, from: data) else {
+            fatalError()
+        }
 
         guard case .messageFailed(let event) = eventType else {
             fatalError()
         }
         XCTAssertEqual(failedEvent, event)
+    }
+
+    func testMessageAcknowledgmentEventMappingFromString() {
+        let payloadText = """
+        {
+         "channel": "chat.ec8f9754f943e33c5c04bc8c3e874bf61862f5a8",
+         "event": {
+                    "t": 1556020950.193132,
+                    "a": {
+                            "id": "59D72530-E8A5-47B7-9EEE-E5CA65AEAF1B",
+                            "u": "5cac47e17981217e4f21745e"
+                         }
+                  }
+        }
+        """
+        guard let data = payloadText.data(using: .utf8, allowLossyConversion: false) else {
+            fatalError()
+        }
+        guard let payload = try? JSONDecoder().decode(ChatPayload.self, from: data) else {
+            fatalError()
+        }
+        guard case .event(let event) = payload else {
+            fatalError()
+        }
+        XCTAssertEqual("chat.ec8f9754f943e33c5c04bc8c3e874bf61862f5a8", event.channel)
+        guard case .messageAcknowledgment(let ack) = event.event else {
+            fatalError()
+        }
+        XCTAssertEqual(ack.messageId, "59D72530-E8A5-47B7-9EEE-E5CA65AEAF1B")
+        XCTAssertEqual(ack.time, 1556020950.193132)
     }
 }

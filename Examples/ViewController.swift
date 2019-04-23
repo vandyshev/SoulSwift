@@ -26,6 +26,7 @@ class ViewController: UIViewController {
     // MARK: - API Stuff
 
     func initializeSoulSwift() {
+        setupFakeData()
         let configuration = SoulConfiguration(
             baseURL: "https://testing-api.soulplatform.com",
             apiKey: "b9ef962ad2323fea17085bbe3fd7a35b",
@@ -33,6 +34,11 @@ class ViewController: UIViewController {
             chatURL: "wss://chats-testing.soulplatform.com/",
             chatApiKey: "1b7e5656-b0f3-4190-a368-c8ac01ac0373")
         SoulSwift.shared.setup(withSoulConfiguration: configuration)
+    }
+
+    private func setupFakeData() {
+        UserDefaults.standard.set("userID", forKey: "SL/USER_ID")
+        UserDefaults.standard.set("sessionID", forKey: "SL/SESSION_TOKEN")
     }
 
     func downloadFeatures() {

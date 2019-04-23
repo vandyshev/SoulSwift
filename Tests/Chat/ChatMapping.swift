@@ -76,5 +76,81 @@ class ChatMapping: XCTestCase {
         XCTAssertTrue(jsonString.contains("\"m\":\"text\""))
         XCTAssertTrue(jsonString.contains("\"u\":\"userIdentifier\""))
     }
+
+    func testMessageAcknowledgmentEventMapping() {
+        let messageAcknowledgmentEvent = MessageAcknowledgmentEvent(time: 10,
+                                                                    messageId: "messageID",
+                                                                    userId: "userID")
+        let data = try! JSONEncoder().encode(messageAcknowledgmentEvent)
+
+        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+
+        guard case .messageAcknowledgment(let event) = eventType else {
+            fatalError()
+        }
+
+        XCTAssertEqual(messageAcknowledgmentEvent, event)
+    }
     
+    func testHistorySyncEventMapping() {
+        guard let message = messageGenerator.createTextMessage("message text") else {
+            fatalError()
+        }
+
+        let historySyncEvent = HistorySyncEvent(time: 10,
+                                                userId: "userID",
+                                                deviceId: "deviceID",
+                                                message: message)
+        let data = try! JSONEncoder().encode(historySyncEvent)
+        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+
+        guard case .historySync(let event) = eventType else {
+            fatalError()
+        }
+
+        XCTAssertEqual(historySyncEvent, event)
+        XCTAssertEqual(event.message, message)
+    }
+
+    func testReadEventMapping() {
+        let readEvent = ReadEvent(time: 19, userId: "userId", lastReadMessageTimestamp: 10)
+        let data = try! JSONEncoder().encode(readEvent)
+        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+
+        guard case .readEvent(let event) = eventType else {
+            fatalError()
+        }
+
+        XCTAssertEqual(readEvent, event)
+    }
+    
+    func testDeliveryConfirmationEventMapping() {
+        let deliveryEvent = DeliveryConfirmationEvent(time: 10,
+                                                      userIdWhoSent: "userIdWhoSent",
+                                                      deliveredMessageId: "deliveredMessageId",
+                                                      userId: "userId")
+
+        let data = try! JSONEncoder().encode(deliveryEvent)
+        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+
+        guard case .deliveryConfirmation(let event) = eventType else {
+            fatalError()
+        }
+        XCTAssertEqual(deliveryEvent, event)
+    }
+    
+    func testMessageFailedEventMapping() {
+        let failedEvent = MessageFailedEvent(time: 10,
+                                             messageId: "messageId",
+                                             userId: "userId",
+                                             error: "error")
+
+        let data = try! JSONEncoder().encode(failedEvent)
+        let eventType = try! JSONDecoder().decode(EventType.self, from: data)
+
+        guard case .messageFailed(let event) = eventType else {
+            fatalError()
+        }
+        XCTAssertEqual(failedEvent, event)
+    }
 }

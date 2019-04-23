@@ -2,9 +2,20 @@ import Foundation
 
 /// This event mean that message was accepted by SOUL server
 
-struct MessageAcknowledgmentEvent {
-    let time: UnixTimeStamp                         /// `t` - unix timestamp // TODO: check int or double
-    private let acknowledgment: AcknowledgmentEvent /// `a` - acknowledgment
+struct MessageAcknowledgmentEvent: Equatable {
+
+    /// `t` - unix timestamp
+    let time: UnixTimeStamp
+
+    /// `a` - acknowledgment
+    private let acknowledgment: AcknowledgmentEvent
+}
+
+extension MessageAcknowledgmentEvent {
+    init(time: UnixTimeStamp, messageId: String, userId: String) {
+        self.time = time
+        self.acknowledgment = AcknowledgmentEvent(messageId: messageId, userId: userId)
+    }
 }
 
 extension MessageAcknowledgmentEvent {
@@ -16,9 +27,13 @@ extension MessageAcknowledgmentEvent {
     }
 }
 
-private struct AcknowledgmentEvent {
-    let messageId: String /// `id` - message id
-    let userId: String    /// `u`  - user id
+private struct AcknowledgmentEvent: Equatable {
+
+    /// `id` - message id
+    let messageId: String
+
+    /// `u`  - user id
+    let userId: String
 }
 
 extension MessageAcknowledgmentEvent: Codable {

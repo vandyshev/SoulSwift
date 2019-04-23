@@ -1,10 +1,20 @@
 import Foundation
 
 /// This event mean that this message have been sent by current user from the other device
+struct HistorySyncEvent: Equatable {
 
-struct HistorySyncEvent {
-    let time: UnixTimeStamp          /// `t` - unix timestamp // TODO: check int or double
-    private let syncEvent: SyncEvent /// `h` - SyncEvent
+    /// `t` - unix timestamp
+    let time: UnixTimeStamp
+    
+    /// `h` - SyncEvent
+    private let syncEvent: SyncEvent
+}
+
+extension HistorySyncEvent {
+    init(time: UnixTimeStamp, userId: String, deviceId: String, message: ChatMessage) {
+        self.time = time
+        self.syncEvent = SyncEvent(userId: userId, deviceId: deviceId, message: message)
+    }
 }
 
 extension HistorySyncEvent {
@@ -13,10 +23,16 @@ extension HistorySyncEvent {
     var message: ChatMessage { return syncEvent.message }
 }
 
-private struct SyncEvent {
-    let userId: String       /// `u` - user id
-    let deviceId: String     /// `d` - device id
-    let message: ChatMessage /// `m` - message dict
+private struct SyncEvent: Equatable {
+
+    /// `u` - user id
+    let userId: String
+    
+    /// `d` - device id
+    let deviceId: String
+    
+    /// `m` - message dict
+    let message: ChatMessage
 }
 
 extension HistorySyncEvent: Codable {

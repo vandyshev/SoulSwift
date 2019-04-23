@@ -1,10 +1,20 @@
 import Foundation
 
 /// This event mean that user message haven't passed validation.
+struct MessageFailedEvent: Equatable {
 
-struct MessageFailedEvent {
-    let time: UnixTimeStamp              /// `t` - unix timestamp // TODO: check int or double
-    private let failedEvent: FailedEvent /// `f` - failed event
+    /// `t` - unix timestamp
+    let time: UnixTimeStamp
+
+    /// `f` - failed event
+    private let failedEvent: FailedEvent
+}
+
+extension MessageFailedEvent {
+    init(time: UnixTimeStamp, messageId: String, userId: String, error: String) {
+        self.time = time
+        self.failedEvent = FailedEvent(messageId: messageId, userId: userId, error: error)
+    }
 }
 
 extension MessageFailedEvent {
@@ -13,10 +23,16 @@ extension MessageFailedEvent {
     var error: String { return failedEvent.error }
 }
 
-private struct FailedEvent {
-    let messageId: String /// `id` - message id
-    let userId: String    /// `u`  - user id
-    let error: String     /// 'r'  - error description
+private struct FailedEvent: Equatable {
+
+    /// `id` - message id
+    let messageId: String
+
+    /// `u`  - user id
+    let userId: String
+
+    /// 'r'  - error description
+    let error: String
 }
 
 extension MessageFailedEvent: Codable {

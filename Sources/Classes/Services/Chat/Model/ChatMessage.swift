@@ -1,14 +1,31 @@
 import UIKit
 
-public struct ChatMessage {
-    let messageId: String        /// `id`  - message unique identifier
-    let userId: String           /// `u`   - message creator identifer
-    let timestamp: UnixTimeStamp /// `t`   - unix timestamp // TODO: check that it is
-    let text: String             /// `m`   - message content
-    let photoId: String?         /// `p`   - photo id
-    let albumName: String?       /// `pa`  - album name
-    let latitude: Double?        /// `lat` - latitude
-    let longitude: Double?       /// `lng` - longitude
+/// Chat message
+public struct ChatMessage: Equatable {
+
+    /// `id`  - message unique identifier
+    let messageId: String
+
+    /// `u`   - message creator identifer
+    let userId: String
+
+    /// `t`   - unix timestamp
+    let timestamp: UnixTimeStamp
+
+    /// `m`   - message content
+    let text: String
+
+    /// `p`   - photo id
+    let photoId: String?
+
+    /// `pa`  - album name
+    let albumName: String?
+
+    /// `lat` - latitude
+    let latitude: Double?
+
+    /// `lng` - longitude
+    let longitude: Double?
 }
 
 extension ChatMessage: Codable {

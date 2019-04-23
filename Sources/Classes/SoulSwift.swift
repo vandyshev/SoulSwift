@@ -12,6 +12,6 @@ public class SoulSwift {
     public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
         self.soulConfiguration = soulConfiguration
         self.soulApplicationService = resolver.resolve(SoulApplicationServiceType.self)
-        self.chatService = resolver.resolve(ChatService.self, argument: soulConfiguration)
+//        self.chatService = resolver.resolve(ChatService.self, argument: soulConfiguration)
     }
 }

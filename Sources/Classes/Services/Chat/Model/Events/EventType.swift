@@ -1,6 +1,7 @@
 import UIKit
 
-enum EventType {
+/// Enum for events mapping
+enum EventType: Equatable {
     case historySync(HistorySyncEvent)
     case messageAcknowledgment(MessageAcknowledgmentEvent)
     case messageFailed(MessageFailedEvent)
@@ -11,7 +12,7 @@ enum EventType {
 extension EventType: Codable {
 
     enum EventCodingError: Error { case decoding }
-    
+
     init(from decoder: Decoder) throws {
         if let history = try? HistorySyncEvent(from: decoder) {
             self = .historySync(history)

@@ -27,7 +27,7 @@ private struct ConfirmationEvent: Equatable {
 
     /// `id` - delivered message id
     let deliveredMessageId: String
-    
+
     /// `u` - user id
     let userId: String
 }

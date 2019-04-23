@@ -8,10 +8,10 @@ protocol ChatClient {
 
 // not implemented yet
 public final class ChatClientImpl: ChatClient {
-    
+
     private var socket: WebSocket
     private let uriGenerator: ChatClientURIGenerator
-    
+
     init(uriGenerator: ChatClientURIGenerator) {
         self.uriGenerator = uriGenerator
 
@@ -39,11 +39,11 @@ public final class ChatClientImpl: ChatClient {
         }
         connect()
     }
-    
+
     func connect() {
         socket.connect()
     }
-    
+
     func sendMessage(_ payload: Encodable) -> Bool {
         if socket.isConnected == true {
             guard let messageString = payload.asString else {
@@ -54,4 +54,3 @@ public final class ChatClientImpl: ChatClient {
         return socket.isConnected == true
     }
 }
-

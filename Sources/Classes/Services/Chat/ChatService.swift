@@ -50,7 +50,7 @@ final class ChatServiceImpl: ChatService {
         try send(message: message, channel: channel)
         return message
     }
-    
+
     func send(message: ChatMessage, channel: String) throws {
         let payload = MessagePayload(channel: channel, message: message)
         let sended = chatClient.sendMessage(payload)

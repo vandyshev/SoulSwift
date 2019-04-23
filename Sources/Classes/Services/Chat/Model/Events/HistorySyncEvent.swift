@@ -5,7 +5,7 @@ struct HistorySyncEvent: Equatable {
 
     /// `t` - unix timestamp
     let time: UnixTimeStamp
-    
+
     /// `h` - SyncEvent
     private let syncEvent: SyncEvent
 }
@@ -27,10 +27,10 @@ private struct SyncEvent: Equatable {
 
     /// `u` - user id
     let userId: String
-    
+
     /// `d` - device id
     let deviceId: String
-    
+
     /// `m` - message dict
     let message: ChatMessage
 }

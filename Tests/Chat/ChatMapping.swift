@@ -51,7 +51,7 @@ class ChatMapping: XCTestCase {
         XCTAssertNil(message.latitude)
         XCTAssertNil(message.longitude)
     }
-    
+
     func testGeoMessage() {
         let lat: Double = -55
         let lng: Double = 66
@@ -64,7 +64,7 @@ class ChatMapping: XCTestCase {
         XCTAssertEqual(message.latitude, lat)
         XCTAssertEqual(message.longitude, lng)
     }
-    
+
     func testMessageEncoding() {
         let messageText = "text"
         guard let message = messageGenerator.createTextMessage(messageText) else {
@@ -91,7 +91,7 @@ class ChatMapping: XCTestCase {
 
         XCTAssertEqual(messageAcknowledgmentEvent, event)
     }
-    
+
     func testHistorySyncEventMapping() {
         guard let message = messageGenerator.createTextMessage("message text") else {
             fatalError()
@@ -123,7 +123,7 @@ class ChatMapping: XCTestCase {
 
         XCTAssertEqual(readEvent, event)
     }
-    
+
     func testDeliveryConfirmationEventMapping() {
         let deliveryEvent = DeliveryConfirmationEvent(time: 10,
                                                       userIdWhoSent: "userIdWhoSent",
@@ -138,7 +138,7 @@ class ChatMapping: XCTestCase {
         }
         XCTAssertEqual(deliveryEvent, event)
     }
-    
+
     func testMessageFailedEventMapping() {
         let failedEvent = MessageFailedEvent(time: 10,
                                              messageId: "messageId",

@@ -14,4 +14,3 @@ class FakeStorage: Storage {
         self.serverTimeDelta = serverTimeDelta
     }
 }
-

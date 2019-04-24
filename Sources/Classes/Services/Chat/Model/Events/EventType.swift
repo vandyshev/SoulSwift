@@ -9,6 +9,24 @@ enum EventType: Equatable {
     case deliveryConfirmation(DeliveryConfirmationEvent)
 }
 
+extension EventType {
+    init(_ historySyncEvent: HistorySyncEvent) {
+        self = .historySync(historySyncEvent)
+    }
+    init(_ messageAcknowledgment: MessageAcknowledgmentEvent) {
+        self = .messageAcknowledgment(messageAcknowledgment)
+    }
+    init(_ messageFailed: MessageFailedEvent) {
+        self = .messageFailed(messageFailed)
+    }
+    init(_ readEvent: ReadEvent) {
+        self = .readEvent(readEvent)
+    }
+    init(_ deliveryConfirmation: DeliveryConfirmationEvent) {
+        self = .deliveryConfirmation(deliveryConfirmation)
+    }
+}
+
 extension EventType: Codable {
 
     enum EventCodingError: Error { case decoding }

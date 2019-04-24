@@ -5,11 +5,19 @@ private enum Constants {
     static let userIDKey = "USER_ID"
     static let sessionIDKey = "SESSION_TOKEN"
     static let serverTimeDelta = "SERVER_TIME_DELTA"
+    static let deviceIdentifierKey = "DEVICE_IDDENTIFIER"
 }
 
-/// This class receives data from the SoulSDK storage
-final class SoulSDKCommonStorage: Storage {
+final class SoulSDKCommonStorage {
     private let internalStorage = UserDefaults.standard
+
+    private func fixedKey(_ key: String) -> String {
+        return "\(Constants.prefixKey)/\(key)"
+    }
+}
+
+/// This extension receives data from the SoulSDK storage
+extension SoulSDKCommonStorage: Storage {
 
     var userID: String? {
         get {
@@ -40,8 +48,15 @@ final class SoulSDKCommonStorage: Storage {
             assertionFailure()
         }
     }
+}
 
-    private func fixedKey(_ key: String) -> String {
-        return "\(Constants.prefixKey)/\(key)"
+extension SoulSDKCommonStorage: DeviceIdStorage {
+    var deviceID: String? {
+        get {
+            return internalStorage.string(forKey: fixedKey(Constants.deviceIdentifierKey))
+        }
+        set {
+            internalStorage.set(newValue, forKey: fixedKey(Constants.deviceIdentifierKey))
+        }
     }
 }

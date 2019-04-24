@@ -8,7 +8,8 @@ final class ChatAssembly: Assembly {
 
         container.register(ChatClientURIGenerator.self) { (resolver: Resolver, config: SoulConfiguration) in
             ChatClientURIGeneratorImpl(config: config.chatURIGeneratorConfig,
-                                       authHelper: resolver ~> (AuthHelper.self, argument: config.appName))
+                                       authHelper: resolver ~> (AuthHelper.self, argument: config.appName),
+                                       deviceHandler: resolver~>)
         }
         container.register(ChatClient.self) { ( resolver: Resolver, config: SoulConfiguration) in
             ChatClientImpl(uriGenerator: resolver ~> (ChatClientURIGenerator.self, argument: config))

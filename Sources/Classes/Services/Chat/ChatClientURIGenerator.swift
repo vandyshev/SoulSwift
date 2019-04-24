@@ -26,12 +26,14 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
 
     private let config: ChatURIGeneratorConfig
     private let authHelper: AuthHelper
+    private let deviceHandler: DeviceHandler
 
     var uri: URL? { return buildURI() }
 
-    init(config: ChatURIGeneratorConfig, authHelper: AuthHelper) {
+    init(config: ChatURIGeneratorConfig, authHelper: AuthHelper, deviceHandler: DeviceHandler) {
         self.authHelper = authHelper
         self.config = config
+        self.deviceHandler = deviceHandler
     }
 
     private func buildURI() -> URL? {
@@ -39,12 +41,10 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
                                                   method: Constants.wsAuthMethod,
                                                   body: "")
 
-        let characterSet = Constants.allowedCharactersSet
-        let generateUserAgent = authHelper.userAgent
-
         guard let userAuth = generatedAuth,
-            let auth = userAuth.addingPercentEncoding(withAllowedCharacters: characterSet),
-            let userAgent = generateUserAgent.addingPercentEncoding(withAllowedCharacters: characterSet) else {
+            let auth = addingPercentEncoding(userAuth),
+            let userAgent = addingPercentEncoding(authHelper.userAgent),
+            let deviceID = addingPercentEncoding(deviceHandler.deviceIdentifier) else {
                 assertionFailure()
                 return nil
         }
@@ -54,8 +54,13 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
         let wsUri = urlString
             + "?auth=" + auth
             + "&user-agent=" + userAgent
+            + "&device-id" + deviceID
 
         return URL(string: wsUri)
+    }
+
+    private func addingPercentEncoding(_ target: String) -> String? {
+        return target.addingPercentEncoding(withAllowedCharacters: Constants.allowedCharactersSet)
     }
 }
 

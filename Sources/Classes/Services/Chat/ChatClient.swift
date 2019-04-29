@@ -1,11 +1,23 @@
 import Foundation
 import Starscream
 
+public enum ConnectionStatus {
+    case connected
+    case connecting
+    case disconected
+}
+
 protocol ChatClient {
+    var connectionStatus: ConnectionStatus { get }
+    
     func connect()
     func sendMessage(_ payload: Encodable) -> Bool
+    
     func subscribe(_ observer: AnyObject, closure: @escaping (Data) -> Void)
     func unsubscribe(_ observer: AnyObject)
+    
+    func subscribeToConnectionStatus(_ observer: AnyObject, closure: @escaping (ConnectionStatus) -> Void)
+    func unsubscribeFromConnectionStatus(_ observer: AnyObject)
 }
 
 // not implemented yet
@@ -14,6 +26,13 @@ public final class ChatClientImpl: ChatClient {
     private var socket: WebSocket
     private let uriGenerator: ChatClientURIGenerator
     private let observable = Observable<Data>()
+    private let statusObservable = Observable<ConnectionStatus>()
+    
+    public private(set) var connectionStatus: ConnectionStatus = .disconected {
+        didSet {
+            statusObservable.broadcast(connectionStatus)
+        }
+    }
 
     init(uriGenerator: ChatClientURIGenerator) {
         self.uriGenerator = uriGenerator
@@ -24,13 +43,14 @@ public final class ChatClientImpl: ChatClient {
 
         socket = WebSocket(url: uri)
 
-        socket.onConnect = {
+        socket.onConnect = { [weak self] in
+            self?.connectionStatus = .connected
             print("websocket is connected")
         }
         //websocketDidDisconnect
         socket.onDisconnect = { [weak self] (error: Error?) in
+            self?.connectionStatus = .disconected
             print("websocket is disconnected: \(error)")
-            self?.connect()
         }
         //websocketDidReceiveMessage
         socket.onText = { [weak self] (text: String) in
@@ -45,6 +65,7 @@ public final class ChatClientImpl: ChatClient {
     }
 
     func connect() {
+        connectionStatus = .connecting
         socket.connect()
     }
 
@@ -71,5 +92,13 @@ public final class ChatClientImpl: ChatClient {
 
     func unsubscribe(_ observer: AnyObject) {
         observable.unsubscribe(observer)
+    }
+
+    func subscribeToConnectionStatus(_ observer: AnyObject, closure: @escaping (ConnectionStatus) -> Void) {
+        statusObservable.subscribe(observer, closure: closure)
+    }
+
+    func unsubscribeFromConnectionStatus(_ observer: AnyObject) {
+        statusObservable.unsubscribe(observer)
     }
 }

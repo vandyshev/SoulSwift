@@ -2,11 +2,15 @@ import UIKit
 
 /// generates uri for ChatClient
 protocol ChatClientURIGenerator {
-    var uri: URL? { get }
+    var wsConnectionURI: URL? { get }
+    var urlWithApiKey: String { get }
+    var chatAuthMethod: String { get }
+    var chatAuthEndpoint: String { get }
 }
 
-public struct ChatURIGeneratorConfig {
-    let baseUrlString: String // should be declared with scheme, with port and with last `/` character
+struct ChatURIGeneratorConfig {
+    // should be declared with scheme, with port and with last `/` character
+    let baseUrlString: String
     let apiKey: String
 
     public init(baseUrlString: String, apiKey: String) {
@@ -20,7 +24,8 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
     private enum Constants {
         static let wsAuthMethod = "GET"
         static let wsAuthEndpoint = "/me"
-        static let wsApiVersion = "/v1/ws"
+        static let apiVersion = "/v1"
+        static let wsPart = "/ws"
         static let allowedCharactersSet = CharacterSet(charactersIn: " ;").inverted
     }
 
@@ -28,7 +33,10 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
     private let authHelper: AuthHelper
     private let deviceHandler: DeviceHandler
 
-    var uri: URL? { return buildURI() }
+    var urlWithApiKey: String { return config.baseUrlString + config.apiKey + Constants.apiVersion }
+    var wsConnectionURI: URL? { return buildURI() }
+    var chatAuthMethod: String { return Constants.wsAuthMethod }
+    var chatAuthEndpoint: String { return Constants.wsAuthEndpoint }
 
     init(config: ChatURIGeneratorConfig, authHelper: AuthHelper, deviceHandler: DeviceHandler) {
         self.authHelper = authHelper
@@ -49,7 +57,7 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
                 return nil
         }
 
-        let urlString = config.baseUrlString + config.apiKey + Constants.wsApiVersion
+        let urlString = urlWithApiKey + Constants.wsPart
 
         let wsUri = urlString
             + "?auth=" + auth

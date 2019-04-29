@@ -18,7 +18,7 @@ public final class ChatClientImpl: ChatClient {
     init(uriGenerator: ChatClientURIGenerator) {
         self.uriGenerator = uriGenerator
 
-        guard let uri = uriGenerator.uri else {
+        guard let uri = uriGenerator.wsConnectionURI else {
             fatalError("impossible web socket url")
         }
 

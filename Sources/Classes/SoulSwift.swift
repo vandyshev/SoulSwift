@@ -2,7 +2,7 @@ public class SoulSwift {
 
     public static var shared = SoulSwift()
 
-    public var soulApplicationService: SoulApplicationServiceType?
+    public var soulApplicationService: SoulApplicationService?
     public var chatService: ChatService?
 
     private(set) var soulConfiguration: SoulConfiguration?
@@ -11,7 +11,7 @@ public class SoulSwift {
 
     public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
         self.soulConfiguration = soulConfiguration
-        self.soulApplicationService = resolver.resolve(SoulApplicationServiceType.self)
+        self.soulApplicationService = resolver.resolve(SoulApplicationService.self)
         self.chatService = resolver.resolve(ChatService.self, argument: soulConfiguration)
     }
 }

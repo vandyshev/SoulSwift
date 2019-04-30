@@ -4,8 +4,8 @@ protocol ChatServiceObserver {
     func subscribeOnAllMessages(observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void)
     func subscribeOnAllEvents(observer: AnyObject, onEvent: @escaping (EventPayload) -> Void)
 
-    func subscribeOnMessage(toChannel channel: String, observer: Any, onMessage: @escaping (MessagePayload) -> Void)
-    func subscribeOnEvent(toChannel channel: String, observer: Any, onEvent: @escaping (EventPayload) -> Void)
+    func subscribeOnMessage(toChannel channel: String, observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void)
+    func subscribeOnEvent(toChannel channel: String, observer: AnyObject, onEvent: @escaping (EventPayload) -> Void)
 
     func unsubscribeFromAllMessage(observer: AnyObject)
     func unsubscribeFromAllEvents(observer: AnyObject)
@@ -26,10 +26,10 @@ final class ChatServiceObserverImpl: ChatServiceObserver {
     }
 
     private let allMessagesObservable = Observable<MessagePayload>()
-    private let channelMessageObservers = [String: Observable<MessagePayload>]()
+    private var channelMessageObservables = [String: Observable<MessagePayload>]()
 
     private let allEventsObservable = Observable<EventPayload>()
-    private let channelEventObservers = [String: Observable<EventPayload>]()
+    private var channelEventObservables = [String: Observable<EventPayload>]()
 
     func subscribeOnAllMessages(observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void) {
         allMessagesObservable.subscribe(observer, closure: onMessage)
@@ -39,14 +39,16 @@ final class ChatServiceObserverImpl: ChatServiceObserver {
         allEventsObservable.subscribe(observer, closure: onEvent)
     }
 
-    func subscribeOnMessage(toChannel channel: String, observer: Any, onMessage: @escaping (MessagePayload) -> Void) {
-        let observer = channelMessageObservers[channel] ?? Observable<MessagePayload>()
-        observer.subscribe(observer, closure: onMessage)
+    func subscribeOnMessage(toChannel channel: String, observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void) {
+        let observable = channelMessageObservables[channel] ?? Observable<MessagePayload>()
+        observable.subscribe(observer, closure: onMessage)
+        channelMessageObservables[channel] = observable
     }
 
-    func subscribeOnEvent(toChannel channel: String, observer: Any, onEvent: @escaping (EventPayload) -> Void) {
-        let observer = channelEventObservers[channel] ?? Observable<EventPayload>()
-        observer.subscribe(observer, closure: onEvent)
+    func subscribeOnEvent(toChannel channel: String, observer: AnyObject, onEvent: @escaping (EventPayload) -> Void) {
+        let observable = channelEventObservables[channel] ?? Observable<EventPayload>()
+        observable.subscribe(observer, closure: onEvent)
+        channelEventObservables[channel] = observable
     }
 
     func unsubscribeFromAllMessage(observer: AnyObject) {
@@ -58,13 +60,13 @@ final class ChatServiceObserverImpl: ChatServiceObserver {
     }
 
     func unsubscribeFromMessagesInChannel(_ channel: String, observer: AnyObject) {
-        if let channelObserver = channelMessageObservers[channel] {
+        if let channelObserver = channelMessageObservables[channel] {
             channelObserver.unsubscribe(observer)
         }
     }
 
     func unsubscribeFromEventsInChannel(_ channel: String, observer: AnyObject) {
-        if let channelObserver = channelEventObservers[channel] {
+        if let channelObserver = channelEventObservables[channel] {
             channelObserver.unsubscribe(observer)
         }
     }
@@ -84,14 +86,14 @@ final class ChatServiceObserverImpl: ChatServiceObserver {
 
     private func onMessagePayload(_ messagePayload: MessagePayload) {
         allMessagesObservable.broadcast(messagePayload)
-        if let observable = channelMessageObservers[messagePayload.channel] {
+        if let observable = channelMessageObservables[messagePayload.channel] {
             observable.broadcast(messagePayload)
         }
     }
 
     private func onEventPayload(_ eventPayload: EventPayload) {
         allEventsObservable.broadcast(eventPayload)
-        if let observable = channelEventObservers[eventPayload.channel] {
+        if let observable = channelEventObservables[eventPayload.channel] {
             observable.broadcast(eventPayload)
         }
     }

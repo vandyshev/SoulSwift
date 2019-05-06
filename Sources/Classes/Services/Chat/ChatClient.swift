@@ -9,13 +9,13 @@ public enum ConnectionStatus {
 
 protocol ChatClient {
     var connectionStatus: ConnectionStatus { get }
-    
+
     func connect()
     func sendMessage(_ payload: Encodable) -> Bool
-    
+
     func subscribe(_ observer: AnyObject, closure: @escaping (Data) -> Void)
     func unsubscribe(_ observer: AnyObject)
-    
+
     func subscribeToConnectionStatus(_ observer: AnyObject, closure: @escaping (ConnectionStatus) -> Void)
     func unsubscribeFromConnectionStatus(_ observer: AnyObject)
 }
@@ -27,7 +27,7 @@ public final class ChatClientImpl: ChatClient {
     private let uriGenerator: ChatClientURIGenerator
     private let observable = Observable<Data>()
     private let statusObservable = Observable<ConnectionStatus>()
-    
+
     public private(set) var connectionStatus: ConnectionStatus = .disconected {
         didSet {
             statusObservable.broadcast(connectionStatus)

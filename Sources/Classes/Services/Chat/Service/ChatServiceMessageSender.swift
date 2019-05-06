@@ -1,14 +1,15 @@
 import Foundation
 
 protocol ChatServiceMessageSender {
-    // TODO: refactor without throw and return results
     @discardableResult
-    func sendMessage(withText text: String, channel: String) throws
-    @discardableResult
-    func sendMessage(withLat lat: Double, lng: Double, channel: String) throws
-    @discardableResult
-    func sendMessage(with photoId: String, albumName: String, channel: String) throws
+    func sendNewMessage(_ messageToSend: MessageToSend, channel: String) throws -> ChatMessage
     func send(message: ChatMessage, channel: String) throws
+
+    func sendReadEvent(lastReadMessageTimestamp: UnixTimeStamp, channel: String) throws
+
+    func sendDeliveryConfirmationEvent(deliveredMessageId: String,
+                                       userIdInMessage: String,
+                                       channel: String) throws
 }
 
 enum ChatServiceSenderError: Error {
@@ -30,25 +31,12 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
         self.eventGenerator = eventGenerator
     }
 
-    func sendMessage(withText text: String, channel: String) throws {
-        guard let message = messageGenerator.createTextMessage(text) else {
+    func sendNewMessage(_ messageToSend: MessageToSend, channel: String) throws -> ChatMessage {
+        guard let message = messageGenerator.createMessage(messageToSend) else {
             throw ChatServiceSenderError.cannotCreateMessage
         }
         try send(message: message, channel: channel)
-    }
-
-    func sendMessage(withLat lat: Double, lng: Double, channel: String) throws {
-        guard let message = messageGenerator.createGeoMessage(lat: lat, lng: lng) else {
-            throw ChatServiceSenderError.cannotCreateMessage
-        }
-        try send(message: message, channel: channel)
-    }
-
-    func sendMessage(with photoId: String, albumName: String, channel: String) throws {
-        guard let message = messageGenerator.createPhotoMessage(photoId: photoId, albumName: albumName) else {
-            throw ChatServiceSenderError.cannotCreateMessage
-        }
-        try send(message: message, channel: channel)
+        return message
     }
 
     func send(message: ChatMessage, channel: String) throws {

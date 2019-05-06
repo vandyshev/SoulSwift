@@ -1,6 +1,7 @@
 import UIKit
 
 protocol MessagesGenerator {
+    func createMessage(_ messageToSend: MessageToSend) -> ChatMessage?
     func createTextMessage(_ text: String) -> ChatMessage?
     func createPhotoMessage(photoId: String, albumName: String) -> ChatMessage?
     func createGeoMessage(lat: Double, lng: Double) -> ChatMessage?
@@ -18,6 +19,17 @@ final class MessagesGeneratorImpl: MessagesGenerator {
 
     init(storage: Storage) {
         self.storage = storage
+    }
+
+    func createMessage(_ messageToSend: MessageToSend) -> ChatMessage? {
+        switch messageToSend {
+        case let .text(text):
+            return createTextMessage(text)
+        case let .photo(photoId: photoId, albumName: albumName):
+            return createPhotoMessage(photoId: photoId, albumName: albumName)
+        case let .location(latitude: latitude, longitude: longitude):
+            return createGeoMessage(lat: latitude, lng: longitude)
+        }
     }
 
     func createTextMessage(_ text: String) -> ChatMessage? {
@@ -61,7 +73,7 @@ final class MessagesGeneratorImpl: MessagesGenerator {
 
     private func getBaseMessageData() -> BaseMessageData? {
         let messageId = UUID().uuidString
-        let timeStamp = DateHelper.currentUnixTimestamp // todo: check this. move to date service
+        let timeStamp = DateHelper.currentUnixTimestamp
         guard let userId = storage.userID else { return nil }
         return BaseMessageData(messageId: messageId,
                                userId: userId,

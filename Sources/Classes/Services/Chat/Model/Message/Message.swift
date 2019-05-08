@@ -1,9 +1,16 @@
 import UIKit
 
 public struct Message {
-    let messageID: String
-    let date: Date
-    let userID: String
-    let text: String
-    let channel: String
+    public let messageID: String
+    public let date: Date
+    public let userID: String
+    public let text: String
+    public let channel: String
+    public let direction: MessageDirection
+}
+
+public enum MessageDirection {
+    case outgoing
+    case income
+    case unknown
 }

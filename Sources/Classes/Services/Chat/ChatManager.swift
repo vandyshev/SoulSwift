@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol ChatManager {
+public protocol ChatManager: AnyObject {
     func history(channel: String, olderThan date: Date?, completion: @escaping  (Result<[Message], Error>) -> Void)
     func sendMessage(_ messageForSend: MessageToSend, to channel: String, completion: @escaping (Result<Message, Error>) -> Void)
     func sendReadEvent(to channel: String, lastMessageDate: Date)
@@ -23,7 +23,7 @@ final class ChatManagerImpl: ChatManager {
     init(chatServiceObserver: ChatServiceObserver,
          chatServiceMessageSender: ChatServiceMessageSender,
          chatHistoryService: ChatHistoryService,
-         messageMapper: MessageMapper ) {
+         messageMapper: MessageMapper) {
         self.chatServiceObserver      = chatServiceObserver
         self.chatServiceMessageSender = chatServiceMessageSender
         self.chatHistoryService       = chatHistoryService

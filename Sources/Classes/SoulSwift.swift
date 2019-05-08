@@ -1,9 +1,11 @@
-public class SoulSwift {
+public class SoulSwiftClient {
 
-    public static var shared = SoulSwift()
+    public static var shared = SoulSwiftClient()
 
     public var soulApplicationService: SoulApplicationService?
-    public var chatService: ChatService?
+    public private(set) lazy var chatManager: ChatManager? = {
+        resolver.resolve(ChatManager.self, argument: self.soulConfiguration)
+    }() // TODO: redo
 
     private(set) var soulConfiguration: SoulConfiguration?
 
@@ -12,6 +14,5 @@ public class SoulSwift {
     public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
         self.soulConfiguration = soulConfiguration
         self.soulApplicationService = resolver.resolve(SoulApplicationService.self)
-        self.chatService = resolver.resolve(ChatService.self, argument: soulConfiguration)
     }
 }

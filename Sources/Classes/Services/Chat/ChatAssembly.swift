@@ -11,12 +11,15 @@ final class ChatAssembly: Assembly {
                                        authHelper: resolver ~> (AuthHelper.self, argument: config.appName),
                                        deviceHandler: resolver~>)
         }
+
         container.register(ChatClient.self) { ( resolver: Resolver, config: SoulConfiguration) in
             ChatClientImpl(uriGenerator: resolver ~> (ChatClientURIGenerator.self, argument: config))
         }.inObjectScope(.weak)
+
         container.register(MessagesGenerator.self) { resolver in
             MessagesGeneratorImpl(storage: resolver~>)
         }
+
         container.register(EventGenerator.self) { resolver in
             EventGeneratorImpl(storage: resolver~>)
         }
@@ -31,10 +34,21 @@ final class ChatAssembly: Assembly {
                                          eventGenerator: resolver~>)
         }
 
-        container.register(ChatService.self) { (resolver: Resolver, config: SoulConfiguration) in
+        container.register(ChatHistoryService.self) { (resolver: Resolver, config: SoulConfiguration) in
+            ChatHistoryServiceImpl(authHelper: resolver ~> (AuthHelper.self, argument: config.appName),
+                                   uriGenerator: resolver ~> (ChatClientURIGenerator.self, argument: config))
+        }
+
+        container.register(MessageMapper.self) { resolver in
+            MessageMapperImpl(storage: resolver~>)
+        }
+
+        container.register(ChatManager.self) { (resolver: Resolver, config: SoulConfiguration) in
             let client = resolver ~> (ChatClient.self, argument: config)
-            return ChatServiceImpl(chatServiceObserver: resolver ~> (ChatServiceObserver.self, argument: client),
-                                   chatServiceMessageSender: resolver ~> (ChatServiceMessageSender.self, argument: client))
+            return ChatManagerImpl(chatServiceObserver: resolver ~> (ChatServiceObserver.self, argument: client),
+                                   chatServiceMessageSender: resolver ~> (ChatServiceMessageSender.self, argument: client),
+                                   chatHistoryService: resolver ~> (ChatHistoryService.self, argument: config),
+                                   messageMapper: resolver~>)
         }
     }
 }

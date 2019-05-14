@@ -30,8 +30,15 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
         provider.request(chatApi) { result in
             switch result {
             case .success(let value):
-                let history = try? JSONDecoder().decode([ChatHistoryObject].self, from: value.data)
-                completion(.success(history ?? [])) // TODO: redo
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+                do {
+                    let history = try decoder.decode([ChatHistoryObject].self, from: value.data)
+                    completion(.success(history))
+                } catch {
+                    print(error)
+                    completion(.success([]))
+                }
             case .failure(let error):
                 completion(.failure(error))
             }

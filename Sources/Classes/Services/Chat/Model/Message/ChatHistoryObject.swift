@@ -3,7 +3,7 @@ import Foundation
 /// Chat History Object
 public struct ChatHistoryObject {
     /// `id` - chat history object identifier
-    let identifier: String
+    let identifier: Int
 
     /// `user_id` - user identifier
     let userIdentifier: String

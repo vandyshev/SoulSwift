@@ -9,11 +9,11 @@ final class ChatAssembly: Assembly {
         container.register(ChatClientURIGenerator.self) { (resolver: Resolver, config: SoulConfiguration) in
             resolver ~> (ChatClientURIGeneratorImpl.self, argument: config)
         }
-        
+
         container.register(ChatApiURLGenerator.self) { (resolver: Resolver, config: SoulConfiguration) in
             resolver ~> (ChatClientURIGeneratorImpl.self, argument: config)
         }
-        
+
         container.register(ChatClientURIGeneratorImpl.self) { (resolver: Resolver, config: SoulConfiguration) in
             ChatClientURIGeneratorImpl(config: config.chatURIGeneratorConfig,
                                        authHelper: resolver ~> (AuthHelper.self, argument: config.appName),

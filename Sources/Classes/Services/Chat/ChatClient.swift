@@ -47,19 +47,23 @@ public final class ChatClientImpl: ChatClient {
             self?.connectionStatus = .connected
             print("websocket is connected")
         }
-        //websocketDidDisconnect
+
         socket.onDisconnect = { [weak self] (error: Error?) in
             self?.connectionStatus = .disconected
             print("websocket is disconnected: \(error)")
         }
-        //websocketDidReceiveMessage
+
         socket.onText = { [weak self] (text: String) in
             self?.onText(text)
             print("got some text: \(text)")
         }
-        //websocketDidReceiveData
+
         socket.onData = { (data: Data) in
             print("got some data: \(data.count)")
+        }
+
+        socket.onHttpResponseHeaders = {
+            print("HttpResponseHeaders \($0)")
         }
         connect()
     }

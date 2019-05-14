@@ -11,12 +11,12 @@ public protocol ChatHistoryService: AnyObject {
 final class ChatHistoryServiceImpl: ChatHistoryService {
 
     let authHelper: AuthHelper
-    let uriGenerator: ChatClientURIGenerator
+    let urlGenerator: ChatApiURLGenerator
     let provider: MoyaProvider<ChatApi>
 
-    init(authHelper: AuthHelper, uriGenerator: ChatClientURIGenerator) {
+    init(authHelper: AuthHelper, urlGenerator: ChatApiURLGenerator) {
         self.authHelper   = authHelper
-        self.uriGenerator = uriGenerator
+        self.urlGenerator = urlGenerator
         self.provider = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
     }
 
@@ -26,7 +26,7 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
         let chatApi = ChatApi(chatHistoryConfig: historyConfig,
                               channel: channel,
                               authHelper: authHelper,
-                              uriGenerator: uriGenerator)
+                              urlGenerator: urlGenerator)
         provider.request(chatApi) { result in
             switch result {
             case .success(let value):

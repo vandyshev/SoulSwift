@@ -1,10 +1,13 @@
 public class SoulSwiftClient {
 
     public static var shared = SoulSwiftClient()
+    
+    private init() { }
 
     public var soulApplicationService: SoulApplicationService?
     public private(set) lazy var chatManager: ChatManager? = {
-        resolver.resolve(ChatManager.self, argument: self.soulConfiguration)
+        guard let soulConfiguration = soulConfiguration else { return nil }
+        return resolver.resolve(ChatManager.self, argument: soulConfiguration)
     }() // TODO: redo
 
     private(set) var soulConfiguration: SoulConfiguration?

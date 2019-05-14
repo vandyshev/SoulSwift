@@ -5,12 +5,12 @@ struct ChatApi {
     let chatHistoryConfig: ChatHistoryConfig
     let channel: String
     let authHelper: AuthHelper
-    let uriGenerator: ChatClientURIGenerator
+    let urlGenerator: ChatApiURLGenerator
 }
 
 extension ChatApi: TargetType {
     var baseURL: URL {
-        return URL(string: uriGenerator.urlWithApiKey)!
+        return URL(string: urlGenerator.httpUrlWithApiKey)!
     }
 
     var path: String {
@@ -26,13 +26,21 @@ extension ChatApi: TargetType {
     }
 
     var task: Task {
-        return .requestJSONEncodable(chatHistoryConfig)
+        guard let encodedData = try? JSONEncoder().encode(chatHistoryConfig) else {
+            return .requestPlain
+        }
+        guard let json = try? JSONSerialization.jsonObject(with: encodedData, options: []) as? [String: Any] else {
+            // appropriate error handling
+            return .requestPlain
+        }
+        print(json)
+        return .requestParameters(parameters: json ?? [:], encoding: URLEncoding.queryString)
     }
 
     var headers: [String: String]? {
         var result = [String: String]()
-        result["Authorization"] = authHelper.authString(withEndpoint: uriGenerator.chatAuthEndpoint,
-                                                        method: uriGenerator.chatAuthMethod,
+        result["Authorization"] = authHelper.authString(withEndpoint: urlGenerator.chatAuthEndpoint,
+                                                        method: urlGenerator.chatAuthMethod,
                                                         body: "")
         result["User-Agent"] = authHelper.userAgent
         return result

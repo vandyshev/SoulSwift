@@ -33,7 +33,7 @@ class ViewController: UIViewController {
             appName: "PureFTP",
             chatURL: "wss://chats-testing.soulplatform.com/",
             chatApiKey: "1b7e5656-b0f3-4190-a368-c8ac01ac0373")
-        SoulSwift.shared.setup(withSoulConfiguration: configuration)
+        SoulSwiftClient.shared.setup(withSoulConfiguration: configuration)
     }
 
     private func setupFakeData() {
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     }
 
     func downloadFeatures() {
-        SoulSwift.shared.soulApplicationService?.features(anonymousId: "CF6421EB-B450-41A0-A572-89FCE3FB0C2F", completion: {
+        SoulSwiftClient.shared.soulApplicationService?.features(anonymousId: "CF6421EB-B450-41A0-A572-89FCE3FB0C2F", completion: {
             print("completion")
         })
     }

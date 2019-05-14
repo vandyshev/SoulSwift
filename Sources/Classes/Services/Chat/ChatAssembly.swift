@@ -7,6 +7,14 @@ final class ChatAssembly: Assembly {
     func assemble(container: Container) {
 
         container.register(ChatClientURIGenerator.self) { (resolver: Resolver, config: SoulConfiguration) in
+            resolver ~> (ChatClientURIGeneratorImpl.self, argument: config)
+        }
+        
+        container.register(ChatApiURLGenerator.self) { (resolver: Resolver, config: SoulConfiguration) in
+            resolver ~> (ChatClientURIGeneratorImpl.self, argument: config)
+        }
+        
+        container.register(ChatClientURIGeneratorImpl.self) { (resolver: Resolver, config: SoulConfiguration) in
             ChatClientURIGeneratorImpl(config: config.chatURIGeneratorConfig,
                                        authHelper: resolver ~> (AuthHelper.self, argument: config.appName),
                                        deviceHandler: resolver~>)
@@ -36,7 +44,7 @@ final class ChatAssembly: Assembly {
 
         container.register(ChatHistoryService.self) { (resolver: Resolver, config: SoulConfiguration) in
             ChatHistoryServiceImpl(authHelper: resolver ~> (AuthHelper.self, argument: config.appName),
-                                   uriGenerator: resolver ~> (ChatClientURIGenerator.self, argument: config))
+                                   urlGenerator: resolver ~> (ChatApiURLGenerator.self, argument: config))
         }
 
         container.register(MessageMapper.self) { resolver in

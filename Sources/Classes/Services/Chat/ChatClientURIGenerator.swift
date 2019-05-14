@@ -3,7 +3,10 @@ import UIKit
 /// generates uri for ChatClient
 protocol ChatClientURIGenerator {
     var wsConnectionURI: URL? { get }
-    var urlWithApiKey: String { get }
+}
+
+protocol ChatApiURLGenerator {
+    var httpUrlWithApiKey: String { get }
     var chatAuthMethod: String { get }
     var chatAuthEndpoint: String { get }
 }
@@ -15,13 +18,15 @@ struct ChatURIGeneratorConfig {
 
     public init(baseUrlString: String, apiKey: String) {
         self.baseUrlString = baseUrlString
-        self.apiKey = apiKey
+        self.apiKey        = apiKey
     }
 }
 
-final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
+final class ChatClientURIGeneratorImpl: ChatClientURIGenerator, ChatApiURLGenerator {
 
     private enum Constants {
+        static let wsScheme = "wss://"
+        static let httpScheme = "https://"
         static let wsAuthMethod = "GET"
         static let wsAuthEndpoint = "/me"
         static let apiVersion = "/v1"
@@ -33,7 +38,7 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
     private let authHelper: AuthHelper
     private let deviceHandler: DeviceHandler
 
-    var urlWithApiKey: String { return config.baseUrlString + config.apiKey + Constants.apiVersion }
+    var httpUrlWithApiKey: String { return buildBaseUrl(withScheme: Constants.httpScheme) }
     var wsConnectionURI: URL? { return buildURI() }
     var chatAuthMethod: String { return Constants.wsAuthMethod }
     var chatAuthEndpoint: String { return Constants.wsAuthEndpoint }
@@ -57,14 +62,18 @@ final class ChatClientURIGeneratorImpl: ChatClientURIGenerator {
                 return nil
         }
 
-        let urlString = urlWithApiKey + Constants.wsPart
+        let urlString = buildBaseUrl(withScheme: Constants.wsScheme) + Constants.wsPart
 
         let wsUri = urlString
             + "?auth=" + auth
             + "&user-agent=" + userAgent
-            + "&device-id" + deviceID
+            + "&device-id=" + deviceID
 
         return URL(string: wsUri)
+    }
+
+    private func buildBaseUrl(withScheme scheme: String) -> String {
+        return scheme + config.baseUrlString + config.apiKey + Constants.apiVersion
     }
 
     private func addingPercentEncoding(_ target: String) -> String? {

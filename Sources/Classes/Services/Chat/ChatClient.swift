@@ -4,34 +4,35 @@ import Starscream
 public enum ConnectionStatus {
     case connected
     case connecting
-    case disconected
 }
 
-protocol ChatClient {
-    var connectionStatus: ConnectionStatus { get }
-
+protocol ChatClient: AnyObject {
     func connect()
     func sendMessage(_ payload: Encodable) -> Bool
 
     func subscribe(_ observer: AnyObject, closure: @escaping (Data) -> Void)
     func unsubscribe(_ observer: AnyObject)
+}
 
+protocol ChatClienStatusProvider: AnyObject {
+    var connectionStatus: ConnectionStatus { get }
     func subscribeToConnectionStatus(_ observer: AnyObject, closure: @escaping (ConnectionStatus) -> Void)
     func unsubscribeFromConnectionStatus(_ observer: AnyObject)
 }
 
-// not implemented yet
-public final class ChatClientImpl: ChatClient {
+private enum Constants {
+    static let reconnectionTime: TimeInterval = 3
+}
+
+public final class ChatClientImpl: ChatClient, ChatClienStatusProvider {
 
     private var socket: WebSocket
     private let uriGenerator: ChatClientURIGenerator
     private let observable = Observable<Data>()
     private let statusObservable = Observable<ConnectionStatus>()
 
-    public private(set) var connectionStatus: ConnectionStatus = .disconected {
-        didSet {
-            statusObservable.broadcast(connectionStatus)
-        }
+    public var connectionStatus: ConnectionStatus {
+        return socket.isConnected ? .connected : .connecting
     }
 
     init(uriGenerator: ChatClientURIGenerator) {
@@ -44,22 +45,18 @@ public final class ChatClientImpl: ChatClient {
         socket = WebSocket(url: uri)
 
         socket.onConnect = { [weak self] in
-            self?.connectionStatus = .connected
+            self?.broadcastStatus()
             print("websocket is connected")
         }
 
         socket.onDisconnect = { [weak self] (error: Error?) in
-            self?.connectionStatus = .disconected
+            self?.reconnect()
             print("websocket is disconnected: \(error)")
         }
 
         socket.onText = { [weak self] (text: String) in
             self?.onText(text)
             print("got some text: \(text)")
-        }
-
-        socket.onData = { (data: Data) in
-            print("got some data: \(data.count)")
         }
 
         socket.onHttpResponseHeaders = {
@@ -69,8 +66,27 @@ public final class ChatClientImpl: ChatClient {
     }
 
     func connect() {
-        connectionStatus = .connecting
+        broadcastStatus()
         socket.connect()
+    }
+
+    private func broadcastStatus() {
+        statusObservable.broadcast(connectionStatus)
+    }
+
+    private func reconnect() {
+        broadcastStatus()
+        if connectionStatus == .connected { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + Constants.reconnectionTime) { [weak self] in
+            if self?.connectionStatus == .connected { return }
+            self?.connect()
+        }
+    }
+
+    @objc private func updateConnectionStatus() {
+        if !socket.isConnected {
+            connect()
+        }
     }
 
     func sendMessage(_ payload: Encodable) -> Bool {

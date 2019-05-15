@@ -30,7 +30,6 @@ extension ChatApi: TargetType {
             return .requestPlain
         }
         guard let json = try? JSONSerialization.jsonObject(with: encodedData, options: []) as? [String: Any] else {
-            // appropriate error handling
             return .requestPlain
         }
         return .requestParameters(parameters: json ?? [:], encoding: URLEncoding.queryString)

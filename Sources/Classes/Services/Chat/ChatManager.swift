@@ -1,5 +1,6 @@
 import Foundation
 
+/// Handle all messenger interactions
 public protocol ChatManager: AnyObject {
     func history(channel: String, olderThan date: Date?, completion: @escaping  (Result<[Message], Error>) -> Void)
     func sendMessage(_ messageForSend: MessageToSend, to channel: String, completion: @escaping (Result<Message, Error>) -> Void)

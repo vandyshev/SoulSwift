@@ -9,12 +9,7 @@ public struct SoulConfiguration {
     private(set) public var chatURL: String
     /// Chat Api Key
     private(set) public var chatApiKey: String
-//    /// PubNub publisher key
-//    let pubKey: String?
-//    /// PubNub subscriber key
-//    let subKey: String?
-//    /// PubNub cipher salt
-//    let cipherSalt: String?
+
     public init(baseURL: String,
                 apiKey: String,
                 appName: String,

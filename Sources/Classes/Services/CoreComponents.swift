@@ -22,5 +22,9 @@ final class CoreComponents: Assembly {
             AuthHelperImpl(storage: resolver~>,
                            appName: appName)
         }
+
+        container.register(AppStatusObserver.self) { _ in
+            AppStatusObserverImpl()
+        }
     }
 }

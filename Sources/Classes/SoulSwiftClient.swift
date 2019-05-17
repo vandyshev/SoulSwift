@@ -1,7 +1,7 @@
 public class SoulSwiftClient {
 
     public static var shared = SoulSwiftClient()
-    
+
     private init() { }
 
     public var soulApplicationService: SoulApplicationService?
@@ -17,5 +17,11 @@ public class SoulSwiftClient {
     public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
         self.soulConfiguration = soulConfiguration
         self.soulApplicationService = resolver.resolve(SoulApplicationService.self)
+    }
+
+    public func logOut() {
+        self.soulConfiguration = nil
+        self.soulApplicationService = nil
+        self.chatManager = nil
     }
 }

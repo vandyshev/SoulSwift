@@ -6,6 +6,17 @@ public enum ConnectionStatus {
     case connecting
 }
 
+extension ConnectionStatus {
+    public var isConnected: Bool {
+        guard case .connected = self else { return false }
+        return true
+    }
+    public var isConnecting: Bool {
+        guard case .connecting = self else { return false }
+        return true
+    }
+}
+
 protocol ChatClient: AnyObject {
     func connect()
     func sendMessage(_ payload: Encodable) -> Bool

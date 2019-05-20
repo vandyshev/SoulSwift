@@ -42,7 +42,7 @@ final class ChatAssembly: Assembly {
 
         container.register(ChatServiceObserver.self) { (_: Resolver, client: ChatClient) in
             ChatServiceObserverImpl(chatClient: client)
-        }
+        }.inObjectScope(.weak)
 
         container.register(ChatServiceMessageSender.self) { (resolver: Resolver, client: ChatClient) in
             ChatServiceMessageSenderImpl(chatClient: client,
@@ -66,6 +66,13 @@ final class ChatAssembly: Assembly {
                                    chatHistoryService: resolver ~> (ChatHistoryService.self, argument: config),
                                    chatStatusProvider: resolver ~> (ChatClienStatusProvider.self, argument: config),
                                    messageMapper: resolver~>)
+        }
+
+        container.register(ChatLocalPushManager.self) { (resolver: Resolver, config: SoulConfiguration) in
+            let client = resolver ~> (ChatClient.self, argument: config)
+            let chatServiceObserver = resolver ~> (ChatServiceObserver.self, argument: client)
+            return ChatLocalPushManagerImpl(chatServiceObserver: chatServiceObserver,
+                                            localPushService: resolver~>)
         }
     }
 }

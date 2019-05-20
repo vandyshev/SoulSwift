@@ -40,3 +40,17 @@ extension ChatMessage: Codable {
         case longitude = "lng"
     }
 }
+
+extension ChatMessage {
+    var isPhotoMessage: Bool {
+        return photoId != nil && albumName != nil
+    }
+
+    var isLocationMessage: Bool {
+        return latitude != nil && longitude != nil
+    }
+
+    var isTextMessage: Bool {
+        return !isPhotoMessage && !isLocationMessage
+    }
+}

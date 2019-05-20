@@ -21,7 +21,7 @@ final class MessageMapperImpl: MessageMapper {
         guard let currentUserIdentifier = currentUserIdentifier else { return .unknown }
         return userIdentifier == currentUserIdentifier ? .outgoing  : .income
     }
-    
+
     func mapToMessage(chatHistoryObject: ChatHistoryObject) -> Message {
         let historyMessage = chatHistoryObject.message
         return Message(messageID: historyMessage.messageId,

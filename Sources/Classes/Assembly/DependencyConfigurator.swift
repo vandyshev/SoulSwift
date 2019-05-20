@@ -13,7 +13,8 @@ final class DependencyConfigurator {
         assembler = Assembler([
             CoreComponents(),
             SoulServiceAssembly(),
-            ChatAssembly()
+            ChatAssembly(),
+            PushServiceAssembly()
         ])
     }
 }

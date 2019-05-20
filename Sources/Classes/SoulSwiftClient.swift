@@ -10,6 +10,11 @@ public class SoulSwiftClient {
         return resolver.resolve(ChatManager.self, argument: soulConfiguration)
     }() // TODO: redo
 
+    public private(set) lazy var chatPushManager: ChatLocalPushManager? = {
+        guard let soulConfiguration = soulConfiguration else { return nil }
+        return resolver.resolve(ChatLocalPushManager.self, argument: soulConfiguration)
+    }() // TODO: redo
+
     private(set) var soulConfiguration: SoulConfiguration?
 
     private let resolver = DependencyConfigurator.shared.resolver

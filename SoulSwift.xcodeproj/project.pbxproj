@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		19723D8522933C500009A336 /* ChatClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19723D8422933C500009A336 /* ChatClient.swift */; };
 		19E9EE572269FF5A003AD22F /* ChatMapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9EE562269FF5A003AD22F /* ChatMapping.swift */; };
 		19E9EE5E226A0D70003AD22F /* FakeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9EE5C226A0D61003AD22F /* FakeStorage.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		19723D8422933C500009A336 /* ChatClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatClient.swift; sourceTree = "<group>"; };
 		19E9EE562269FF5A003AD22F /* ChatMapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChatMapping.swift; path = Chat/ChatMapping.swift; sourceTree = "<group>"; };
 		19E9EE5C226A0D61003AD22F /* FakeStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeStorage.swift; sourceTree = "<group>"; };
 		2E48A2B555C095721817FC91 /* Pods-SoulSwift_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SoulSwift_Tests.release.xcconfig"; path = "Target Support Files/Pods-SoulSwift_Tests/Pods-SoulSwift_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				19E9EE562269FF5A003AD22F /* ChatMapping.swift */,
+				19723D8422933C500009A336 /* ChatClient.swift */,
 			);
 			name = Chat;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 			files = (
 				19E9EE572269FF5A003AD22F /* ChatMapping.swift in Sources */,
 				19E9EE5E226A0D70003AD22F /* FakeStorage.swift in Sources */,
+				19723D8522933C500009A336 /* ChatClient.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

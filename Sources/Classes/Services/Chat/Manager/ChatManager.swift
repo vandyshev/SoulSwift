@@ -2,6 +2,10 @@ import Foundation
 
 /// Handle all messenger interactions
 public protocol ChatManager: AnyObject {
+
+    func start() -> Bool
+    func finish()
+
     func history(channel: String, olderThan date: Date?, completion: @escaping  (Result<[Message], Error>) -> Void)
     func sendMessage(_ messageForSend: MessageToSend, to channel: String, completion: @escaping (Result<Message, Error>) -> Void)
     func sendReadEvent(to channel: String, lastMessageDate: Date)
@@ -20,34 +24,42 @@ private enum Constants {
 
 final class ChatManagerImpl: ChatManager {
 
-    var connectionStatus: ConnectionStatus { return chatStatusProvider.connectionStatus }
+    var connectionStatus: ConnectionStatus { return chatClient.connectionStatus }
 
     private let chatServiceObserver: ChatServiceObserver
     private let chatServiceMessageSender: ChatServiceMessageSender
     private let chatHistoryService: ChatHistoryService
-    private let chatStatusProvider: ChatClienStatusProvider
+    private let chatClient: ChatClient
     private let messageMapper: MessageMapper
 
     init(chatServiceObserver: ChatServiceObserver,
          chatServiceMessageSender: ChatServiceMessageSender,
          chatHistoryService: ChatHistoryService,
-         chatStatusProvider: ChatClienStatusProvider,
+         chatClient: ChatClient,
          messageMapper: MessageMapper) {
         self.chatServiceObserver      = chatServiceObserver
         self.chatServiceMessageSender = chatServiceMessageSender
         self.chatHistoryService       = chatHistoryService
-        self.chatStatusProvider       = chatStatusProvider
+        self.chatClient               = chatClient
         self.messageMapper            = messageMapper
 
         handleInputMessages()
     }
 
     deinit {
-        chatServiceObserver.unsubscribeFromAllMessage(observer: self)
+        chatServiceObserver.unsubscribeFromAllMessages(observer: self)
+    }
+    
+    func start() -> Bool {
+        return chatClient.start()
+    }
+    
+    func finish() {
+        chatClient.finish()
     }
 
     private func handleInputMessages() {
-        chatServiceObserver.subscribeOnAllMessages(observer: self) { [weak self] messagePayload in
+        chatServiceObserver.subscribeToAllMessages(observer: self) { [weak self] messagePayload in
             let message = messagePayload.message
             try? self?.chatServiceMessageSender.sendDeliveryConfirmationEvent(deliveredMessageId: message.messageId,
                                                                               userIdInMessage: message.userId,
@@ -94,7 +106,7 @@ final class ChatManagerImpl: ChatManager {
     }
 
     func subscribe(to channel: String, observer: AnyObject, onMessage: @escaping (Message) -> Void) {
-        chatServiceObserver.subscribeOnMessage(toChannel: channel, observer: observer) { [weak self] messagePayload in
+        chatServiceObserver.subscribeToMessages(inChannel: channel, observer: observer) { [weak self] messagePayload in
             guard let stelf = self else { return }
             let message = stelf.messageMapper.mapToMessage(chatMessage: messagePayload.message, channel: messagePayload.channel)
             onMessage(message)
@@ -106,10 +118,10 @@ final class ChatManagerImpl: ChatManager {
     }
 
     func subscribeToConnectionStatus(observer: AnyObject, onStatusChange: @escaping (ConnectionStatus) -> Void) {
-        chatStatusProvider.subscribeToConnectionStatus(observer, closure: onStatusChange)
+        chatClient.subscribeToConnectionStatus(observer, closure: onStatusChange)
     }
 
     func unsubscribeFromConnectionStatus(observer: AnyObject) {
-        chatStatusProvider.unsubscribeFromConnectionStatus(observer)
+        chatClient.unsubscribeFromConnectionStatus(observer)
     }
 }

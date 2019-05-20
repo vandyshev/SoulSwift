@@ -26,10 +26,15 @@ class ChatLocalPushManagerImpl: ChatLocalPushManager {
         self.chatServiceObserver = chatServiceObserver
         self.localPushService = localPushService
 
-        chatServiceObserver.subscribeOnAllMessages(observer: self) { [weak self] messagePayload in
+        chatServiceObserver.subscribeToAllMessages(observer: self) { [weak self] messagePayload in
+            guard self?.isEnabled == true else { return }
             let pushPayload = ChatLocalPushManagerImpl.createPushPayload(from: messagePayload)
             self?.localPushService.sendLocalPush(with: pushPayload)
         }
+    }
+
+    deinit {
+        chatServiceObserver.unsubscribeFromAllMessages(observer: self)
     }
 
     private static func createPushPayload(from messagePayload: MessagePayload) -> PushPayload {

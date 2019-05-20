@@ -20,15 +20,15 @@ final class ChatAssembly: Assembly {
                                        deviceHandler: resolver~>)
         }
 
+        container.register(SocketFactory.self) { (resolver: Resolver, config: SoulConfiguration) in
+            SocketFactoryImpl(uriGenerator: resolver ~> (ChatClientURIGenerator.self, argument: config))
+        }
+
         container.register(ChatClientImpl.self) { (resolver: Resolver, config: SoulConfiguration) in
-            ChatClientImpl(uriGenerator: resolver ~> (ChatClientURIGenerator.self, argument: config))
+            ChatClientImpl(socketFactory: resolver ~> (SocketFactory.self, argument: config))
         }.inObjectScope(.weak)
 
         container.register(ChatClient.self) { (resolver: Resolver, config: SoulConfiguration) in
-            resolver ~> (ChatClientImpl.self, argument: config)
-        }
-
-        container.register(ChatClienStatusProvider.self) { (resolver: Resolver, config: SoulConfiguration) in
             resolver ~> (ChatClientImpl.self, argument: config)
         }
 
@@ -64,7 +64,7 @@ final class ChatAssembly: Assembly {
             return ChatManagerImpl(chatServiceObserver: resolver ~> (ChatServiceObserver.self, argument: client),
                                    chatServiceMessageSender: resolver ~> (ChatServiceMessageSender.self, argument: client),
                                    chatHistoryService: resolver ~> (ChatHistoryService.self, argument: config),
-                                   chatStatusProvider: resolver ~> (ChatClienStatusProvider.self, argument: config),
+                                   chatClient: resolver ~> (ChatClient.self, argument: config),
                                    messageMapper: resolver~>)
         }
 

@@ -1,5 +1,6 @@
 import UIKit
 
+/// Public message representation
 public struct Message {
     public let messageID: String
     public let date: Date

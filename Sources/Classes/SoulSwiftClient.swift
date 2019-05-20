@@ -4,16 +4,10 @@ public class SoulSwiftClient {
 
     private init() { }
 
-    public var soulApplicationService: SoulApplicationService?
-    public private(set) lazy var chatManager: ChatManager? = {
-        guard let soulConfiguration = soulConfiguration else { return nil }
-        return resolver.resolve(ChatManager.self, argument: soulConfiguration)
-    }() // TODO: redo
+    public private(set) var soulApplicationService: SoulApplicationService?
+    public private(set) var chatManager: ChatManager?
 
-    public private(set) lazy var chatPushManager: ChatLocalPushManager? = {
-        guard let soulConfiguration = soulConfiguration else { return nil }
-        return resolver.resolve(ChatLocalPushManager.self, argument: soulConfiguration)
-    }() // TODO: redo
+    public private(set) var chatPushManager: ChatLocalPushManager?
 
     private(set) var soulConfiguration: SoulConfiguration?
 
@@ -22,11 +16,8 @@ public class SoulSwiftClient {
     public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
         self.soulConfiguration = soulConfiguration
         self.soulApplicationService = resolver.resolve(SoulApplicationService.self)
-    }
 
-    public func logOut() {
-        self.soulConfiguration = nil
-        self.soulApplicationService = nil
-        self.chatManager = nil
+        self.chatManager = resolver.resolve(ChatManager.self, argument: soulConfiguration)
+        self.chatPushManager = resolver.resolve(ChatLocalPushManager.self, argument: soulConfiguration)
     }
 }

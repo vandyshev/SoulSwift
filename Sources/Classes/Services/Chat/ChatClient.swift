@@ -1,9 +1,9 @@
 import Foundation
-import Starscream
 
 public enum ConnectionStatus {
     case connected
     case connecting
+    case noSocket
 }
 
 extension ConnectionStatus {
@@ -18,14 +18,15 @@ extension ConnectionStatus {
 }
 
 protocol ChatClient: AnyObject {
-    func connect()
+
+    func start() -> Bool
+    func finish()
+
     func sendMessage(_ payload: Encodable) -> Bool
 
     func subscribe(_ observer: AnyObject, closure: @escaping (Data) -> Void)
     func unsubscribe(_ observer: AnyObject)
-}
 
-protocol ChatClienStatusProvider: AnyObject {
     var connectionStatus: ConnectionStatus { get }
     func subscribeToConnectionStatus(_ observer: AnyObject, closure: @escaping (ConnectionStatus) -> Void)
     func unsubscribeFromConnectionStatus(_ observer: AnyObject)
@@ -35,25 +36,30 @@ private enum Constants {
     static let reconnectionTime: TimeInterval = 3
 }
 
-public final class ChatClientImpl: ChatClient, ChatClienStatusProvider {
+public final class ChatClientImpl: ChatClient {
 
-    private var socket: WebSocket
-    private let uriGenerator: ChatClientURIGenerator
+    private var socket: Socket?
+    private let socketFactory: SocketFactory
     private let observable = Observable<Data>()
     private let statusObservable = Observable<ConnectionStatus>()
 
     public var connectionStatus: ConnectionStatus {
+        guard let socket = socket else {
+            return .noSocket
+        }
         return socket.isConnected ? .connected : .connecting
     }
 
-    init(uriGenerator: ChatClientURIGenerator) {
-        self.uriGenerator = uriGenerator
+    init(socketFactory: SocketFactory) {
+        self.socketFactory = socketFactory
+    }
 
-        guard let uri = uriGenerator.wsConnectionURI else {
-            fatalError("impossible web socket url")
+    func start() -> Bool {
+        guard let socket = socketFactory.socket else {
+            return false
         }
 
-        socket = WebSocket(url: uri)
+        self.socket = socket
 
         socket.onConnect = { [weak self] in
             self?.broadcastStatus()
@@ -70,15 +76,20 @@ public final class ChatClientImpl: ChatClient, ChatClienStatusProvider {
             print("got some text: \(text)")
         }
 
-        socket.onHttpResponseHeaders = {
-            print("HttpResponseHeaders \($0)")
-        }
         connect()
+        return true
     }
 
-    func connect() {
+    func finish() {
+        self.socket?.onConnect = nil
+        self.socket?.onDisconnect = nil
+        self.socket?.onText = nil
+        self.socket = nil
+    }
+
+    private func connect() {
         broadcastStatus()
-        socket.connect()
+        socket?.connect()
     }
 
     private func broadcastStatus() {
@@ -95,19 +106,20 @@ public final class ChatClientImpl: ChatClient, ChatClienStatusProvider {
     }
 
     @objc private func updateConnectionStatus() {
-        if !socket.isConnected {
+        if let socket = socket, !socket.isConnected {
             connect()
         }
     }
 
     func sendMessage(_ payload: Encodable) -> Bool {
-        if socket.isConnected == true {
+        guard let socket = socket else { return false }
+        if socket.isConnected {
             guard let messageString = payload.asString else {
                 return false
             }
             socket.write(string: messageString)
         }
-        return socket.isConnected == true
+        return socket.isConnected
     }
 
     private func onText(_ string: String) {

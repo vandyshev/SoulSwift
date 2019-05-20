@@ -1,13 +1,13 @@
 import Foundation
 
 protocol ChatServiceObserver {
-    func subscribeOnAllMessages(observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void)
-    func subscribeOnAllEvents(observer: AnyObject, onEvent: @escaping (EventPayload) -> Void)
+    func subscribeToAllMessages(observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void)
+    func subscribeToAllEvents(observer: AnyObject, onEvent: @escaping (EventPayload) -> Void)
 
-    func subscribeOnMessage(toChannel channel: String, observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void)
-    func subscribeOnEvent(toChannel channel: String, observer: AnyObject, onEvent: @escaping (EventPayload) -> Void)
+    func subscribeToMessages(inChannel channel: String, observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void)
+    func subscribeToEvents(inChannel channel: String, observer: AnyObject, onEvent: @escaping (EventPayload) -> Void)
 
-    func unsubscribeFromAllMessage(observer: AnyObject)
+    func unsubscribeFromAllMessages(observer: AnyObject)
     func unsubscribeFromAllEvents(observer: AnyObject)
 
     func unsubscribeFromMessagesInChannel(_ channel: String, observer: AnyObject)
@@ -31,27 +31,27 @@ final class ChatServiceObserverImpl: ChatServiceObserver {
     private let allEventsObservable = Observable<EventPayload>()
     private var channelEventObservables = [String: Observable<EventPayload>]()
 
-    func subscribeOnAllMessages(observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void) {
+    func subscribeToAllMessages(observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void) {
         allMessagesObservable.subscribe(observer, closure: onMessage)
     }
 
-    func subscribeOnAllEvents(observer: AnyObject, onEvent: @escaping (EventPayload) -> Void) {
+    func subscribeToAllEvents(observer: AnyObject, onEvent: @escaping (EventPayload) -> Void) {
         allEventsObservable.subscribe(observer, closure: onEvent)
     }
 
-    func subscribeOnMessage(toChannel channel: String, observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void) {
+    func subscribeToMessages(inChannel channel: String, observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void) {
         let observable = channelMessageObservables[channel] ?? Observable<MessagePayload>()
         observable.subscribe(observer, closure: onMessage)
         channelMessageObservables[channel] = observable
     }
 
-    func subscribeOnEvent(toChannel channel: String, observer: AnyObject, onEvent: @escaping (EventPayload) -> Void) {
+    func subscribeToEvents(inChannel channel: String, observer: AnyObject, onEvent: @escaping (EventPayload) -> Void) {
         let observable = channelEventObservables[channel] ?? Observable<EventPayload>()
         observable.subscribe(observer, closure: onEvent)
         channelEventObservables[channel] = observable
     }
 
-    func unsubscribeFromAllMessage(observer: AnyObject) {
+    func unsubscribeFromAllMessages(observer: AnyObject) {
         allMessagesObservable.unsubscribe(observer)
     }
 

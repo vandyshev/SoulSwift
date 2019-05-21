@@ -8,9 +8,17 @@ public protocol ChatManager: AnyObject {
 
     var isLocalPushNotificationsEnabled: Bool { get set }
 
-    func history(channel: String, olderThan date: Date?, completion: @escaping  (Result<[Message], Error>) -> Void)
-    func sendMessage(_ messageContent: MessageContent, to channel: String, completion: @escaping (Result<Message, Error>) -> Void)
+    func history(channel: String,
+                 olderThan date: Date?,
+                 limit: UInt?,
+                 completion: @escaping  (Result<[Message], Error>) -> Void)
+
+    func sendMessage(_ messageContent: MessageContent,
+                     to channel: String,
+                     completion: @escaping (Result<Message, Error>) -> Void)
+
     func sendReadEvent(to channel: String, lastMessageDate: Date)
+
     func subscribe(to channel: String, observer: AnyObject, onMessage: @escaping (Message) -> Void)
     func unsubscribe(from channel: String, observer: AnyObject)
 
@@ -76,9 +84,13 @@ final class ChatManagerImpl: ChatManager {
         }
     }
 
-    func history(channel: String, olderThan date: Date?, completion: @escaping (Result<[Message], Error>) -> Void) {
+    func history(channel: String,
+                 olderThan date: Date?,
+                 limit: UInt?,
+                 completion: @escaping (Result<[Message], Error>) -> Void) {
         let olderThan = date ?? Date()
-        let chatHistoryConfig = ChatHistoryConfig(limit: Constants.defaultLimit,
+        let limit = limit.flatMap { Int($0) } ?? Constants.defaultLimit
+        let chatHistoryConfig = ChatHistoryConfig(limit: limit,
                                                   offset: Constants.defaultOffset,
                                                   beforeTimestamp: DateHelper.timestamp(from: olderThan),
                                                   afterTimestamp: nil,
@@ -121,7 +133,6 @@ final class ChatManagerImpl: ChatManager {
                                                            channel: messagePayload.channel)
             onMessage(message)
         }
-
         chatServiceObserver.subscribeToEvents(inChannel: channel, observer: observer) { [weak self] event in
             let historySync: HistorySyncEvent? = {
                 guard case let .historySync(historySync) = event.event else { return nil }

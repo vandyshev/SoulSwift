@@ -1,6 +1,7 @@
 import UIKit
 
-public protocol ChatLocalPushManager {
+/// It handles local push notifications
+protocol ChatLocalPushManager: AnyObject {
     var isEnabled: Bool { get set }
 }
 
@@ -14,7 +15,6 @@ private enum LocalizationConstants {
     static let geoMessage = "chat_message_location"
 }
 
-/// It handles local push notifications
 class ChatLocalPushManagerImpl: ChatLocalPushManager {
 
     var isEnabled: Bool = true

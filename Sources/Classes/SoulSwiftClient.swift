@@ -7,8 +7,6 @@ public class SoulSwiftClient {
     public private(set) var soulApplicationService: SoulApplicationService?
     public private(set) var chatManager: ChatManager?
 
-    public private(set) var chatPushManager: ChatLocalPushManager?
-
     private(set) var soulConfiguration: SoulConfiguration?
 
     private let resolver = DependencyConfigurator.shared.resolver
@@ -16,8 +14,6 @@ public class SoulSwiftClient {
     public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
         self.soulConfiguration = soulConfiguration
         self.soulApplicationService = resolver.resolve(SoulApplicationService.self)
-
         self.chatManager = resolver.resolve(ChatManager.self, argument: soulConfiguration)
-        self.chatPushManager = resolver.resolve(ChatLocalPushManager.self, argument: soulConfiguration)
     }
 }

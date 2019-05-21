@@ -5,7 +5,9 @@ public protocol ChatManager: AnyObject {
 
     func start() -> Bool
     func finish()
-
+    
+    var isLocalPushNotificationsEnabled: Bool { get set }
+    
     func history(channel: String, olderThan date: Date?, completion: @escaping  (Result<[Message], Error>) -> Void)
     func sendMessage(_ messageForSend: MessageToSend, to channel: String, completion: @escaping (Result<Message, Error>) -> Void)
     func sendReadEvent(to channel: String, lastMessageDate: Date)
@@ -25,10 +27,15 @@ private enum Constants {
 final class ChatManagerImpl: ChatManager {
 
     var connectionStatus: ConnectionStatus { return chatClient.connectionStatus }
+    var isLocalPushNotificationsEnabled: Bool {
+        get { return pushManager.isEnabled }
+        set { pushManager.isEnabled = newValue }
+    }
 
     private let chatServiceObserver: ChatServiceObserver
     private let chatServiceMessageSender: ChatServiceMessageSender
     private let chatHistoryService: ChatHistoryService
+    private let pushManager: ChatLocalPushManager
     private let chatClient: ChatClient
     private let messageMapper: MessageMapper
 
@@ -36,11 +43,13 @@ final class ChatManagerImpl: ChatManager {
          chatServiceMessageSender: ChatServiceMessageSender,
          chatHistoryService: ChatHistoryService,
          chatClient: ChatClient,
+         pushManager: ChatLocalPushManager,
          messageMapper: MessageMapper) {
         self.chatServiceObserver      = chatServiceObserver
         self.chatServiceMessageSender = chatServiceMessageSender
         self.chatHistoryService       = chatHistoryService
         self.chatClient               = chatClient
+        self.pushManager              = pushManager
         self.messageMapper            = messageMapper
 
         handleInputMessages()

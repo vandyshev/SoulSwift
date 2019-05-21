@@ -81,10 +81,12 @@ public final class ChatClientImpl: ChatClient {
     }
 
     func finish() {
+        self.socket?.disconnect()
         self.socket?.onConnect = nil
         self.socket?.onDisconnect = nil
         self.socket?.onText = nil
         self.socket = nil
+        broadcastStatus()
     }
 
     private func connect() {

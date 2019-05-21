@@ -65,6 +65,7 @@ final class ChatAssembly: Assembly {
                                    chatServiceMessageSender: resolver ~> (ChatServiceMessageSender.self, argument: client),
                                    chatHistoryService: resolver ~> (ChatHistoryService.self, argument: config),
                                    chatClient: resolver ~> (ChatClient.self, argument: config),
+                                   pushManager: resolver ~> (ChatLocalPushManager.self, argument: config),
                                    messageMapper: resolver~>)
         }
 

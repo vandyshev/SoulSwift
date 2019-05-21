@@ -8,6 +8,7 @@ protocol Socket: AnyObject {
     var onText: ((String) -> Void)? { get set }
     func write(string: String)
     func connect()
+    func disconnect()
 }
 
 extension WebSocket: Socket {  }

@@ -5,11 +5,11 @@ public protocol ChatManager: AnyObject {
 
     func start() -> Bool
     func finish()
-    
+
     var isLocalPushNotificationsEnabled: Bool { get set }
-    
+
     func history(channel: String, olderThan date: Date?, completion: @escaping  (Result<[Message], Error>) -> Void)
-    func sendMessage(_ messageForSend: MessageToSend, to channel: String, completion: @escaping (Result<Message, Error>) -> Void)
+    func sendMessage(_ messageContent: MessageContent, to channel: String, completion: @escaping (Result<Message, Error>) -> Void)
     func sendReadEvent(to channel: String, lastMessageDate: Date)
     func subscribe(to channel: String, observer: AnyObject, onMessage: @escaping (Message) -> Void)
     func unsubscribe(from channel: String, observer: AnyObject)
@@ -58,11 +58,11 @@ final class ChatManagerImpl: ChatManager {
     deinit {
         chatServiceObserver.unsubscribeFromAllMessages(observer: self)
     }
-    
+
     func start() -> Bool {
         return chatClient.start()
     }
-    
+
     func finish() {
         chatClient.finish()
     }
@@ -99,9 +99,9 @@ final class ChatManagerImpl: ChatManager {
         }
     }
 
-    func sendMessage(_ messageToSend: MessageToSend, to channel: String, completion: @escaping (Result<Message, Error>) -> Void) {
+    func sendMessage(_ messageContent: MessageContent, to channel: String, completion: @escaping (Result<Message, Error>) -> Void) {
         do {
-            let chatMessage = try chatServiceMessageSender.sendNewMessage(messageToSend, channel: channel)
+            let chatMessage = try chatServiceMessageSender.sendNewMessage(messageContent, channel: channel)
             let message = messageMapper.mapToMessage(chatMessage: chatMessage, channel: channel)
             completion(.success(message))
         } catch {

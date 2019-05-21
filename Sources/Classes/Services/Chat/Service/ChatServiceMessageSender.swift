@@ -2,7 +2,7 @@ import Foundation
 
 protocol ChatServiceMessageSender {
     @discardableResult
-    func sendNewMessage(_ messageToSend: MessageToSend, channel: String) throws -> ChatMessage
+    func sendNewMessage(_ messageContent: MessageContent, channel: String) throws -> ChatMessage
     func send(message: ChatMessage, channel: String) throws
 
     func sendReadEvent(lastReadMessageTimestamp: UnixTimeStamp, channel: String) throws
@@ -31,8 +31,8 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
         self.eventGenerator = eventGenerator
     }
 
-    func sendNewMessage(_ messageToSend: MessageToSend, channel: String) throws -> ChatMessage {
-        guard let message = messageGenerator.createMessage(messageToSend) else {
+    func sendNewMessage(_ messageContent: MessageContent, channel: String) throws -> ChatMessage {
+        guard let message = messageGenerator.createMessage(messageContent) else {
             throw ChatServiceSenderError.cannotCreateMessage
         }
         try send(message: message, channel: channel)

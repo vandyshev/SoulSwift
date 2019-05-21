@@ -1,7 +1,7 @@
 import UIKit
 
 protocol MessagesGenerator {
-    func createMessage(_ messageToSend: MessageToSend) -> ChatMessage?
+    func createMessage(_ messageContnet: MessageContent) -> ChatMessage?
     func createTextMessage(_ text: String) -> ChatMessage?
     func createPhotoMessage(photoId: String, albumName: String) -> ChatMessage?
     func createGeoMessage(lat: Double, lng: Double) -> ChatMessage?
@@ -21,8 +21,8 @@ final class MessagesGeneratorImpl: MessagesGenerator {
         self.storage = storage
     }
 
-    func createMessage(_ messageToSend: MessageToSend) -> ChatMessage? {
-        switch messageToSend {
+    func createMessage(_ messageContnet: MessageContent) -> ChatMessage? {
+        switch messageContnet {
         case let .text(text):
             return createTextMessage(text)
         case let .photo(photoId: photoId, albumName: albumName):

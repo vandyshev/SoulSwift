@@ -27,8 +27,8 @@ final class MessageMapperImpl: MessageMapper {
         return Message(messageID: historyMessage.messageId,
                        date: historyMessage.timestamp.date,
                        userID: historyMessage.userId,
-                       text: historyMessage.text,
                        channel: chatHistoryObject.channel,
+                       contnet: historyMessage.content,
                        direction: getDirection(by: chatHistoryObject.userIdentifier))
     }
 
@@ -37,8 +37,8 @@ final class MessageMapperImpl: MessageMapper {
         return Message(messageID: chatMessage.messageId,
                        date: chatMessage.timestamp.date,
                        userID: chatMessage.userId,
-                       text: chatMessage.text,
                        channel: channel,
+                       contnet: chatMessage.content,
                        direction: getDirection(by: chatMessage.userId))
     }
 }

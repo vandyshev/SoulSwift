@@ -53,4 +53,14 @@ extension ChatMessage {
     var isTextMessage: Bool {
         return !isPhotoMessage && !isLocationMessage
     }
+
+    var content: MessageContent {
+        if let lat = latitude, let lng = longitude {
+            return .location(latitude: lat, longitude: lng)
+        } else if let photoId = photoId, let albumName = albumName {
+            return .photo(photoId: photoId, albumName: albumName)
+        } else {
+            return .text(text)
+        }
+    }
 }

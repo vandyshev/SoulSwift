@@ -5,8 +5,8 @@ public struct Message {
     public let messageID: String
     public let date: Date
     public let userID: String
-    public let text: String
     public let channel: String
+    public let contnet: MessageContent
     public let direction: MessageDirection
 }
 

@@ -117,13 +117,26 @@ final class ChatManagerImpl: ChatManager {
     func subscribe(to channel: String, observer: AnyObject, onMessage: @escaping (Message) -> Void) {
         chatServiceObserver.subscribeToMessages(inChannel: channel, observer: observer) { [weak self] messagePayload in
             guard let stelf = self else { return }
-            let message = stelf.messageMapper.mapToMessage(chatMessage: messagePayload.message, channel: messagePayload.channel)
+            let message = stelf.messageMapper.mapToMessage(chatMessage: messagePayload.message,
+                                                           channel: messagePayload.channel)
             onMessage(message)
+        }
+
+        chatServiceObserver.subscribeToEvents(inChannel: channel, observer: observer) { [weak self] event in
+            let historySync: HistorySyncEvent? = {
+                guard case let .historySync(historySync) = event.event else { return nil }
+                return historySync
+            }()
+            guard let message = historySync?.message, let stelf = self else { return }
+            let mappedMessage = stelf.messageMapper.mapToMessage(chatMessage: message,
+                                                                 channel: channel)
+            onMessage(mappedMessage)
         }
     }
 
     func unsubscribe(from channel: String, observer: AnyObject) {
         chatServiceObserver.unsubscribeFromMessagesInChannel(channel, observer: observer)
+        chatServiceObserver.unsubscribeFromEventsInChannel(channel, observer: observer)
     }
 
     func subscribeToConnectionStatus(observer: AnyObject, onStatusChange: @escaping (ConnectionStatus) -> Void) {

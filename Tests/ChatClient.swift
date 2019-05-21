@@ -20,6 +20,10 @@ private class SocketMock: Socket {
     func connect() {
         self.isConnected = true
     }
+
+    func disconnect() {
+        self.isConnected = false
+    }
 }
 
 private class FakeSocketFactory: SocketFactory {
@@ -69,5 +73,15 @@ class ChatClient: XCTestCase {
         let sendMessageResult = client.sendMessage(message)
         XCTAssertTrue(sendMessageResult)
         XCTAssertEqual(socket.lastWritedText, message.asString)
+    }
+
+    func testClientStartFinish() {
+        let socket = SocketMock()
+        factory.socket = socket
+        let startResult = client.start()
+        XCTAssertTrue(startResult)
+        XCTAssertEqual(client.connectionStatus, ConnectionStatus.connected)
+        client.finish()
+        XCTAssertEqual(client.connectionStatus, ConnectionStatus.noSocket)
     }
 }

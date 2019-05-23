@@ -1,11 +1,3 @@
-//
-//  ViewController.swift
-//  SoulSwift
-//
-//  Created by Evgeny Vandyshev on 11/28/2018.
-//  Copyright (c) 2018 Evgeny Vandyshev. All rights reserved.
-//
-
 import UIKit
 import SoulSwift
 

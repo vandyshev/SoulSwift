@@ -1,11 +1,3 @@
-//
-//  ChatMapping.swift
-//  SoulSwift_Tests
-//
-//  Created by Andrey Mikhaylov on 19/04/2019.
-//  Copyright © 2019 CocoaPods. All rights reserved.
-//
-
 import XCTest
 import Foundation
 @testable import SoulSwift

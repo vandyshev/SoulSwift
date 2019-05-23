@@ -1,6 +1,6 @@
 import Starscream
 
-/// Generates socketif possible
+/// Generates socket if possible
 protocol SocketFactory: AnyObject {
     var socket: Socket? { get }
 }

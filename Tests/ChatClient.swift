@@ -30,7 +30,7 @@ private class FakeSocketFactory: SocketFactory {
     var socket: Socket?
 }
 
-class ChatClient: XCTestCase {
+class ChatClientTests: XCTestCase {
 
     private var client: ChatClientImpl!
     private var factory: FakeSocketFactory!

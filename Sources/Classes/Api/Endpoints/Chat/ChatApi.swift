@@ -25,14 +25,9 @@ extension ChatApi: TargetType {
         return "{}".data(using: String.Encoding.utf8)!
     }
 
-    var task: Task { // TODO: redo
-        guard let encodedData = try? JSONEncoder().encode(chatHistoryConfig) else {
-            return .requestPlain
-        }
-        guard let json = try? JSONSerialization.jsonObject(with: encodedData, options: []) as? [String: Any] else {
-            return .requestPlain
-        }
-        return .requestParameters(parameters: json ?? [:], encoding: URLEncoding.queryString)
+    var task: Task {
+        let parameters = chatHistoryConfig.asDictionary ?? [:]
+        return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
     }
 
     var headers: [String: String]? {

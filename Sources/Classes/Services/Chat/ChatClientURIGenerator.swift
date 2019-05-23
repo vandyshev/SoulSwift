@@ -12,7 +12,7 @@ protocol ChatApiURLGenerator {
 }
 
 struct ChatURIGeneratorConfig {
-    // should be declared with scheme, with port and with last `/` character
+    // should be declared without scheme, but with port and with last `/` character
     let baseUrlString: String
     let apiKey: String
 

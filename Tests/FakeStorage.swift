@@ -14,3 +14,12 @@ class FakeStorage: Storage {
         self.serverTimeDelta = serverTimeDelta
     }
 }
+
+class FakeDeviceIdStorage: DeviceIdStorage {
+    
+    var deviceID: String?
+
+    init(deviceID: String?) {
+        self.deviceID = deviceID
+    }
+}

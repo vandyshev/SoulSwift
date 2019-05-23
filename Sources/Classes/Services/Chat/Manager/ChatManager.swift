@@ -11,7 +11,7 @@ public protocol ChatManager: AnyObject {
     func history(channel: String,
                  olderThan date: Date?,
                  limit: UInt?,
-                 completion: @escaping  (Result<[Message], Error>) -> Void)
+                 completion: @escaping  (Result<[Message], ApiError>) -> Void)
 
     func sendMessage(_ messageContent: MessageContent,
                      to channel: String,
@@ -78,16 +78,17 @@ final class ChatManagerImpl: ChatManager {
     private func handleInputMessages() {
         chatServiceObserver.subscribeToAllMessages(observer: self) { [weak self] messagePayload in
             let message = messagePayload.message
-            try? self?.chatServiceMessageSender.sendDeliveryConfirmationEvent(deliveredMessageId: message.messageId,
-                                                                              userIdInMessage: message.userId,
-                                                                              channel: messagePayload.channel)
+            try? self?.chatServiceMessageSender
+                .sendDeliveryConfirmationEvent(deliveredMessageId: message.messageId,
+                                               userIdInMessage: message.userId,
+                                               channel: messagePayload.channel)
         }
     }
 
     func history(channel: String,
                  olderThan date: Date?,
                  limit: UInt?,
-                 completion: @escaping (Result<[Message], Error>) -> Void) {
+                 completion: @escaping (Result<[Message], ApiError>) -> Void) {
         let olderThan = date ?? Date()
         let limit = limit.flatMap { Int($0) } ?? Constants.defaultLimit
         let chatHistoryConfig = ChatHistoryConfig(limit: limit,
@@ -98,7 +99,8 @@ final class ChatManagerImpl: ChatManager {
                                                   afterIdentifer: nil,
                                                   beforeMessageIdentifier: nil,
                                                   afterMessageIdentifer: nil)
-        chatHistoryService.loadHistory(channel: channel, historyConfig: chatHistoryConfig) { [weak self] result in
+        chatHistoryService.loadHistory(channel: channel,
+                                       historyConfig: chatHistoryConfig) { [weak self] result in
             guard let stelf = self else { return }
 
             switch result {
@@ -111,7 +113,9 @@ final class ChatManagerImpl: ChatManager {
         }
     }
 
-    func sendMessage(_ messageContent: MessageContent, to channel: String, completion: @escaping (Result<Message, Error>) -> Void) {
+    func sendMessage(_ messageContent: MessageContent,
+                     to channel: String,
+                     completion: @escaping (Result<Message, Error>) -> Void) {
         do {
             let chatMessage = try chatServiceMessageSender.sendNewMessage(messageContent, channel: channel)
             let message = messageMapper.mapToMessage(chatMessage: chatMessage, channel: channel)
@@ -127,13 +131,15 @@ final class ChatManagerImpl: ChatManager {
     }
 
     func subscribe(to channel: String, observer: AnyObject, onMessage: @escaping (Message) -> Void) {
-        chatServiceObserver.subscribeToMessages(inChannel: channel, observer: observer) { [weak self] messagePayload in
+        chatServiceObserver.subscribeToMessages(inChannel: channel,
+                                                observer: observer) { [weak self] messagePayload in
             guard let stelf = self else { return }
             let message = stelf.messageMapper.mapToMessage(chatMessage: messagePayload.message,
                                                            channel: messagePayload.channel)
             onMessage(message)
         }
-        chatServiceObserver.subscribeToEvents(inChannel: channel, observer: observer) { [weak self] event in
+        chatServiceObserver.subscribeToEvents(inChannel: channel,
+                                              observer: observer) { [weak self] event in
             let historySync: HistorySyncEvent? = {
                 guard case let .historySync(historySync) = event.event else { return nil }
                 return historySync

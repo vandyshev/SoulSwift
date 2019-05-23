@@ -5,7 +5,11 @@ import Moya
 public protocol ChatHistoryService: AnyObject {
     func loadHistory(channel: String,
                      historyConfig: ChatHistoryConfig,
-                     completion: @escaping (Result<[ChatHistoryObject], Error>) -> Void)
+                     completion: @escaping (Result<[ChatHistoryObject], ApiError>) -> Void)
+}
+
+private enum Constants {
+    static let chatHsitoryMappingError = "Can't decode history"
 }
 
 final class ChatHistoryServiceImpl: ChatHistoryService {
@@ -22,7 +26,7 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
 
     func loadHistory(channel: String,
                      historyConfig: ChatHistoryConfig,
-                     completion: @escaping (Result<[ChatHistoryObject], Error>) -> Void) {
+                     completion: @escaping (Result<[ChatHistoryObject], ApiError>) -> Void) {
         let chatApi = ChatApi(chatHistoryConfig: historyConfig,
                               channel: channel,
                               authHelper: authHelper,
@@ -36,11 +40,13 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
                     let history = try decoder.decode([ChatHistoryObject].self, from: value.data)
                     completion(.success(history))
                 } catch {
-                    print(error)
-                    completion(.success([]))
+                    let decodableError: ApiError
+                        = .mappingError(description: Constants.chatHsitoryMappingError)
+                    completion(.failure(decodableError))
                 }
             case .failure(let error):
-                completion(.failure(error))
+                let apiError = ApiError(moyaError: error)
+                completion(.failure(apiError))
             }
         }
     }

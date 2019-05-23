@@ -1,11 +1,16 @@
+import SwinjectAutoregistration
+
 public class SoulSwiftClient {
 
     public static var shared = SoulSwiftClient()
 
-    private init() { }
+    private init() {
+        errorService = resolver ~> ErrorService.self
+    }
 
     public private(set) var soulApplicationService: SoulApplicationService?
     public private(set) var chatManager: ChatManager?
+    public private(set) var errorService: ErrorService
 
     private(set) var soulConfiguration: SoulConfiguration?
 

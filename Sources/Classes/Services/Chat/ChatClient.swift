@@ -36,10 +36,24 @@ private enum Constants {
     static let reconnectionTime: TimeInterval = 3
 }
 
+private enum ChatClientError: Error {
+    case cannotStartSocket
+}
+
+extension ChatClientError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .cannotStartSocket:
+            return "Can't start socket"
+        }
+    }
+}
+
 public final class ChatClientImpl: ChatClient {
 
     private var socket: Socket?
     private let socketFactory: SocketFactory
+    private let errorService: InternalErrorService
     private let observable = Observable<Data>()
     private let statusObservable = Observable<ConnectionStatus>()
 
@@ -50,12 +64,16 @@ public final class ChatClientImpl: ChatClient {
         return socket.isConnected ? .connected : .connecting
     }
 
-    init(socketFactory: SocketFactory) {
+    init(socketFactory: SocketFactory,
+         errorService: InternalErrorService) {
         self.socketFactory = socketFactory
+        self.errorService = errorService
     }
 
     func start() -> Bool {
         guard let socket = socketFactory.socket else {
+            let apiError: ApiError = .chatSocketError(ChatClientError.cannotStartSocket)
+            errorService.handleError(apiError)
             return false
         }
 
@@ -67,6 +85,10 @@ public final class ChatClientImpl: ChatClient {
         }
 
         socket.onDisconnect = { [weak self] (error: Error?) in
+            if let error = error {
+                let apiError: ApiError = .chatSocketError(error)
+                self?.errorService.handleError(apiError)
+            }
             self?.reconnect()
             print("websocket is disconnected: \(error)")
         }

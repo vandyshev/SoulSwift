@@ -14,13 +14,17 @@ private enum Constants {
 
 final class ChatHistoryServiceImpl: ChatHistoryService {
 
-    let authHelper: AuthHelper
-    let urlGenerator: ChatApiURLGenerator
+    private let authHelper: AuthHelper
+    private let urlGenerator: ChatApiURLGenerator
+    private let errorService: InternalErrorService
     let provider: MoyaProvider<ChatApi>
 
-    init(authHelper: AuthHelper, urlGenerator: ChatApiURLGenerator) {
+    init(authHelper: AuthHelper,
+         urlGenerator: ChatApiURLGenerator,
+         errorService: InternalErrorService) {
         self.authHelper   = authHelper
         self.urlGenerator = urlGenerator
+        self.errorService = errorService
         self.provider = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
     }
 
@@ -31,7 +35,7 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
                               channel: channel,
                               authHelper: authHelper,
                               urlGenerator: urlGenerator)
-        provider.request(chatApi) { result in
+        provider.request(chatApi) { [weak self] result in
             switch result {
             case .success(let value):
                 let decoder = JSONDecoder()
@@ -46,6 +50,7 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
                 }
             case .failure(let error):
                 let apiError = ApiError(moyaError: error)
+                self?.errorService.handleError(apiError)
                 completion(.failure(apiError))
             }
         }

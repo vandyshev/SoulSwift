@@ -25,7 +25,8 @@ final class ChatAssembly: Assembly {
         }
 
         container.register(ChatClientImpl.self) { (resolver: Resolver, config: SoulConfiguration) in
-            ChatClientImpl(socketFactory: resolver ~> (SocketFactory.self, argument: config))
+            ChatClientImpl(socketFactory: resolver ~> (SocketFactory.self, argument: config),
+                           errorService: resolver~>)
         }.inObjectScope(.weak)
 
         container.register(ChatClient.self) { (resolver: Resolver, config: SoulConfiguration) in
@@ -47,12 +48,14 @@ final class ChatAssembly: Assembly {
         container.register(ChatServiceMessageSender.self) { (resolver: Resolver, client: ChatClient) in
             ChatServiceMessageSenderImpl(chatClient: client,
                                          messagesGenerator: resolver~>,
-                                         eventGenerator: resolver~>)
+                                         eventGenerator: resolver~>,
+                                         errorService: resolver~>)
         }
 
         container.register(ChatHistoryService.self) { (resolver: Resolver, config: SoulConfiguration) in
             ChatHistoryServiceImpl(authHelper: resolver ~> (AuthHelper.self, argument: config.appName),
-                                   urlGenerator: resolver ~> (ChatApiURLGenerator.self, argument: config))
+                                   urlGenerator: resolver ~> (ChatApiURLGenerator.self, argument: config),
+                                   errorService: resolver~>)
         }
 
         container.register(MessageMapper.self) { resolver in

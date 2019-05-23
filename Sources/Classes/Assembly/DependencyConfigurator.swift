@@ -14,7 +14,8 @@ final class DependencyConfigurator {
             CoreComponents(),
             SoulServiceAssembly(),
             ChatAssembly(),
-            PushServiceAssembly()
+            PushServiceAssembly(),
+            ErrorServiceAssembly()
         ])
     }
 }

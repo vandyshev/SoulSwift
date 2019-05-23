@@ -7,6 +7,7 @@ public enum ApiError {
     case networkConnection(code: Int, domain: String)
     case badRequest
     case unknown(error: Error)
+    case chatSocketError(Error)
 }
 
 extension ApiError: Error {
@@ -46,6 +47,8 @@ extension ApiError: LocalizedError {
             return "Failed to create URLRequest"
         case let .unknown(error: error):
             return error.localizedDescription
+        case let .chatSocketError(error):
+            return "Socket Error: \(error.localizedDescription)"
         }
     }
 }

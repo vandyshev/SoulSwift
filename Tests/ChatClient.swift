@@ -33,15 +33,19 @@ private class FakeSocketFactory: SocketFactory {
 class ChatClientTests: XCTestCase {
 
     private var client: ChatClientImpl!
+    private var errorService: ErrorServiceImpl!
     private var factory: FakeSocketFactory!
 
     override func setUp() {
         factory = FakeSocketFactory()
-        client = ChatClientImpl(socketFactory: factory)
+        errorService = ErrorServiceImpl()
+        client = ChatClientImpl(socketFactory: factory,
+                                errorService: errorService)
     }
 
     override func tearDown() {
         client = nil
+        errorService = nil
         factory = nil
     }
 

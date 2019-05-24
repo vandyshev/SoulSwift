@@ -33,8 +33,8 @@ final class ChatAssembly: Assembly {
             resolver ~> (ChatClientImpl.self, argument: config)
         }
 
-        container.register(MessagesGenerator.self) { resolver in
-            MessagesGeneratorImpl(storage: resolver~>)
+        container.register(MessagesFactory.self) { resolver in
+            MessagesFactoryImpl(storage: resolver~>)
         }
 
         container.register(EventFactory.self) { resolver in
@@ -47,7 +47,7 @@ final class ChatAssembly: Assembly {
 
         container.register(ChatServiceMessageSender.self) { (resolver: Resolver, client: ChatClient) in
             ChatServiceMessageSenderImpl(chatClient: client,
-                                         messagesGenerator: resolver~>,
+                                         messagesFactory: resolver~>,
                                          eventFactory: resolver~>,
                                          errorService: resolver~>)
         }

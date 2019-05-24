@@ -51,10 +51,18 @@ class ChatClientTests: XCTestCase {
 
     func testClientStartFailed() {
         factory.socket = nil
-        let startResult = client.start()
-        XCTAssertFalse(startResult)
-        let sendMessageResult = client.sendMessage("hello")
-        XCTAssertFalse(sendMessageResult)
+        do {
+            try client.start()
+            fatalError()
+        } catch {
+            // expected
+        }
+        do {
+            try client.sendMessage("hello")
+            fatalError()
+        } catch {
+            // expected
+        }
         let status = client.connectionStatus
         XCTAssertEqual(status, ConnectionStatus.noSocket)
     }
@@ -62,8 +70,11 @@ class ChatClientTests: XCTestCase {
     func testClientStartSuccess() {
         let socket = SocketMock()
         factory.socket = socket
-        let startResult = client.start()
-        XCTAssertTrue(startResult)
+        do {
+            try client.start()
+        } catch {
+            fatalError()
+        }
         let status = client.connectionStatus
         XCTAssertEqual(status, ConnectionStatus.connected)
         let message = ChatMessage(messageId: "id",
@@ -74,16 +85,22 @@ class ChatClientTests: XCTestCase {
                                   albumName: nil,
                                   latitude: nil,
                                   longitude: nil)
-        let sendMessageResult = client.sendMessage(message)
-        XCTAssertTrue(sendMessageResult)
+        do {
+            try client.sendMessage(message)
+        } catch {
+            fatalError()
+        }
         XCTAssertEqual(socket.lastWritedText, message.asString)
     }
 
     func testClientStartFinish() {
         let socket = SocketMock()
         factory.socket = socket
-        let startResult = client.start()
-        XCTAssertTrue(startResult)
+        do {
+            try client.start()
+        } catch {
+            fatalError()
+        }
         XCTAssertEqual(client.connectionStatus, ConnectionStatus.connected)
         client.finish()
         XCTAssertEqual(client.connectionStatus, ConnectionStatus.noSocket)

@@ -12,33 +12,28 @@ protocol ChatServiceMessageSender {
                                        channel: String) throws
 }
 
-enum ChatServiceSenderError: Error {
-    case cannotCreateMessage
-    case cannotSendMessage
-    case cannotCreateEvent
-    case cannotSendEvent
-}
-
 final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
 
     private let chatClient: ChatClient
-    private let messageGenerator: MessagesGenerator
+    private let messagesFactory: MessagesFactory
     private let eventFactory: EventFactory
     private let errorService: InternalErrorService
 
     init(chatClient: ChatClient,
-         messagesGenerator: MessagesGenerator,
+         messagesFactory: MessagesFactory,
          eventFactory: EventFactory,
          errorService: InternalErrorService) {
         self.chatClient = chatClient
-        self.messageGenerator = messagesGenerator
+        self.messagesFactory = messagesFactory
         self.eventFactory = eventFactory
         self.errorService = errorService
     }
 
     func sendNewMessage(_ messageContent: MessageContent, channel: String) throws -> ChatMessage {
-        guard let message = messageGenerator.createMessage(messageContent) else {
-            let error = ChatServiceSenderError.cannotCreateMessage
+        let message: ChatMessage
+        do {
+            message = try messagesFactory.createMessage(messageContent)
+        } catch {
             handleError(error)
             throw error
         }
@@ -48,9 +43,9 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
 
     func send(message: ChatMessage, channel: String) throws {
         let payload = MessagePayload(channel: channel, message: message)
-        let sended = chatClient.sendMessage(payload)
-        if !sended {
-            let error = ChatServiceSenderError.cannotSendMessage
+        do {
+            try chatClient.sendMessage(payload)
+        } catch {
             handleError(error)
             throw error
         }
@@ -59,9 +54,11 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
     func sendDeliveryConfirmationEvent(deliveredMessageId: String,
                                        userIdInMessage: String,
                                        channel: String) throws {
-        guard let event = eventFactory.createDeliveryConfirmation(deliveredMessageId: deliveredMessageId,
-                                                                  userIdInMessage: userIdInMessage) else {
-            let error = ChatServiceSenderError.cannotCreateEvent
+        let event: DeliveryConfirmationEvent
+        do {
+            event = try eventFactory.createDeliveryConfirmation(deliveredMessageId: deliveredMessageId,
+                                                                userIdInMessage: userIdInMessage)
+        } catch {
             handleError(error)
             throw error
         }
@@ -70,8 +67,10 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
     }
 
     func sendReadEvent(lastReadMessageTimestamp: UnixTimeStamp, channel: String) throws {
-        guard let event = eventFactory.createReadEvent(lastReadMessageTimestamp: lastReadMessageTimestamp) else {
-            let error = ChatServiceSenderError.cannotCreateEvent
+        let event: ReadEvent
+        do {
+            event = try eventFactory.createReadEvent(lastReadMessageTimestamp: lastReadMessageTimestamp)
+        } catch {
             handleError(error)
             throw error
         }
@@ -81,15 +80,15 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
 
     private func sendEvent(_ eventType: EventType, channel: String) throws {
         let eventPayload = EventPayload(channel: channel, event: eventType)
-        let sended = chatClient.sendMessage(eventPayload)
-        if !sended {
-            let error = ChatServiceSenderError.cannotSendEvent
+        do {
+            try chatClient.sendMessage(eventPayload)
+        } catch {
             handleError(error)
             throw error
         }
     }
 
-    private func handleError(_ error: ChatServiceSenderError) {
+    private func handleError(_ error: Error) {
         let apiError: ApiError = .chatSocketError(error)
         errorService.handleError(apiError)
     }

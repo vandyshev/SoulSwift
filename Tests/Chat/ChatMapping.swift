@@ -2,25 +2,29 @@ import XCTest
 import Foundation
 @testable import SoulSwift
 
-class ChatMapping: XCTestCase {
+class ChatMappingTests: XCTestCase {
 
     let userIdentifier = "userIdentifier"
 
-    var messageGenerator: MessagesGenerator!
+    var messagesFactory: MessagesFactory!
 
     override func setUp() {
 
         let storage = FakeStorage(userID: userIdentifier, sessionToken: "token", serverTimeDelta: 0.1)
-        self.messageGenerator = MessagesGeneratorImpl(storage: storage)
+        self.messagesFactory = MessagesFactoryImpl(storage: storage)
     }
 
     override func tearDown() {
-        self.messageGenerator = nil
+        self.messagesFactory = nil
     }
 
     func testTextMessage() {
         let messageText = "text"
-        guard let message = messageGenerator.createTextMessage(messageText) else {
+        let content: MessageContent = .text(messageText)
+        let message: ChatMessage
+        do {
+            message = try messagesFactory.createMessage(content)
+        } catch {
             fatalError()
         }
         XCTAssertEqual(message.text, messageText)
@@ -33,8 +37,11 @@ class ChatMapping: XCTestCase {
     func testPhotoMessage() {
         let photoId = "photoId"
         let albumId = "albumId"
-        guard let message = messageGenerator.createPhotoMessage(photoId: photoId,
-                                                                albumName: albumId) else {
+        let content: MessageContent = .photo(photoId: photoId, albumName: albumId)
+        let message: ChatMessage
+        do {
+            message = try messagesFactory.createMessage(content)
+        } catch {
             fatalError()
         }
         XCTAssertEqual(message.text, "")
@@ -47,7 +54,12 @@ class ChatMapping: XCTestCase {
     func testGeoMessage() {
         let lat: Double = -55
         let lng: Double = 66
-        guard let message = messageGenerator.createGeoMessage(lat: lat, lng: lng) else {
+
+        let content: MessageContent = .location(latitude: lat, longitude: lng)
+        let message: ChatMessage
+        do {
+            message = try messagesFactory.createMessage(content)
+        } catch {
             fatalError()
         }
         XCTAssertEqual(message.text, "")
@@ -59,7 +71,11 @@ class ChatMapping: XCTestCase {
 
     func testMessageEncoding() {
         let messageText = "text"
-        guard let message = messageGenerator.createTextMessage(messageText) else {
+        let content: MessageContent = .text(messageText)
+        let message: ChatMessage
+        do {
+            message = try messagesFactory.createMessage(content)
+        } catch {
             fatalError()
         }
         guard let jsonString = message.asString else {
@@ -89,10 +105,13 @@ class ChatMapping: XCTestCase {
     }
 
     func testHistorySyncEventMapping() {
-        guard let message = messageGenerator.createTextMessage("message text") else {
+        let content: MessageContent = .text("message text")
+        let message: ChatMessage
+        do {
+            message = try messagesFactory.createMessage(content)
+        } catch {
             fatalError()
         }
-
         let historySyncEvent = HistorySyncEvent(time: 10,
                                                 userId: "userID",
                                                 deviceId: "deviceID",

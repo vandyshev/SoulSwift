@@ -8,9 +8,9 @@ platform :ios do
   end
 
   lane :tests do
-    FastlaneCore::Simulator.reset_all
     run_tests(workspace: "SoulSwift.xcworkspace",
               scheme: "SoulSwift-Example",
+              clean: true,
               formatter: "xcpretty-json-formatter",
               output_types: "html,junit",
               output_directory: "fastlane/tests_output",

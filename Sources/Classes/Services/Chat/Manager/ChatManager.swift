@@ -3,7 +3,7 @@ import Foundation
 /// Handle all messenger interactions
 public protocol ChatManager: AnyObject {
 
-    func start() -> Bool
+    func start() throws
     func finish()
 
     var isLocalPushNotificationsEnabled: Bool { get set }
@@ -14,8 +14,7 @@ public protocol ChatManager: AnyObject {
                  completion: @escaping  (Result<[Message], ApiError>) -> Void)
 
     func sendMessage(_ messageContent: MessageContent,
-                     to channel: String,
-                     completion: @escaping (Result<Message, Error>) -> Void)
+                     to channel: String) throws -> Message
 
     func sendReadEvent(to channel: String, lastMessageDate: Date)
 
@@ -67,8 +66,8 @@ final class ChatManagerImpl: ChatManager {
         chatServiceObserver.unsubscribeFromAllMessages(observer: self)
     }
 
-    func start() -> Bool {
-        return chatClient.start()
+    func start() throws {
+        try chatClient.start()
     }
 
     func finish() {
@@ -114,15 +113,9 @@ final class ChatManagerImpl: ChatManager {
     }
 
     func sendMessage(_ messageContent: MessageContent,
-                     to channel: String,
-                     completion: @escaping (Result<Message, Error>) -> Void) {
-        do {
+                     to channel: String) throws -> Message {
             let chatMessage = try chatServiceMessageSender.sendNewMessage(messageContent, channel: channel)
-            let message = messageMapper.mapToMessage(chatMessage: chatMessage, channel: channel)
-            completion(.success(message))
-        } catch {
-            completion(.failure(error))
-        }
+            return messageMapper.mapToMessage(chatMessage: chatMessage, channel: channel)
     }
 
     func sendReadEvent(to channel: String, lastMessageDate: Date) {

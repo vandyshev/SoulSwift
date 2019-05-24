@@ -19,10 +19,10 @@ extension ConnectionStatus {
 
 protocol ChatClient: AnyObject {
 
-    func start() -> Bool
+    func start() throws
     func finish()
 
-    func sendMessage(_ payload: Encodable) -> Bool
+    func sendMessage(_ payload: Encodable) throws
 
     func subscribe(_ observer: AnyObject, closure: @escaping (Data) -> Void)
     func unsubscribe(_ observer: AnyObject)
@@ -38,6 +38,9 @@ private enum Constants {
 
 private enum ChatClientError: Error {
     case cannotStartSocket
+    case cannotEncodeMessage
+    case noSocket
+    case socketIsDisconnected
 }
 
 extension ChatClientError: LocalizedError {
@@ -45,6 +48,12 @@ extension ChatClientError: LocalizedError {
         switch self {
         case .cannotStartSocket:
             return "Can't start socket"
+        case .cannotEncodeMessage:
+            return "Cannot encode message"
+        case .noSocket:
+            return "Socket haven't been started yet"
+        case .socketIsDisconnected:
+            return "Socket is disconnected"
         }
     }
 }
@@ -64,17 +73,14 @@ public final class ChatClientImpl: ChatClient {
         return socket.isConnected ? .connected : .connecting
     }
 
-    init(socketFactory: SocketFactory,
-         errorService: InternalErrorService) {
+    init(socketFactory: SocketFactory, errorService: InternalErrorService) {
         self.socketFactory = socketFactory
         self.errorService = errorService
     }
 
-    func start() -> Bool {
+    func start() throws {
         guard let socket = socketFactory.socket else {
-            let apiError: ApiError = .chatSocketError(ChatClientError.cannotStartSocket)
-            errorService.handleError(apiError)
-            return false
+            throw getApiError(.cannotStartSocket)
         }
 
         self.socket = socket
@@ -99,14 +105,10 @@ public final class ChatClientImpl: ChatClient {
         }
 
         connect()
-        return true
     }
 
     func finish() {
         self.socket?.disconnect()
-        self.socket?.onConnect = nil
-        self.socket?.onDisconnect = nil
-        self.socket?.onText = nil
         self.socket = nil
         broadcastStatus()
     }
@@ -135,15 +137,17 @@ public final class ChatClientImpl: ChatClient {
         }
     }
 
-    func sendMessage(_ payload: Encodable) -> Bool {
-        guard let socket = socket else { return false }
-        if socket.isConnected {
-            guard let messageString = payload.asString else {
-                return false
-            }
-            socket.write(string: messageString)
+    func sendMessage(_ payload: Encodable) throws {
+        guard let socket = socket else {
+            throw getApiError(.noSocket)
         }
-        return socket.isConnected
+        guard socket.isConnected else {
+            throw getApiError(.socketIsDisconnected)
+        }
+        guard let messageString = payload.asString else {
+            throw getApiError(.cannotEncodeMessage)
+        }
+        socket.write(string: messageString)
     }
 
     private func onText(_ string: String) {
@@ -167,5 +171,11 @@ public final class ChatClientImpl: ChatClient {
 
     func unsubscribeFromConnectionStatus(_ observer: AnyObject) {
         statusObservable.unsubscribe(observer)
+    }
+
+    private func getApiError(_ error: ChatClientError) -> ApiError {
+        let apiError: ApiError = .chatSocketError(error)
+        errorService.handleError(apiError)
+        return apiError
     }
 }

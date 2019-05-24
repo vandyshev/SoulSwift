@@ -1,13 +1,23 @@
 import UIKit
 
-protocol MessagesGenerator {
-    func createMessage(_ messageContnet: MessageContent) -> ChatMessage?
-    func createTextMessage(_ text: String) -> ChatMessage?
-    func createPhotoMessage(photoId: String, albumName: String) -> ChatMessage?
-    func createGeoMessage(lat: Double, lng: Double) -> ChatMessage?
+protocol MessagesFactory {
+    func createMessage(_ messageContnet: MessageContent) throws -> ChatMessage
 }
 
-final class MessagesGeneratorImpl: MessagesGenerator {
+enum MessagesFactoryError: Error {
+    case cannotCreateMessage
+}
+
+extension MessagesFactoryError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .cannotCreateMessage:
+            return "Cannot create message"
+        }
+    }
+}
+
+final class MessagesFactoryImpl: MessagesFactory {
 
     private struct BaseMessageData {
         let messageId: String
@@ -21,19 +31,19 @@ final class MessagesGeneratorImpl: MessagesGenerator {
         self.storage = storage
     }
 
-    func createMessage(_ messageContnet: MessageContent) -> ChatMessage? {
+    func createMessage(_ messageContnet: MessageContent) throws -> ChatMessage {
         switch messageContnet {
         case let .text(text):
-            return createTextMessage(text)
+            return try createTextMessage(text)
         case let .photo(photoId: photoId, albumName: albumName):
-            return createPhotoMessage(photoId: photoId, albumName: albumName)
+            return try createPhotoMessage(photoId: photoId, albumName: albumName)
         case let .location(latitude: latitude, longitude: longitude):
-            return createGeoMessage(lat: latitude, lng: longitude)
+            return try createGeoMessage(lat: latitude, lng: longitude)
         }
     }
 
-    func createTextMessage(_ text: String) -> ChatMessage? {
-        guard let baseMessageData = getBaseMessageData() else { return nil }
+    private func createTextMessage(_ text: String) throws -> ChatMessage {
+        let baseMessageData = try getBaseMessageData()
         let message = ChatMessage(messageId: baseMessageData.messageId,
                                   userId: baseMessageData.userId,
                                   timestamp: baseMessageData.timeStamp,
@@ -45,8 +55,8 @@ final class MessagesGeneratorImpl: MessagesGenerator {
         return message
     }
 
-    func createPhotoMessage(photoId: String, albumName: String) -> ChatMessage? {
-        guard let baseMessageData = getBaseMessageData() else { return nil }
+    private func createPhotoMessage(photoId: String, albumName: String) throws -> ChatMessage {
+        let baseMessageData = try getBaseMessageData()
         let message = ChatMessage(messageId: baseMessageData.messageId,
                                   userId: baseMessageData.userId,
                                   timestamp: baseMessageData.timeStamp,
@@ -58,8 +68,8 @@ final class MessagesGeneratorImpl: MessagesGenerator {
         return message
     }
 
-    func createGeoMessage(lat: Double, lng: Double) -> ChatMessage? {
-        guard let baseMessageData = getBaseMessageData() else { return nil }
+    private func createGeoMessage(lat: Double, lng: Double) throws -> ChatMessage {
+        let baseMessageData = try getBaseMessageData()
         let message = ChatMessage(messageId: baseMessageData.messageId,
                                   userId: baseMessageData.userId,
                                   timestamp: baseMessageData.timeStamp,
@@ -71,10 +81,12 @@ final class MessagesGeneratorImpl: MessagesGenerator {
         return message
     }
 
-    private func getBaseMessageData() -> BaseMessageData? {
+    private func getBaseMessageData() throws -> BaseMessageData {
         let messageId = UUID().uuidString
         let timeStamp = DateHelper.currentUnixTimestamp
-        guard let userId = storage.userID else { return nil }
+        guard let userId = storage.userID else {
+            throw MessagesFactoryError.cannotCreateMessage
+        }
         return BaseMessageData(messageId: messageId,
                                userId: userId,
                                timeStamp: timeStamp)

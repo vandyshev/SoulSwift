@@ -17,6 +17,7 @@ protocol ChatServiceObserver {
 final class ChatServiceObserverImpl: ChatServiceObserver {
 
     private let chatClient: ChatClient
+    private let decoder = JSONDecoder()
 
     init(chatClient: ChatClient) {
         self.chatClient = chatClient
@@ -72,7 +73,7 @@ final class ChatServiceObserverImpl: ChatServiceObserver {
     }
 
     private func onPayload(_ data: Data) {
-        guard let payload = try? JSONDecoder().decode(ChatPayload.self, from: data) else {
+        guard let payload = try? decoder.decode(ChatPayload.self, from: data) else {
             assertionFailure("impossible message")
             return
         }

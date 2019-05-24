@@ -17,7 +17,8 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
     private let authHelper: AuthHelper
     private let urlGenerator: ChatApiURLGenerator
     private let errorService: InternalErrorService
-    let provider: MoyaProvider<ChatApi>
+    private let provider: MoyaProvider<ChatApi>
+    private let decoder: JSONDecoder
 
     init(authHelper: AuthHelper,
          urlGenerator: ChatApiURLGenerator,
@@ -26,6 +27,9 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
         self.urlGenerator = urlGenerator
         self.errorService = errorService
         self.provider = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+        self.decoder = decoder
     }
 
     func loadHistory(channel: String,
@@ -36,12 +40,11 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
                               authHelper: authHelper,
                               urlGenerator: urlGenerator)
         provider.request(chatApi) { [weak self] result in
+            guard let stelf = self else { return }
             switch result {
             case .success(let value):
-                let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
                 do {
-                    let history = try decoder.decode([ChatHistoryObject].self, from: value.data)
+                    let history = try stelf.decoder.decode([ChatHistoryObject].self, from: value.data)
                     completion(.success(history))
                 } catch {
                     let decodableError: ApiError

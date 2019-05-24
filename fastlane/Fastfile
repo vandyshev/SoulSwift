@@ -13,7 +13,8 @@ platform :ios do
               scheme: "SoulSwift-Example",
               formatter: "xcpretty-json-formatter",
               output_types: "html,junit",
-              output_directory: "fastlane/tests_output")
+              output_directory: "fastlane/tests_output",
+              devices: ["iPhone 6s"])
   end
 
   lane :coverage do

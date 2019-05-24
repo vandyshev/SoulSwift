@@ -38,12 +38,12 @@ final class EventFactoryImpl: EventFactory {
     }
 
     func createDeliveryConfirmation(deliveredMessageId: String, userIdInMessage: String) throws -> DeliveryConfirmationEvent {
-        guard let userIdWhoSentEvent = storage.userID else {
+        guard let senderId = storage.userID else {
             throw EventFactoryError.cannotCreateEvent
         }
         let time = DateHelper.currentUnixTimestamp
         return DeliveryConfirmationEvent(time: time,
-                                         userIdWhoSentEvent: userIdWhoSentEvent,
+                                         senderId: senderId,
                                          deliveredMessageId: deliveredMessageId,
                                          userId: userIdInMessage)
     }

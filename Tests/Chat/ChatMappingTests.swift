@@ -149,7 +149,7 @@ class ChatMappingTests: XCTestCase {
 
     func testDeliveryConfirmationEventMapping() {
         let deliveryEvent = DeliveryConfirmationEvent(time: 10,
-                                                      userIdWhoSentEvent: "userIdWhoSent",
+                                                      senderId: "userIdWhoSent",
                                                       deliveredMessageId: "deliveredMessageId",
                                                       userId: "userId")
 

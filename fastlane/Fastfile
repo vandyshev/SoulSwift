@@ -8,7 +8,7 @@ platform :ios do
   end
 
   lane :tests do
-    cocoapods
+    FastlaneCore::Simulator.reset_all
     run_tests(workspace: "SoulSwift.xcworkspace",
               scheme: "SoulSwift-Example",
               formatter: "xcpretty-json-formatter",

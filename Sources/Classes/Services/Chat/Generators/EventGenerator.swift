@@ -1,11 +1,11 @@
 import UIKit
 
-protocol EventGenerator {
+protocol EventFactory {
     func createReadEvent(lastReadMessageTimestamp: UnixTimeStamp) -> ReadEvent?
     func createDeliveryConfirmation(deliveredMessageId: String, userIdInMessage: String) -> DeliveryConfirmationEvent?
 }
 
-final class EventGeneratorImpl: EventGenerator {
+final class EventFactoryImpl: EventFactory {
 
     private let storage: Storage
 

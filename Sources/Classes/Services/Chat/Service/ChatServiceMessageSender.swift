@@ -23,16 +23,16 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
 
     private let chatClient: ChatClient
     private let messageGenerator: MessagesGenerator
-    private let eventGenerator: EventGenerator
+    private let eventFactory: EventFactory
     private let errorService: InternalErrorService
 
     init(chatClient: ChatClient,
          messagesGenerator: MessagesGenerator,
-         eventGenerator: EventGenerator,
+         eventFactory: EventFactory,
          errorService: InternalErrorService) {
         self.chatClient = chatClient
         self.messageGenerator = messagesGenerator
-        self.eventGenerator = eventGenerator
+        self.eventFactory = eventFactory
         self.errorService = errorService
     }
 
@@ -59,8 +59,8 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
     func sendDeliveryConfirmationEvent(deliveredMessageId: String,
                                        userIdInMessage: String,
                                        channel: String) throws {
-        guard let event = eventGenerator.createDeliveryConfirmation(deliveredMessageId: deliveredMessageId,
-                                                                    userIdInMessage: userIdInMessage) else {
+        guard let event = eventFactory.createDeliveryConfirmation(deliveredMessageId: deliveredMessageId,
+                                                                  userIdInMessage: userIdInMessage) else {
             let error = ChatServiceSenderError.cannotCreateEvent
             handleError(error)
             throw error
@@ -70,7 +70,7 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
     }
 
     func sendReadEvent(lastReadMessageTimestamp: UnixTimeStamp, channel: String) throws {
-        guard let event = eventGenerator.createReadEvent(lastReadMessageTimestamp: lastReadMessageTimestamp) else {
+        guard let event = eventFactory.createReadEvent(lastReadMessageTimestamp: lastReadMessageTimestamp) else {
             let error = ChatServiceSenderError.cannotCreateEvent
             handleError(error)
             throw error

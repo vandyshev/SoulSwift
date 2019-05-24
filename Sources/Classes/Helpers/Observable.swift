@@ -1,7 +1,7 @@
 import Foundation
 
 class Observable<E> {
-    var closures: [UInt: (E) -> Void] = [:]
+    private var closures: [UInt: (E) -> Void] = [:]
 
     func subscribe(_ observer: AnyObject, closure: @escaping (E) -> Void) {
         let key = keyAtObject(observer)
@@ -18,7 +18,7 @@ class Observable<E> {
     }
 
     func broadcast(_ event: E) {
-        for closure in closures.values {
+        closures.values.forEach { closure in
             closure(event)
         }
     }

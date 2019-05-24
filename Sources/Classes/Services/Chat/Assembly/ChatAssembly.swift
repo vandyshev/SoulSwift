@@ -37,8 +37,8 @@ final class ChatAssembly: Assembly {
             MessagesGeneratorImpl(storage: resolver~>)
         }
 
-        container.register(EventGenerator.self) { resolver in
-            EventGeneratorImpl(storage: resolver~>)
+        container.register(EventFactory.self) { resolver in
+            EventFactoryImpl(storage: resolver~>)
         }
 
         container.register(ChatServiceObserver.self) { (_: Resolver, client: ChatClient) in
@@ -48,7 +48,7 @@ final class ChatAssembly: Assembly {
         container.register(ChatServiceMessageSender.self) { (resolver: Resolver, client: ChatClient) in
             ChatServiceMessageSenderImpl(chatClient: client,
                                          messagesGenerator: resolver~>,
-                                         eventGenerator: resolver~>,
+                                         eventFactory: resolver~>,
                                          errorService: resolver~>)
         }
 

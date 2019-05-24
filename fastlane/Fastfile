@@ -8,6 +8,7 @@ platform :ios do
   end
 
   lane :tests do
+    cocoapods
     run_tests(workspace: "SoulSwift.xcworkspace",
               scheme: "SoulSwift-Example",
               formatter: "xcpretty-json-formatter",

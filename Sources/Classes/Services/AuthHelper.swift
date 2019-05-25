@@ -1,18 +1,16 @@
 import UIKit
 import CommonCrypto
 
-protocol AuthHelper {
-    func authString(withEndpoint endpoint: String, method: String, body: String) -> String?
-    var userAgent: String { get }
+struct AuthConfig {
+    let endpoint: String
+    let method: String
+    let body: String
+    let date: Date
 }
 
-struct AuthData {
-    let userID: String
-    let sessionToken: String
-    let date: Date
-    let httpMethod: String
-    let endpoint: String
-    let body: String
+protocol AuthHelper {
+    func authString(withAuthConfig authConfig: AuthConfig) -> String?
+    var userAgent: String { get }
 }
 
 private enum Constants {
@@ -23,6 +21,15 @@ private enum Constants {
 }
 
 public final class AuthHelperImpl: AuthHelper {
+
+    private struct AuthData {
+        let userID: String
+        let sessionToken: String
+        let date: Date
+        let httpMethod: String
+        let endpoint: String
+        let body: String
+    }
 
     private let storage: Storage
     private let appName: String
@@ -36,20 +43,20 @@ public final class AuthHelperImpl: AuthHelper {
         return getUserAgent()
     }
 
-    func authString(withEndpoint endpoint: String, method: String, body: String) -> String? {
+    func authString(withAuthConfig authConfig: AuthConfig) -> String? {
 
         guard let userID = storage.userID, let sessionID = storage.sessionToken else {
             return nil
         }
         let delta: Double = storage.serverTimeDelta ?? 0
-        let date = Date().addingTimeInterval(delta)
+        let date = authConfig.date.addingTimeInterval(delta)
 
         let authData = AuthData(userID: userID,
                                 sessionToken: sessionID,
                                 date: date,
-                                httpMethod: method,
-                                endpoint: endpoint,
-                                body: body)
+                                httpMethod: authConfig.method,
+                                endpoint: authConfig.endpoint,
+                                body: authConfig.body)
 
         return authString(authData: authData)
     }

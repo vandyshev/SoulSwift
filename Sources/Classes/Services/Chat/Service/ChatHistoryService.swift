@@ -15,21 +15,19 @@ private enum Constants {
 final class ChatHistoryServiceImpl: ChatHistoryService {
 
     private let authHelper: AuthHelper
-    private let urlGenerator: ChatApiURLGenerator
+    private let urlFactory: ChatApiURLFactory
     private let errorService: InternalErrorService
     private let provider: MoyaProvider<ChatApi>
     private let decoder: JSONDecoder
 
     init(authHelper: AuthHelper,
-         urlGenerator: ChatApiURLGenerator,
+         urlFactory: ChatApiURLFactory,
          errorService: InternalErrorService) {
         self.authHelper   = authHelper
-        self.urlGenerator = urlGenerator
+        self.urlFactory   = urlFactory
         self.errorService = errorService
-        self.provider = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
-        self.decoder = decoder
+        self.provider     = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
+        self.decoder      = ChatHistoryServiceImpl.createJSONDecoder()
     }
 
     func loadHistory(channel: String,
@@ -38,7 +36,7 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
         let chatApi = ChatApi(chatHistoryConfig: historyConfig,
                               channel: channel,
                               authHelper: authHelper,
-                              urlGenerator: urlGenerator)
+                              urlFactory: urlFactory)
         provider.request(chatApi) { [weak self] result in
             guard let stelf = self else { return }
             switch result {
@@ -57,5 +55,11 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
                 completion(.failure(apiError))
             }
         }
+    }
+    
+    private static func createJSONDecoder() -> JSONDecoder {
+        let decoder       = JSONDecoder()
+        decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
+        return decoder
     }
 }

@@ -12,37 +12,40 @@ private enum Constants {
     static let fakeApiKey = "fakeApiKey"
 }
 
-class ChatApiTests: XCTestCase {
+class URLTests: XCTestCase {
 
     var provider: MoyaProvider<ChatApi>!
     var fakeStorage: Storage!
     var deviceHandler: DeviceHandler!
     var fakeDeviceIDStorage: DeviceIdStorage!
-    var chatURIGeneratorConfig: ChatURIGeneratorConfig!
-    var chatApiURLGenerator: ChatApiURLGenerator!
+    var chatURIGeneratorConfig: ChatURIFactoryConfig!
+    var chatApiURLFactory: ChatApiURLFactory!
+    var chatClientURIFactory: ChatClientURIFactory!
     var authHelper: AuthHelper!
 
     override func setUp() {
         self.provider = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
         self.fakeStorage = FakeStorage(userID: Constants.fakeUserID,
                                        sessionToken: Constants.fakeSessionID,
-                                       serverTimeDelta: 0)
+                                       serverTimeDelta: 1)
         self.fakeDeviceIDStorage = FakeDeviceIdStorage(deviceID: Constants.fakeDeviceID)
         self.deviceHandler = DeviceHandlerImpl(storage: fakeDeviceIDStorage)
-        self.chatURIGeneratorConfig = ChatURIGeneratorConfig(baseUrlString: Constants.fakeURL,
-                                                             apiKey: Constants.fakeApiKey)
+        self.chatURIGeneratorConfig = ChatURIFactoryConfig(baseUrlString: Constants.fakeURL,
+                                                           apiKey: Constants.fakeApiKey)
         self.authHelper = AuthHelperImpl(storage: fakeStorage,
                                          appName: Constants.fakeAppName)
-        self.chatApiURLGenerator = ChatClientURIGeneratorImpl(config: chatURIGeneratorConfig,
-                                                              authHelper: authHelper,
-                                                              deviceHandler: deviceHandler)
+        let chatClientURIGeneratorImpl = ChatClientURIFactoryImpl(config: chatURIGeneratorConfig,
+                                                                  authHelper: authHelper,
+                                                                  deviceHandler: deviceHandler)
+        self.chatApiURLFactory = chatClientURIGeneratorImpl
+        self.chatClientURIFactory = chatClientURIGeneratorImpl
     }
 
     override func tearDown() {
         self.provider = nil
     }
 
-    func testURL() {
+    func testChatApiURL() {
         let limit = 100
         let defaultOffset = 0
         let dateInSeconds: Double = 1558600194
@@ -61,7 +64,7 @@ class ChatApiTests: XCTestCase {
         let chatApi = ChatApi(chatHistoryConfig: chatHistoryConfig,
                               channel: channel,
                               authHelper: authHelper,
-                              urlGenerator: chatApiURLGenerator)
+                              urlFactory: chatApiURLFactory)
         let endPoint = provider.endpoint(chatApi)
 
         guard let request = try? endPoint.urlRequest() else {
@@ -71,5 +74,33 @@ class ChatApiTests: XCTestCase {
             "https://\(Constants.fakeURL)\(Constants.fakeApiKey)/v1/chat/history/channel.name" +
             "?before=\(Int(dateInSeconds))&limit=\(limit)&offset=\(defaultOffset)"
         XCTAssertEqual(request.url?.absoluteString, expectedURL)
+    }
+
+    func testAuthString() {
+        let wsAuthEndpoint = "/me"
+        let wsAuthMethod = "GET"
+        let wsAuthBody = ""
+        let date = Date(timeIntervalSince1970: 1558780958)
+        let authConfig = AuthConfig(endpoint: wsAuthEndpoint,
+                                    method: wsAuthMethod,
+                                    body: wsAuthBody,
+                                    date: date)
+        guard let authString = authHelper.authString(withAuthConfig: authConfig) else {
+            fatalError()
+        }
+        let expected = "hmac \(Constants.fakeUserID):1558780959:571e880688d17e39376599c0266d0f77172ac7ccd67ea21c176812465058a4b0"
+        XCTAssertEqual(expected, authString)
+    }
+
+    func testWsURL() {
+        guard let url = chatClientURIFactory.wsConnectionURI else {
+            fatalError()
+        }
+        let firstPart = "wss://\(Constants.fakeURL)\(Constants.fakeApiKey)/v1/ws?auth=hmac%20\(Constants.fakeUserID)"
+        let middlePart = "&user-agent=appName/1.0"
+        let lastPart = "(iOS)&device-id=\(Constants.fakeDeviceID)"
+        XCTAssertTrue(url.absoluteString.hasPrefix(firstPart))
+        XCTAssertTrue(url.absoluteString.contains(middlePart))
+        XCTAssertTrue(url.absoluteString.hasSuffix(lastPart))
     }
 }

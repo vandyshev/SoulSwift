@@ -7,14 +7,14 @@ protocol SocketFactory: AnyObject {
 
 class SocketFactoryImpl: SocketFactory {
 
-    private let uriGenerator: ChatClientURIGenerator
+    private let uriFactory: ChatClientURIFactory
 
-    init(uriGenerator: ChatClientURIGenerator) {
-        self.uriGenerator = uriGenerator
+    init(uriFactory: ChatClientURIFactory) {
+        self.uriFactory = uriFactory
     }
 
     var socket: Socket? {
-        guard let uri = uriGenerator.wsConnectionURI else {
+        guard let uri = uriFactory.wsConnectionURI else {
             return nil
         }
         return WebSocket(url: uri)

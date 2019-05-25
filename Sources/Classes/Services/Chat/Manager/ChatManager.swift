@@ -8,9 +8,7 @@ public protocol ChatManager: AnyObject {
 
     var isLocalPushNotificationsEnabled: Bool { get set }
 
-    func history(channel: String,
-                 olderThan date: Date?,
-                 limit: UInt?,
+    func history(with config: HsitoryLoadingConfig,
                  completion: @escaping  (Result<[Message], ApiError>) -> Void)
 
     func sendMessage(_ messageContent: MessageContent,
@@ -24,6 +22,12 @@ public protocol ChatManager: AnyObject {
     var connectionStatus: ConnectionStatus { get }
     func subscribeToConnectionStatus(observer: AnyObject, onStatusChange: @escaping (ConnectionStatus) -> Void)
     func unsubscribeFromConnectionStatus(observer: AnyObject)
+}
+
+public struct HsitoryLoadingConfig {
+    let channel: String
+    let olderThan: Date?
+    let limit: UInt?
 }
 
 private enum Constants {
@@ -84,12 +88,10 @@ final class ChatManagerImpl: ChatManager {
         }
     }
 
-    func history(channel: String,
-                 olderThan date: Date?,
-                 limit: UInt?,
+    func history(with config: HsitoryLoadingConfig,
                  completion: @escaping (Result<[Message], ApiError>) -> Void) {
-        let olderThan = date ?? Date()
-        let limit = limit.flatMap { Int($0) } ?? Constants.defaultLimit
+        let olderThan = config.olderThan ?? Date()
+        let limit = config.limit.flatMap { Int($0) } ?? Constants.defaultLimit
         let chatHistoryConfig = ChatHistoryConfig(limit: limit,
                                                   offset: Constants.defaultOffset,
                                                   beforeTimestamp: DateHelper.timestamp(from: olderThan),
@@ -98,7 +100,7 @@ final class ChatManagerImpl: ChatManager {
                                                   afterIdentifer: nil,
                                                   beforeMessageIdentifier: nil,
                                                   afterMessageIdentifer: nil)
-        chatHistoryService.loadHistory(channel: channel,
+        chatHistoryService.loadHistory(channel: config.channel,
                                        historyConfig: chatHistoryConfig) { [weak self] result in
             guard let stelf = self else { return }
 

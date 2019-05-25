@@ -18,7 +18,7 @@ class URLTests: XCTestCase {
     var fakeStorage: Storage!
     var deviceHandler: DeviceHandler!
     var fakeDeviceIDStorage: DeviceIdStorage!
-    var chatURIGeneratorConfig: ChatURIFactoryConfig!
+    var chatURIFactoryConfig: ChatURIFactoryConfig!
     var chatApiURLFactory: ChatApiURLFactory!
     var chatClientURIFactory: ChatClientURIFactory!
     var authHelper: AuthHelper!
@@ -30,15 +30,15 @@ class URLTests: XCTestCase {
                                        serverTimeDelta: 1)
         self.fakeDeviceIDStorage = FakeDeviceIdStorage(deviceID: Constants.fakeDeviceID)
         self.deviceHandler = DeviceHandlerImpl(storage: fakeDeviceIDStorage)
-        self.chatURIGeneratorConfig = ChatURIFactoryConfig(baseUrlString: Constants.fakeURL,
-                                                           apiKey: Constants.fakeApiKey)
+        self.chatURIFactoryConfig = ChatURIFactoryConfig(baseUrlString: Constants.fakeURL,
+                                                         apiKey: Constants.fakeApiKey)
         self.authHelper = AuthHelperImpl(storage: fakeStorage,
                                          appName: Constants.fakeAppName)
-        let chatClientURIGeneratorImpl = ChatClientURIFactoryImpl(config: chatURIGeneratorConfig,
-                                                                  authHelper: authHelper,
-                                                                  deviceHandler: deviceHandler)
-        self.chatApiURLFactory = chatClientURIGeneratorImpl
-        self.chatClientURIFactory = chatClientURIGeneratorImpl
+        let chatClientURIFactoryImpl = ChatClientURIFactoryImpl(config: chatURIFactoryConfig,
+                                                                authHelper: authHelper,
+                                                                deviceHandler: deviceHandler)
+        self.chatApiURLFactory = chatClientURIFactoryImpl
+        self.chatClientURIFactory = chatClientURIFactoryImpl
     }
 
     override func tearDown() {

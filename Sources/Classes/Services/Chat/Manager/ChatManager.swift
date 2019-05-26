@@ -25,9 +25,9 @@ public protocol ChatManager: AnyObject {
 }
 
 public struct HsitoryLoadingConfig {
-    let channel: String
-    let olderThan: Date?
-    let limit: UInt?
+    public let channel: String
+    public let olderThan: Date?
+    public let limit: UInt?
 }
 
 private enum Constants {

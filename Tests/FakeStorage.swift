@@ -16,7 +16,7 @@ class FakeStorage: Storage {
 }
 
 class FakeDeviceIdStorage: DeviceIdStorage {
-    
+
     var deviceID: String?
 
     init(deviceID: String?) {

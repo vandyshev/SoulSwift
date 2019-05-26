@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ChatHistoryConfig {
+struct ChatHistoryConfig {
     let limit: Int
     let offset: Int
     let beforeTimestamp: UnixTimeStamp?

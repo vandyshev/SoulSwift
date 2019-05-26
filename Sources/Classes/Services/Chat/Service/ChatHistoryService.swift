@@ -2,7 +2,7 @@ import UIKit
 import Moya
 
 /// Loads Chat History
-public protocol ChatHistoryService: AnyObject {
+protocol ChatHistoryService: AnyObject {
     func loadHistory(channel: String,
                      historyConfig: ChatHistoryConfig,
                      completion: @escaping (Result<[ChatHistoryObject], ApiError>) -> Void)
@@ -56,9 +56,9 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
             }
         }
     }
-    
+
     private static func createJSONDecoder() -> JSONDecoder {
-        let decoder       = JSONDecoder()
+        let decoder = JSONDecoder()
         decoder.dateDecodingStrategy = .formatted(DateFormatter.iso8601Full)
         return decoder
     }

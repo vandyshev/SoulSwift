@@ -99,8 +99,10 @@ class URLTests: XCTestCase {
         let firstPart = "wss://\(Constants.fakeURL)\(Constants.fakeApiKey)/v1/ws?auth=hmac%20\(Constants.fakeUserID)"
         let middlePart = "&user-agent=appName/1.0"
         let lastPart = "(iOS)&device-id=\(Constants.fakeDeviceID)"
+        let userAgentCheckPart = "%3B%20en_US%3B%20b"
         XCTAssertTrue(url.absoluteString.hasPrefix(firstPart))
         XCTAssertTrue(url.absoluteString.contains(middlePart))
         XCTAssertTrue(url.absoluteString.hasSuffix(lastPart))
+        XCTAssertTrue(url.absoluteString.contains(userAgentCheckPart))
     }
 }

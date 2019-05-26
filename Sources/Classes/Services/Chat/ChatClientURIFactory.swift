@@ -57,21 +57,33 @@ final class ChatClientURIFactoryImpl: ChatClientURIFactory, ChatApiURLFactory {
                                     method: Constants.wsAuthMethod,
                                     body: "",
                                     date: Date())
-        let auth = authHelper.authString(withAuthConfig: authConfig)
+        let generatedAuth = authHelper.authString(withAuthConfig: authConfig)
+
+        guard let userAuth = generatedAuth,
+            let auth = addingPercentEncoding(userAuth),
+            let userAgent = addingPercentEncoding(authHelper.userAgent),
+            let deviceID = addingPercentEncoding(deviceHandler.deviceIdentifier) else {
+                assertionFailure()
+                return nil
+        }
 
         let urlString = buildBaseUrl(withScheme: Constants.wsScheme) + Constants.wsPart
 
-        let authQueryItem = URLQueryItem(name: Constants.authQueryItemName, value: auth)
-        let userAgentQueryItem = URLQueryItem(name: Constants.userAgentQueryItemName, value: authHelper.userAgent)
-        let deviceIDQueryItem = URLQueryItem(name: Constants.deviceIDQueryItemName, value: deviceHandler.deviceIdentifier)
+        // can't use URLQueryItem because of percentage encoding of `;` symbol
+        let wsUri = urlString
+            + "?auth=" + auth
+            + "&user-agent=" + userAgent
+            + "&device-id=" + deviceID
 
-        var urlComponents = URLComponents(string: urlString)
-        urlComponents?.queryItems = [authQueryItem, userAgentQueryItem, deviceIDQueryItem]
-        return urlComponents?.url
+        return URL(string: wsUri)
     }
 
     private func buildBaseUrl(withScheme scheme: String) -> String {
         return scheme + config.baseUrlString + config.apiKey + Constants.apiVersion
+    }
+
+    private func addingPercentEncoding(_ target: String) -> String? {
+        return target.addingPercentEncoding(withAllowedCharacters: Constants.allowedCharactersSet)
     }
 }
 

@@ -28,6 +28,12 @@ public struct HsitoryLoadingConfig {
     public let channel: String
     public let olderThan: Date?
     public let limit: UInt?
+
+    public init(channel: String, olderThan: Date?, limit: UInt?) {
+        self.channel = channel
+        self.olderThan = olderThan
+        self.limit = limit
+    }
 }
 
 private enum Constants {

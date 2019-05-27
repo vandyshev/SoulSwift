@@ -6,7 +6,7 @@ public struct Message {
     public let date: Date
     public let userID: String
     public let channel: String
-    public let contnet: MessageContent
+    public let content: MessageContent
     public let direction: MessageDirection
 }
 

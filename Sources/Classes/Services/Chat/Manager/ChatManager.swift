@@ -8,7 +8,7 @@ public protocol ChatManager: AnyObject {
 
     var isLocalPushNotificationsEnabled: Bool { get set }
 
-    func history(with config: HsitoryLoadingConfig,
+    func history(with config: HistoryLoadingConfig,
                  completion: @escaping  (Result<[Message], ApiError>) -> Void)
 
     func sendMessage(_ messageContent: MessageContent,
@@ -24,7 +24,7 @@ public protocol ChatManager: AnyObject {
     func unsubscribeFromConnectionStatus(observer: AnyObject)
 }
 
-public struct HsitoryLoadingConfig {
+public struct HistoryLoadingConfig {
     public let channel: String
     public let olderThan: Date?
     public let limit: UInt?
@@ -94,7 +94,7 @@ final class ChatManagerImpl: ChatManager {
         }
     }
 
-    func history(with config: HsitoryLoadingConfig,
+    func history(with config: HistoryLoadingConfig,
                  completion: @escaping (Result<[Message], ApiError>) -> Void) {
         let olderThan = config.olderThan ?? Date()
         let limit = config.limit.flatMap { Int($0) } ?? Constants.defaultLimit

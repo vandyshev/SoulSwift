@@ -8,7 +8,7 @@ public class SoulSwiftClient {
         errorService = resolver ~> ErrorService.self
     }
 
-    public private(set) var soulApplicationService: SoulApplicationService?
+    public private(set) var soulApplicationService: ApplicationService?
     public private(set) var chatManager: ChatManager?
     public private(set) var errorService: ErrorService
 
@@ -18,7 +18,7 @@ public class SoulSwiftClient {
 
     public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
         self.soulConfiguration = soulConfiguration
-        self.soulApplicationService = resolver.resolve(SoulApplicationService.self)
+        self.soulApplicationService = resolver.resolve(ApplicationService.self)
         self.chatManager = resolver.resolve(ChatManager.self, argument: soulConfiguration)
     }
 }

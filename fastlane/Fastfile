@@ -10,9 +10,11 @@ platform :ios do
   lane :tests do
     run_tests(workspace: "SoulSwift.xcworkspace",
               scheme: "SoulSwift-Example",
+              clean: true,
               formatter: "xcpretty-json-formatter",
               output_types: "html,junit",
-              output_directory: "fastlane/tests_output")
+              output_directory: "fastlane/tests_output",
+              devices: ["iPhone 6s"])
   end
 
   lane :coverage do

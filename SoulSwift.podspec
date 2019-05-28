@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SoulSwift'
-  s.version          = '0.1.0'
+  s.version          = '0.2.0'
   s.summary          = 'A short description of SoulSwift.'
 
 # This description is used to generate tags and improve search results.
@@ -29,6 +29,7 @@ TODO: Add long description of the pod here.
   # s.social_media_url = 'https://twitter.com/e_vandyshev'
 
   s.ios.deployment_target = '8.0'
+  s.swift_version = '5.0'
 
   s.source_files = 'Sources/Classes/**/*'
   
@@ -39,6 +40,7 @@ TODO: Add long description of the pod here.
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'Moya', '~> 13.0'
+  s.dependency 'Starscream', '~> 3.0.2'
   s.dependency 'Swinject', '~> 2.5'
   s.dependency 'SwinjectAutoregistration', '~> 2.5'
 end

@@ -6,7 +6,7 @@ public enum SoulApplicationApi {
 }
 
 extension SoulApplicationApi: TargetType {
-    public var baseURL: URL { return URL(string: SoulSwift.shared.soulConfiguration!.baseURL)! }
+    public var baseURL: URL { return URL(string: SoulSwiftClient.shared.soulConfiguration!.baseURL)! }
 
     public var path: String {
         switch self {
@@ -25,7 +25,7 @@ extension SoulApplicationApi: TargetType {
         case .features(let anonymousId):
             var parameters: [String: Any] = [:]
             parameters["v"] = "1.0.1"
-            parameters["apiKey"] = SoulSwift.shared.soulConfiguration!.apiKey
+            parameters["apiKey"] = SoulSwiftClient.shared.soulConfiguration!.apiKey
             parameters["anonymousUser"] = anonymousId
             return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
         }

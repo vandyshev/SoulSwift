@@ -5,7 +5,6 @@ struct AuthConfig {
     let endpoint: String
     let method: String
     let body: String
-    let date: Date
 }
 
 protocol AuthHelper {
@@ -25,18 +24,20 @@ public final class AuthHelperImpl: AuthHelper {
     private struct AuthData {
         let userID: String
         let sessionToken: String
-        let date: Date
+        let timeStamp: UnixTimeStamp
         let httpMethod: String
         let endpoint: String
         let body: String
     }
 
     private let storage: Storage
+    private let dateService: DateService
     private let appName: String
 
-    init(storage: Storage, appName: String) {
+    init(storage: Storage, dateService: DateService, appName: String) {
         self.storage = storage
         self.appName = appName
+        self.dateService = dateService
     }
 
     var userAgent: String {
@@ -48,12 +49,11 @@ public final class AuthHelperImpl: AuthHelper {
         guard let userID = storage.userID, let sessionID = storage.sessionToken else {
             return nil
         }
-        let delta: Double = storage.serverTimeDelta ?? 0
-        let date = authConfig.date.addingTimeInterval(delta)
+        let timestamp = dateService.adjustedUnixTimeStamp
 
         let authData = AuthData(userID: userID,
                                 sessionToken: sessionID,
-                                date: date,
+                                timeStamp: timestamp,
                                 httpMethod: authConfig.method,
                                 endpoint: authConfig.endpoint,
                                 body: authConfig.body)
@@ -63,7 +63,7 @@ public final class AuthHelperImpl: AuthHelper {
 
     private func authString(authData: AuthData) -> String {
 
-        let unixtime = "\(Int(round(authData.date.timeIntervalSince1970)))"
+        let unixtime = "\(Int(round(authData.timeStamp)))"
         let rawDigest = "\(authData.httpMethod)+\(authData.endpoint)+\(authData.body)+\(unixtime)"
         let digest = hmacSHA256(from: rawDigest, key: authData.sessionToken)
         let hmac = "hmac \(authData.userID):\(unixtime):\(digest)"

@@ -22,6 +22,7 @@ class URLTests: XCTestCase {
     var chatApiURLFactory: ChatApiURLFactory!
     var chatClientURIFactory: ChatClientURIFactory!
     var authHelper: AuthHelper!
+    var dateService: DateServiceMock!
 
     override func setUp() {
         self.provider = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
@@ -32,7 +33,9 @@ class URLTests: XCTestCase {
         self.deviceHandler = DeviceHandlerImpl(storage: fakeDeviceIDStorage)
         self.chatURIFactoryConfig = ChatURIFactoryConfig(baseUrlString: Constants.fakeURL,
                                                          apiKey: Constants.fakeApiKey)
+        self.dateService = DateServiceMock(adjustedUnixTimeStamp: 1558780959)
         self.authHelper = AuthHelperImpl(storage: fakeStorage,
+                                         dateService: dateService,
                                          appName: Constants.fakeAppName)
         let chatClientURIFactoryImpl = ChatClientURIFactoryImpl(config: chatURIFactoryConfig,
                                                                 authHelper: authHelper,
@@ -43,6 +46,7 @@ class URLTests: XCTestCase {
 
     override func tearDown() {
         self.provider = nil
+        self.dateService = nil
     }
 
     func testChatApiURL() {
@@ -80,11 +84,9 @@ class URLTests: XCTestCase {
         let wsAuthEndpoint = "/me"
         let wsAuthMethod = "GET"
         let wsAuthBody = ""
-        let date = Date(timeIntervalSince1970: 1558780958)
         let authConfig = AuthConfig(endpoint: wsAuthEndpoint,
                                     method: wsAuthMethod,
-                                    body: wsAuthBody,
-                                    date: date)
+                                    body: wsAuthBody)
         guard let authString = authHelper.authString(withAuthConfig: authConfig) else {
             fatalError()
         }

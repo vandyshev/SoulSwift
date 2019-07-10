@@ -10,6 +10,7 @@ private enum Constants {
     static let fakeDeviceID = "fakeDeviceID"
     static let fakeURL = "www.myURL.com/"
     static let fakeApiKey = "fakeApiKey"
+    static let defaultTimeInterval: UnixTimeStamp = 1558780959
 }
 
 class URLTests: XCTestCase {
@@ -33,7 +34,7 @@ class URLTests: XCTestCase {
         self.deviceHandler = DeviceHandlerImpl(storage: fakeDeviceIDStorage)
         self.chatURIFactoryConfig = ChatURIFactoryConfig(baseUrlString: Constants.fakeURL,
                                                          apiKey: Constants.fakeApiKey)
-        self.dateService = DateServiceMock(adjustedUnixTimeStamp: 1558780959)
+        self.dateService = DateServiceMock(adjustedUnixTimeStamp: Constants.defaultTimeInterval)
         self.authHelper = AuthHelperImpl(storage: fakeStorage,
                                          dateService: dateService,
                                          appName: Constants.fakeAppName)
@@ -90,7 +91,7 @@ class URLTests: XCTestCase {
         guard let authString = authHelper.authString(withAuthConfig: authConfig) else {
             fatalError()
         }
-        let expected = "hmac \(Constants.fakeUserID):1558780959:571e880688d17e39376599c0266d0f77172ac7ccd67ea21c176812465058a4b0"
+        let expected = "hmac \(Constants.fakeUserID):\(Int(Constants.defaultTimeInterval)):571e880688d17e39376599c0266d0f77172ac7ccd67ea21c176812465058a4b0"
         XCTAssertEqual(expected, authString)
     }
 

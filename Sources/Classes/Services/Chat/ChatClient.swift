@@ -72,6 +72,7 @@ public final class ChatClientImpl: ChatClient {
         }
         return socket.isConnected ? .connected : .connecting
     }
+    private var lastBroadcastedStatus: ConnectionStatus?
 
     init(socketFactory: SocketFactory, errorService: InternalErrorService) {
         self.socketFactory = socketFactory
@@ -82,9 +83,12 @@ public final class ChatClientImpl: ChatClient {
         guard let socket = socketFactory.socket else {
             throw getApiError(.cannotStartSocket)
         }
-
+        subscribeOnEvents(socket: socket)
         self.socket = socket
+        connect()
+    }
 
+    private func subscribeOnEvents(socket: Socket) {
         socket.onConnect = { [weak self] in
             self?.broadcastStatus()
             print("websocket is connected")
@@ -103,8 +107,6 @@ public final class ChatClientImpl: ChatClient {
             self?.onText(text)
             print("got some text: \(text)")
         }
-
-        connect()
     }
 
     func finish() {
@@ -119,7 +121,10 @@ public final class ChatClientImpl: ChatClient {
     }
 
     private func broadcastStatus() {
-        statusObservable.broadcast(connectionStatus)
+        if lastBroadcastedStatus != connectionStatus {
+            lastBroadcastedStatus = connectionStatus
+            statusObservable.broadcast(connectionStatus)
+        }
     }
 
     private func reconnect() {

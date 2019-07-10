@@ -34,11 +34,11 @@ final class ChatAssembly: Assembly {
         }
 
         container.register(MessagesFactory.self) { resolver in
-            MessagesFactoryImpl(storage: resolver~>)
+            MessagesFactoryImpl(storage: resolver~>, dateService: resolver~>)
         }
 
         container.register(EventFactory.self) { resolver in
-            EventFactoryImpl(storage: resolver~>)
+            EventFactoryImpl(storage: resolver~>, dateService: resolver~>)
         }
 
         container.register(ChatServiceObserver.self) { (_: Resolver, client: ChatClient) in

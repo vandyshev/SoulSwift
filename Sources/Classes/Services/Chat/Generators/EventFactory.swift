@@ -21,9 +21,11 @@ extension EventFactoryError: LocalizedError {
 final class EventFactoryImpl: EventFactory {
 
     private let storage: Storage
+    private let dateService: DateService
 
-    init(storage: Storage) {
+    init(storage: Storage, dateService: DateService) {
         self.storage = storage
+        self.dateService = dateService
     }
 
     func createReadEvent(lastReadMessageTimestamp: UnixTimeStamp) throws -> ReadEvent {
@@ -31,7 +33,7 @@ final class EventFactoryImpl: EventFactory {
         guard let userId = storage.userID else {
             throw EventFactoryError.cannotCreateEvent
         }
-        let time = DateHelper.currentUnixTimestamp
+        let time = dateService.adjustedUnixTimeStamp
         return ReadEvent(time: time,
                          userId: userId,
                          lastReadMessageTimestamp: lastReadMessageTimestamp)
@@ -41,7 +43,7 @@ final class EventFactoryImpl: EventFactory {
         guard let senderId = storage.userID else {
             throw EventFactoryError.cannotCreateEvent
         }
-        let time = DateHelper.currentUnixTimestamp
+        let time = dateService.adjustedUnixTimeStamp
         return DeliveryConfirmationEvent(time: time,
                                          senderId: senderId,
                                          deliveredMessageId: deliveredMessageId,

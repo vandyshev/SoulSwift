@@ -36,6 +36,7 @@ private class SocketMock: Socket {
 
 private class FakeSocketFactory: SocketFactory {
     var socket: Socket?
+    var hasSocket: Bool { return socket != nil }
 }
 
 class ChatClientTests: XCTestCase {

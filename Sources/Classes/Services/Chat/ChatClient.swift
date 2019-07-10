@@ -73,6 +73,7 @@ public final class ChatClientImpl: ChatClient {
         return socket.isConnected ? .connected : .connecting
     }
     private var lastBroadcastedStatus: ConnectionStatus?
+    private var isStarted = false
 
     init(socketFactory: SocketFactory, errorService: InternalErrorService) {
         self.socketFactory = socketFactory
@@ -80,12 +81,27 @@ public final class ChatClientImpl: ChatClient {
     }
 
     func start() throws {
-        guard let socket = socketFactory.socket else {
+        guard socketFactory.hasSocket else {
             throw getApiError(.cannotStartSocket)
         }
-        subscribeOnEvents(socket: socket)
-        self.socket = socket
+        isStarted = true
         connect()
+    }
+
+    private func connect() {
+        if isStarted, let socket = socketFactory.socket {
+            subscribeOnEvents(socket: socket)
+            self.socket = socket
+        }
+        broadcastStatus()
+        socket?.connect()
+    }
+
+    func finish() {
+        socket?.disconnect()
+        socket = nil
+        isStarted = false
+        broadcastStatus()
     }
 
     private func subscribeOnEvents(socket: Socket) {
@@ -109,17 +125,6 @@ public final class ChatClientImpl: ChatClient {
         }
     }
 
-    func finish() {
-        self.socket?.disconnect()
-        self.socket = nil
-        broadcastStatus()
-    }
-
-    private func connect() {
-        broadcastStatus()
-        socket?.connect()
-    }
-
     private func broadcastStatus() {
         if lastBroadcastedStatus != connectionStatus {
             lastBroadcastedStatus = connectionStatus
@@ -133,12 +138,6 @@ public final class ChatClientImpl: ChatClient {
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.reconnectionTime) { [weak self] in
             if self?.connectionStatus == .connected { return }
             self?.connect()
-        }
-    }
-
-    @objc private func updateConnectionStatus() {
-        if let socket = socket, !socket.isConnected {
-            connect()
         }
     }
 

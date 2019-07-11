@@ -90,6 +90,7 @@ public final class ChatClientImpl: ChatClient {
 
     private func connect() {
         if isStarted, let socket = socketFactory.socket {
+            disconnectSocket()
             subscribeOnEvents(socket: socket)
             self.socket = socket
         }
@@ -98,8 +99,7 @@ public final class ChatClientImpl: ChatClient {
     }
 
     func finish() {
-        socket?.disconnect()
-        socket = nil
+        disconnectSocket()
         isStarted = false
         broadcastStatus()
     }
@@ -123,6 +123,14 @@ public final class ChatClientImpl: ChatClient {
             self?.onText(text)
             print("got some text: \(text)")
         }
+    }
+
+    func disconnectSocket() {
+        socket?.onDisconnect = nil
+        socket?.onText = nil
+        socket?.onConnect = nil
+        socket?.disconnect()
+        socket = nil
     }
 
     private func broadcastStatus() {

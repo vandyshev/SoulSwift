@@ -49,7 +49,7 @@ public final class AuthHelperImpl: AuthHelper {
         guard let userID = storage.userID, let sessionID = storage.sessionToken else {
             return nil
         }
-        let timestamp = dateService.adjustedUnixTimeStamp
+        let timestamp = dateService.currentAdjustedUnixTimeStamp
 
         let authData = AuthData(userID: userID,
                                 sessionToken: sessionID,

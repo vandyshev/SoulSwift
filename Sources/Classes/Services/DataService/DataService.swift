@@ -1,7 +1,8 @@
 import UIKit
 
 protocol DateService: AnyObject {
-    var adjustedUnixTimeStamp: UnixTimeStamp { get }
+    var currentAdjustedUnixTimeStamp: UnixTimeStamp { get }
+    func getAdjustedTimeStamp(from date: Date) -> UnixTimeStamp
 }
 
 class DateServiceImpl: DateService {
@@ -11,8 +12,13 @@ class DateServiceImpl: DateService {
         self.storage = storage
     }
 
-    var adjustedUnixTimeStamp: UnixTimeStamp {
+    var currentAdjustedUnixTimeStamp: UnixTimeStamp {
+        return getAdjustedTimeStamp(from: Date())
+    }
+
+    func getAdjustedTimeStamp(from date: Date) -> UnixTimeStamp {
         let delta = storage.serverTimeDelta ?? 0
-        return DateHelper.currentUnixTimestamp + delta
+        let currentUnixTimestamp = DateHelper.timestamp(from: date)
+        return currentUnixTimestamp + delta
     }
 }

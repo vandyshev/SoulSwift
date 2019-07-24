@@ -86,7 +86,7 @@ final class MessagesFactoryImpl: MessagesFactory {
     private func getBaseMessageData() throws -> BaseMessageData {
         let messageId = UUID().uuidString
 
-        let timeStamp = dateService.adjustedUnixTimeStamp
+        let timeStamp = dateService.currentAdjustedUnixTimeStamp
         guard let userId = storage.userID else {
             throw MessagesFactoryError.cannotCreateMessage
         }

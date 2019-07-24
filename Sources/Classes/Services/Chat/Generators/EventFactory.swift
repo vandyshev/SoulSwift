@@ -33,7 +33,7 @@ final class EventFactoryImpl: EventFactory {
         guard let userId = storage.userID else {
             throw EventFactoryError.cannotCreateEvent
         }
-        let time = dateService.adjustedUnixTimeStamp
+        let time = dateService.currentAdjustedUnixTimeStamp
         return ReadEvent(time: time,
                          userId: userId,
                          lastReadMessageTimestamp: lastReadMessageTimestamp)
@@ -43,7 +43,7 @@ final class EventFactoryImpl: EventFactory {
         guard let senderId = storage.userID else {
             throw EventFactoryError.cannotCreateEvent
         }
-        let time = dateService.adjustedUnixTimeStamp
+        let time = dateService.currentAdjustedUnixTimeStamp
         return DeliveryConfirmationEvent(time: time,
                                          senderId: senderId,
                                          deliveredMessageId: deliveredMessageId,

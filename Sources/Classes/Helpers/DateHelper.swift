@@ -8,7 +8,7 @@ extension UnixTimeStamp {
     }
 }
 
-class DateHelper {
+final class DateHelper {
 
     static func timestamp(from date: Date) -> UnixTimeStamp {
         return date.timeIntervalSince1970

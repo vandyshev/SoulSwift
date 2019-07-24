@@ -5,7 +5,7 @@ protocol DateService: AnyObject {
     func getAdjustedTimeStamp(from date: Date) -> UnixTimeStamp
 }
 
-class DateServiceImpl: DateService {
+final class DateServiceImpl: DateService {
     private let storage: Storage
 
     init(storage: Storage) {

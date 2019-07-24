@@ -18,7 +18,15 @@ private class SocketMock: Socket {
     }
 
     func connect() {
-        self.isConnected = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.isConnected = true
+            self.onConnect?()
+        }
+    }
+
+    func makeDisconnect() {
+        isConnected = false
+        onDisconnect?(nil)
     }
 
     func disconnect() {
@@ -28,6 +36,7 @@ private class SocketMock: Socket {
 
 private class FakeSocketFactory: SocketFactory {
     var socket: Socket?
+    var hasSocket: Bool { return socket != nil }
 }
 
 class ChatClientTests: XCTestCase {
@@ -75,22 +84,27 @@ class ChatClientTests: XCTestCase {
         } catch {
             fatalError()
         }
-        let status = client.connectionStatus
-        XCTAssertEqual(status, ConnectionStatus.connected)
-        let message = ChatMessage(messageId: "id",
-                                  userId: "userID",
-                                  timestamp: DateHelper.currentUnixTimestamp,
-                                  text: "text",
-                                  photoId: nil,
-                                  albumName: nil,
-                                  latitude: nil,
-                                  longitude: nil)
-        do {
-            try client.sendMessage(message)
-        } catch {
-            fatalError()
+        let exp = expectation(description: "exp")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            let status = self.client.connectionStatus
+            XCTAssertEqual(status, ConnectionStatus.connected)
+            let message = ChatMessage(messageId: "id",
+                                      userId: "userID",
+                                      timestamp: DateHelper.currentUnixTimestamp,
+                                      text: "text",
+                                      photoId: nil,
+                                      albumName: nil,
+                                      latitude: nil,
+                                      longitude: nil)
+            do {
+                try self.client.sendMessage(message)
+            } catch {
+                fatalError()
+            }
+            XCTAssertEqual(socket.lastWritedText, message.asString)
+            exp.fulfill()
         }
-        XCTAssertEqual(socket.lastWritedText, message.asString)
+        wait(for: [exp], timeout: 2)
     }
 
     func testClientStartFinish() {
@@ -101,8 +115,46 @@ class ChatClientTests: XCTestCase {
         } catch {
             fatalError()
         }
-        XCTAssertEqual(client.connectionStatus, ConnectionStatus.connected)
-        client.finish()
-        XCTAssertEqual(client.connectionStatus, ConnectionStatus.noSocket)
+        let exp = expectation(description: "exp")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            XCTAssertEqual(self.client.connectionStatus, ConnectionStatus.connected)
+            self.client.finish()
+            XCTAssertEqual(self.client.connectionStatus, ConnectionStatus.noSocket)
+            exp.fulfill()
+        }
+        wait(for: [exp], timeout: 2)
+    }
+
+    func testClientReconnect() {
+        let socket = SocketMock()
+        factory.socket = socket
+        let connectedExp = expectation(description: "connectedExp")
+        connectedExp.expectedFulfillmentCount = 2
+        connectedExp.assertForOverFulfill = true
+        let disconnectedExp = expectation(description: "disconnectedExp")
+        disconnectedExp.expectedFulfillmentCount = 2
+        disconnectedExp.assertForOverFulfill = true
+
+        var once = false
+        client.subscribeToConnectionStatus(self) { status in
+            switch status {
+            case .connected:
+                if !once {
+                    once = true
+                    socket.makeDisconnect()
+                }
+                connectedExp.fulfill()
+            case .connecting:
+                disconnectedExp.fulfill()
+            case .noSocket:
+                fatalError()
+            }
+        }
+        do {
+            try client.start()
+        } catch {
+            fatalError()
+        }
+        wait(for: [connectedExp, disconnectedExp], timeout: 4)
     }
 }

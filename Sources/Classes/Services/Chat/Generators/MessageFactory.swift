@@ -26,9 +26,11 @@ final class MessagesFactoryImpl: MessagesFactory {
     }
 
     private let storage: Storage
+    private let dateService: DateService
 
-    init(storage: Storage) {
+    init(storage: Storage, dateService: DateService) {
         self.storage = storage
+        self.dateService = dateService
     }
 
     func createMessage(_ messageContnet: MessageContent) throws -> ChatMessage {
@@ -83,7 +85,8 @@ final class MessagesFactoryImpl: MessagesFactory {
 
     private func getBaseMessageData() throws -> BaseMessageData {
         let messageId = UUID().uuidString
-        let timeStamp = DateHelper.currentUnixTimestamp
+
+        let timeStamp = dateService.adjustedUnixTimeStamp
         guard let userId = storage.userID else {
             throw MessagesFactoryError.cannotCreateMessage
         }

@@ -55,8 +55,7 @@ final class ChatClientURIFactoryImpl: ChatClientURIFactory, ChatApiURLFactory {
     private func buildWSURI() -> URL? {
         let authConfig = AuthConfig(endpoint: Constants.wsAuthEndpoint,
                                     method: Constants.wsAuthMethod,
-                                    body: "",
-                                    date: Date())
+                                    body: "")
         let generatedAuth = authHelper.authString(withAuthConfig: authConfig)
 
         guard let userAuth = generatedAuth,

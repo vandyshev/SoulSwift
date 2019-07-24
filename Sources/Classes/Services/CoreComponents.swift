@@ -20,7 +20,12 @@ final class CoreComponents: Assembly {
 
         container.register(AuthHelper.self) { (resolver: Resolver, appName: String) in
             AuthHelperImpl(storage: resolver~>,
+                           dateService: resolver~>,
                            appName: appName)
+        }
+
+        container.register(DateService.self) { resolver in
+            DateServiceImpl(storage: resolver~>)
         }
     }
 }

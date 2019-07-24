@@ -34,8 +34,7 @@ extension ChatApi: TargetType {
         var result = [String: String]()
         let authConfig = AuthConfig(endpoint: urlFactory.chatAuthEndpoint,
                                     method: urlFactory.chatAuthMethod,
-                                    body: "",
-                                    date: Date())
+                                    body: "")
         result["Authorization"] = authHelper.authString(withAuthConfig: authConfig)
         result["User-Agent"] = authHelper.userAgent
         return result

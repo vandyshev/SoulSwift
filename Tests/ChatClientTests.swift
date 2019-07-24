@@ -90,7 +90,7 @@ class ChatClientTests: XCTestCase {
             XCTAssertEqual(status, ConnectionStatus.connected)
             let message = ChatMessage(messageId: "id",
                                       userId: "userID",
-                                      timestamp: DateHelper.currentUnixTimestamp,
+                                      timestamp: DateHelper.timestamp(from: Date()),
                                       text: "text",
                                       photoId: nil,
                                       albumName: nil,

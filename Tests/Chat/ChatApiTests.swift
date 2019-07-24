@@ -11,6 +11,7 @@ private enum Constants {
     static let fakeURL = "www.myURL.com/"
     static let fakeApiKey = "fakeApiKey"
     static let defaultTimeInterval: UnixTimeStamp = 1558780959
+    static let defaultAdjustedFromDateTimeInterval: UnixTimeStamp = 1558780950
 }
 
 class URLTests: XCTestCase {
@@ -34,7 +35,8 @@ class URLTests: XCTestCase {
         self.deviceHandler = DeviceHandlerImpl(storage: fakeDeviceIDStorage)
         self.chatURIFactoryConfig = ChatURIFactoryConfig(baseUrlString: Constants.fakeURL,
                                                          apiKey: Constants.fakeApiKey)
-        self.dateService = DateServiceMock(adjustedUnixTimeStamp: Constants.defaultTimeInterval)
+        self.dateService = DateServiceMock(currentAdjustedUnixTimeStamp: Constants.defaultTimeInterval,
+                                           adjustedTimeStampFromDate: Constants.defaultAdjustedFromDateTimeInterval)
         self.authHelper = AuthHelperImpl(storage: fakeStorage,
                                          dateService: dateService,
                                          appName: Constants.fakeAppName)

@@ -55,19 +55,22 @@ final class ChatManagerImpl: ChatManager {
     private let pushManager: ChatLocalPushManager
     private let chatClient: ChatClient
     private let messageMapper: MessageMapper
+    private let dateService: DateService
 
     init(chatServiceObserver: ChatServiceObserver,
          chatServiceMessageSender: ChatServiceMessageSender,
          chatHistoryService: ChatHistoryService,
          chatClient: ChatClient,
          pushManager: ChatLocalPushManager,
-         messageMapper: MessageMapper) {
+         messageMapper: MessageMapper,
+         dateService: DateService) {
         self.chatServiceObserver      = chatServiceObserver
         self.chatServiceMessageSender = chatServiceMessageSender
         self.chatHistoryService       = chatHistoryService
         self.chatClient               = chatClient
         self.pushManager              = pushManager
         self.messageMapper            = messageMapper
+        self.dateService              = dateService
 
         handleInputMessages()
     }
@@ -97,10 +100,11 @@ final class ChatManagerImpl: ChatManager {
     func history(with config: HistoryLoadingConfig,
                  completion: @escaping (Result<[Message], ApiError>) -> Void) {
         let olderThan = config.olderThan ?? Date()
+        let adjustedOlderThan = dateService.getAdjustedTimeStamp(from: olderThan)
         let limit = config.limit.flatMap { Int($0) } ?? Constants.defaultLimit
         let chatHistoryConfig = ChatHistoryConfig(limit: limit,
                                                   offset: Constants.defaultOffset,
-                                                  beforeTimestamp: DateHelper.timestamp(from: olderThan),
+                                                  beforeTimestamp: adjustedOlderThan,
                                                   afterTimestamp: nil,
                                                   beforeIdentifier: nil,
                                                   afterIdentifer: nil,

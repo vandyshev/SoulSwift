@@ -8,7 +8,7 @@ PODS:
   - Nimble (8.0.1)
   - Quick (2.0.0)
   - Result (4.1.0)
-  - SoulSwift (0.2.1):
+  - SoulSwift (0.2.2):
     - Moya (~> 13.0)
     - Starscream (~> 3.0.2)
     - Swinject (~> 2.5)
@@ -47,7 +47,7 @@ SPEC CHECKSUMS:
   Nimble: 45f786ae66faa9a709624227fae502db55a8bdd0
   Quick: ce1276c7c27ba2da3cb2fd0cde053c3648b3b22d
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
-  SoulSwift: 95fd8b01354d7daf6ed9ca1d52f78e3122f0393a
+  SoulSwift: dae8e6071d70c684a413c6fb99e343968373a5c4
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   SwiftLint: 7a0227733d786395817373b2d0ca799fd0093ff3
   Swinject: 48a96cda93633cf2860697b4ce76ab5db9ebaca2

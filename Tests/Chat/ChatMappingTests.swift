@@ -7,15 +7,25 @@ class ChatMappingTests: XCTestCase {
     let userIdentifier = "userIdentifier"
 
     var messagesFactory: MessagesFactory!
+    var storage: Storage!
+    var eventFactory: EventFactory!
+    var dateService: DateService!
 
     override func setUp() {
 
-        let storage = FakeStorage(userID: userIdentifier, sessionToken: "token", serverTimeDelta: 0.1)
-        self.messagesFactory = MessagesFactoryImpl(storage: storage)
+        storage = FakeStorage(userID: userIdentifier, sessionToken: "token", serverTimeDelta: 0.1)
+        dateService = DateServiceMock(adjustedUnixTimeStamp: 1556020950)
+        messagesFactory = MessagesFactoryImpl(storage: storage,
+                                              dateService: dateService)
+        eventFactory = EventFactoryImpl(storage: storage,
+                                        dateService: dateService)
     }
 
     override func tearDown() {
-        self.messagesFactory = nil
+        messagesFactory = nil
+        eventFactory = nil
+        dateService = nil
+        storage = nil
     }
 
     func testTextMessage() {
@@ -28,6 +38,8 @@ class ChatMappingTests: XCTestCase {
             fatalError()
         }
         XCTAssertEqual(message.text, messageText)
+        XCTAssertEqual(message.timestamp, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(message.userId, storage.userID)
         XCTAssertNil(message.photoId)
         XCTAssertNil(message.albumName)
         XCTAssertNil(message.latitude)
@@ -45,6 +57,8 @@ class ChatMappingTests: XCTestCase {
             fatalError()
         }
         XCTAssertEqual(message.text, "")
+        XCTAssertEqual(message.timestamp, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(message.userId, storage.userID)
         XCTAssertEqual(message.photoId, photoId)
         XCTAssertEqual(message.albumName, albumId)
         XCTAssertNil(message.latitude)
@@ -63,6 +77,8 @@ class ChatMappingTests: XCTestCase {
             fatalError()
         }
         XCTAssertEqual(message.text, "")
+        XCTAssertEqual(message.timestamp, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(message.userId, storage.userID)
         XCTAssertNil(message.photoId)
         XCTAssertNil(message.albumName)
         XCTAssertEqual(message.latitude, lat)
@@ -213,5 +229,29 @@ class ChatMappingTests: XCTestCase {
         }
         XCTAssertEqual(ack.messageId, "59D72530-E8A5-47B7-9EEE-E5CA65AEAF1B")
         XCTAssertEqual(ack.time, 1556020950.193132)
+    }
+
+    func testReadEventCreation() {
+        let lastReadMessageTimestamp: UnixTimeStamp = 1556000050
+        guard let event = try? eventFactory.createReadEvent(lastReadMessageTimestamp: lastReadMessageTimestamp) else {
+            fatalError()
+        }
+        XCTAssertEqual(event.lastReadMessageTimestamp, lastReadMessageTimestamp)
+        XCTAssertEqual(event.time, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(event.userId, storage.userID)
+    }
+
+    func testDeliveryConfirmationEventCreation() {
+        let deliveredMessageId = "deliveredMessageId"
+        let userIdInMessage = "userIdInMessage"
+
+        guard let event = try? eventFactory.createDeliveryConfirmation(deliveredMessageId: deliveredMessageId,
+                                                                       userIdInMessage: userIdInMessage) else {
+            fatalError()
+        }
+        XCTAssertEqual(event.deliveredMessageId, deliveredMessageId)
+        XCTAssertEqual(event.time, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(event.userId, userIdInMessage)
+        XCTAssertEqual(event.senderId, storage.userID)
     }
 }

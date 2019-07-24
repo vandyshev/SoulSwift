@@ -72,6 +72,8 @@ public final class ChatClientImpl: ChatClient {
         }
         return socket.isConnected ? .connected : .connecting
     }
+    private var lastBroadcastedStatus: ConnectionStatus?
+    private var isStarted = false
 
     init(socketFactory: SocketFactory, errorService: InternalErrorService) {
         self.socketFactory = socketFactory
@@ -79,12 +81,30 @@ public final class ChatClientImpl: ChatClient {
     }
 
     func start() throws {
-        guard let socket = socketFactory.socket else {
+        guard socketFactory.hasSocket else {
             throw getApiError(.cannotStartSocket)
         }
+        isStarted = true
+        connect()
+    }
 
-        self.socket = socket
+    private func connect() {
+        if isStarted, let socket = socketFactory.socket {
+            disconnectSocket()
+            subscribeOnEvents(socket: socket)
+            self.socket = socket
+        }
+        broadcastStatus()
+        socket?.connect()
+    }
 
+    func finish() {
+        disconnectSocket()
+        isStarted = false
+        broadcastStatus()
+    }
+
+    private func subscribeOnEvents(socket: Socket) {
         socket.onConnect = { [weak self] in
             self?.broadcastStatus()
             print("websocket is connected")
@@ -103,23 +123,21 @@ public final class ChatClientImpl: ChatClient {
             self?.onText(text)
             print("got some text: \(text)")
         }
-
-        connect()
     }
 
-    func finish() {
-        self.socket?.disconnect()
-        self.socket = nil
-        broadcastStatus()
-    }
-
-    private func connect() {
-        broadcastStatus()
-        socket?.connect()
+    func disconnectSocket() {
+        socket?.onDisconnect = nil
+        socket?.onText = nil
+        socket?.onConnect = nil
+        socket?.disconnect()
+        socket = nil
     }
 
     private func broadcastStatus() {
-        statusObservable.broadcast(connectionStatus)
+        if lastBroadcastedStatus != connectionStatus {
+            lastBroadcastedStatus = connectionStatus
+            statusObservable.broadcast(connectionStatus)
+        }
     }
 
     private func reconnect() {
@@ -128,12 +146,6 @@ public final class ChatClientImpl: ChatClient {
         DispatchQueue.main.asyncAfter(deadline: .now() + Constants.reconnectionTime) { [weak self] in
             if self?.connectionStatus == .connected { return }
             self?.connect()
-        }
-    }
-
-    @objc private func updateConnectionStatus() {
-        if let socket = socket, !socket.isConnected {
-            connect()
         }
     }
 

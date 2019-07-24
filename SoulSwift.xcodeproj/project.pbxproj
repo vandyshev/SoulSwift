@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1912D0BC22D60D0C00B6CD49 /* DateServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1912D0BA22D60CCB00B6CD49 /* DateServiceMock.swift */; };
 		19182E0922968FB2003994D8 /* ChatApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19182E0722968E2F003994D8 /* ChatApiTests.swift */; };
 		19723D8522933C500009A336 /* ChatClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19723D8422933C500009A336 /* ChatClientTests.swift */; };
 		19E9EE572269FF5A003AD22F /* ChatMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E9EE562269FF5A003AD22F /* ChatMappingTests.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1912D0BA22D60CCB00B6CD49 /* DateServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateServiceMock.swift; sourceTree = "<group>"; };
 		19182E0722968E2F003994D8 /* ChatApiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChatApiTests.swift; path = Chat/ChatApiTests.swift; sourceTree = "<group>"; };
 		19723D8422933C500009A336 /* ChatClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatClientTests.swift; sourceTree = "<group>"; };
 		19E9EE562269FF5A003AD22F /* ChatMappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChatMappingTests.swift; path = Chat/ChatMappingTests.swift; sourceTree = "<group>"; };
@@ -77,6 +79,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1912D0B922D60CB600B6CD49 /* Mock */ = {
+			isa = PBXGroup;
+			children = (
+				19E9EE5C226A0D61003AD22F /* FakeStorage.swift */,
+				1912D0BA22D60CCB00B6CD49 /* DateServiceMock.swift */,
+			);
+			name = Mock;
+			sourceTree = "<group>";
+		};
 		19E9EE552269FF3B003AD22F /* Chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,7 +144,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				19E9EE5C226A0D61003AD22F /* FakeStorage.swift */,
+				1912D0B922D60CB600B6CD49 /* Mock */,
 				19E9EE552269FF3B003AD22F /* Chat */,
 				607FACEB1AFB9204008FA782 /* Tests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
@@ -414,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				19E9EE572269FF5A003AD22F /* ChatMappingTests.swift in Sources */,
+				1912D0BC22D60D0C00B6CD49 /* DateServiceMock.swift in Sources */,
 				19182E0922968FB2003994D8 /* ChatApiTests.swift in Sources */,
 				19E9EE5E226A0D70003AD22F /* FakeStorage.swift in Sources */,
 				19723D8522933C500009A336 /* ChatClientTests.swift in Sources */,

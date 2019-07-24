@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SoulSwift'
-  s.version          = '0.2.1'
+  s.version          = '0.2.2'
   s.summary          = 'A short description of SoulSwift.'
 
 # This description is used to generate tags and improve search results.

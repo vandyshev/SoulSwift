@@ -14,7 +14,8 @@ class ChatMappingTests: XCTestCase {
     override func setUp() {
 
         storage = FakeStorage(userID: userIdentifier, sessionToken: "token", serverTimeDelta: 0.1)
-        dateService = DateServiceMock(adjustedUnixTimeStamp: 1556020950)
+        dateService = DateServiceMock(currentAdjustedUnixTimeStamp: 1556020950,
+                                      adjustedTimeStampFromDate: 1556020952)
         messagesFactory = MessagesFactoryImpl(storage: storage,
                                               dateService: dateService)
         eventFactory = EventFactoryImpl(storage: storage,
@@ -38,7 +39,7 @@ class ChatMappingTests: XCTestCase {
             fatalError()
         }
         XCTAssertEqual(message.text, messageText)
-        XCTAssertEqual(message.timestamp, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(message.timestamp, dateService.currentAdjustedUnixTimeStamp)
         XCTAssertEqual(message.userId, storage.userID)
         XCTAssertNil(message.photoId)
         XCTAssertNil(message.albumName)
@@ -57,7 +58,7 @@ class ChatMappingTests: XCTestCase {
             fatalError()
         }
         XCTAssertEqual(message.text, "")
-        XCTAssertEqual(message.timestamp, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(message.timestamp, dateService.currentAdjustedUnixTimeStamp)
         XCTAssertEqual(message.userId, storage.userID)
         XCTAssertEqual(message.photoId, photoId)
         XCTAssertEqual(message.albumName, albumId)
@@ -77,7 +78,7 @@ class ChatMappingTests: XCTestCase {
             fatalError()
         }
         XCTAssertEqual(message.text, "")
-        XCTAssertEqual(message.timestamp, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(message.timestamp, dateService.currentAdjustedUnixTimeStamp)
         XCTAssertEqual(message.userId, storage.userID)
         XCTAssertNil(message.photoId)
         XCTAssertNil(message.albumName)
@@ -237,7 +238,7 @@ class ChatMappingTests: XCTestCase {
             fatalError()
         }
         XCTAssertEqual(event.lastReadMessageTimestamp, lastReadMessageTimestamp)
-        XCTAssertEqual(event.time, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(event.time, dateService.currentAdjustedUnixTimeStamp)
         XCTAssertEqual(event.userId, storage.userID)
     }
 
@@ -250,7 +251,7 @@ class ChatMappingTests: XCTestCase {
             fatalError()
         }
         XCTAssertEqual(event.deliveredMessageId, deliveredMessageId)
-        XCTAssertEqual(event.time, dateService.adjustedUnixTimeStamp)
+        XCTAssertEqual(event.time, dateService.currentAdjustedUnixTimeStamp)
         XCTAssertEqual(event.userId, userIdInMessage)
         XCTAssertEqual(event.senderId, storage.userID)
     }

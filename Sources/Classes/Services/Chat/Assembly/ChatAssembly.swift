@@ -69,7 +69,8 @@ final class ChatAssembly: Assembly {
                                    chatHistoryService: resolver ~> (ChatHistoryService.self, argument: config),
                                    chatClient: resolver ~> (ChatClient.self, argument: config),
                                    pushManager: resolver ~> (ChatLocalPushManager.self, argument: config),
-                                   messageMapper: resolver~>)
+                                   messageMapper: resolver~>,
+                                   dateService: resolver~>)
         }
 
         container.register(ChatLocalPushManager.self) { (resolver: Resolver, config: SoulConfiguration) in

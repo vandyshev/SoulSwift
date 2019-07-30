@@ -4,6 +4,7 @@ import SwinjectAutoregistration
 
 final class ChatAssembly: Assembly {
 
+    // swiftlint:disable function_body_length
     func assemble(container: Container) {
 
         container.register(ChatClientURIFactoryProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in

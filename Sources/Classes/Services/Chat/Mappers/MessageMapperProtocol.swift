@@ -1,11 +1,11 @@
 import UIKit
 
-protocol MessageMapper {
+protocol MessageMapperProtocol {
     func mapToMessage(chatHistoryObject: ChatHistoryObject) -> Message
     func mapToMessage(chatMessage: ChatMessage, channel: String) -> Message
 }
 
-final class MessageMapperImpl: MessageMapper {
+final class MessageMapper: MessageMapperProtocol {
 
     private let storage: Storage
 

@@ -2,7 +2,7 @@ import UIKit
 import Moya
 
 /// Loads Chat History
-protocol ChatHistoryService: AnyObject {
+protocol ChatHistoryServiceProtocol: AnyObject {
     func loadHistory(channel: String,
                      historyConfig: ChatHistoryConfig,
                      completion: @escaping (Result<[ChatHistoryObject], ApiError>) -> Void)
@@ -12,22 +12,22 @@ private enum Constants {
     static let chatHsitoryMappingError = "Can't decode history"
 }
 
-final class ChatHistoryServiceImpl: ChatHistoryService {
+final class ChatHistoryService: ChatHistoryServiceProtocol {
 
-    private let authHelper: AuthHelper
-    private let urlFactory: ChatApiURLFactory
+    private let authHelper: AuthHelperProtocol
+    private let urlFactory: ChatApiURLFactoryProtocol
     private let errorService: InternalErrorService
     private let provider: MoyaProvider<ChatApi>
     private let decoder: JSONDecoder
 
-    init(authHelper: AuthHelper,
-         urlFactory: ChatApiURLFactory,
+    init(authHelper: AuthHelperProtocol,
+         urlFactory: ChatApiURLFactoryProtocol,
          errorService: InternalErrorService) {
         self.authHelper   = authHelper
         self.urlFactory   = urlFactory
         self.errorService = errorService
         self.provider     = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
-        self.decoder      = ChatHistoryServiceImpl.createJSONDecoder()
+        self.decoder      = ChatHistoryService.createJSONDecoder()
     }
 
     func loadHistory(channel: String,

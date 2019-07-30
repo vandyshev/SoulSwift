@@ -7,7 +7,7 @@ struct AuthConfig {
     let body: String
 }
 
-protocol AuthHelper {
+protocol AuthHelperProtocol {
     func authString(withAuthConfig authConfig: AuthConfig) -> String?
     var userAgent: String { get }
 }
@@ -19,7 +19,7 @@ private enum Constants {
     static let simulatorModelIdentifierKey = "SIMULATOR_MODEL_IDENTIFIER"
 }
 
-public final class AuthHelperImpl: AuthHelper {
+public final class AuthHelper: AuthHelperProtocol {
 
     private struct AuthData {
         let userID: String
@@ -31,10 +31,10 @@ public final class AuthHelperImpl: AuthHelper {
     }
 
     private let storage: Storage
-    private let dateService: DateService
+    private let dateService: DateServiceProtocol
     private let appName: String
 
-    init(storage: Storage, dateService: DateService, appName: String) {
+    init(storage: Storage, dateService: DateServiceProtocol, appName: String) {
         self.storage = storage
         self.appName = appName
         self.dateService = dateService

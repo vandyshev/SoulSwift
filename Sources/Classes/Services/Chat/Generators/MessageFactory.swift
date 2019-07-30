@@ -1,6 +1,6 @@
 import UIKit
 
-protocol MessagesFactory {
+protocol MessagesFactoryProtocol {
     func createMessage(_ messageContnet: MessageContent) throws -> ChatMessage
 }
 
@@ -17,7 +17,7 @@ extension MessagesFactoryError: LocalizedError {
     }
 }
 
-final class MessagesFactoryImpl: MessagesFactory {
+final class MessagesFactory: MessagesFactoryProtocol {
 
     private struct BaseMessageData {
         let messageId: String
@@ -26,9 +26,9 @@ final class MessagesFactoryImpl: MessagesFactory {
     }
 
     private let storage: Storage
-    private let dateService: DateService
+    private let dateService: DateServiceProtocol
 
-    init(storage: Storage, dateService: DateService) {
+    init(storage: Storage, dateService: DateServiceProtocol) {
         self.storage = storage
         self.dateService = dateService
     }

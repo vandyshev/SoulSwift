@@ -1,13 +1,13 @@
 import Moya
 
-public protocol ApplicationService: AnyObject {
+public protocol ApplicationServiceProtocol: AnyObject {
     /// Application feature toggles from Soul
     ///
     /// - Parameter completion: collection of features
     func features(anonymousId: String?, completion: @escaping () -> Void)
 }
 
-final class ApplicationServiceImpl: ApplicationService {
+final class ApplicationService: ApplicationServiceProtocol {
 
     let soulApplicationProvider: MoyaProvider<SoulApplicationApi>
 

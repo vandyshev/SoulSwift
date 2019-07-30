@@ -1,6 +1,6 @@
 import Foundation
 
-protocol ChatServiceMessageSender {
+protocol ChatServiceMessageSenderProtocol {
     @discardableResult
     func sendNewMessage(_ messageContent: MessageContent, channel: String) throws -> ChatMessage
     func send(message: ChatMessage, channel: String) throws
@@ -12,16 +12,16 @@ protocol ChatServiceMessageSender {
                                        channel: String) throws
 }
 
-final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
+final class ChatServiceMessageSender: ChatServiceMessageSenderProtocol {
 
-    private let chatClient: ChatClient
-    private let messagesFactory: MessagesFactory
-    private let eventFactory: EventFactory
+    private let chatClient: ChatClientProtocol
+    private let messagesFactory: MessagesFactoryProtocol
+    private let eventFactory: EventFactoryProtocol
     private let errorService: InternalErrorService
 
-    init(chatClient: ChatClient,
-         messagesFactory: MessagesFactory,
-         eventFactory: EventFactory,
+    init(chatClient: ChatClientProtocol,
+         messagesFactory: MessagesFactoryProtocol,
+         eventFactory: EventFactoryProtocol,
          errorService: InternalErrorService) {
         self.chatClient = chatClient
         self.messagesFactory = messagesFactory

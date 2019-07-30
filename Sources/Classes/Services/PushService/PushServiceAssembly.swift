@@ -3,11 +3,11 @@ import SwinjectAutoregistration
 
 class PushServiceAssembly: Assembly {
     func assemble(container: Container) {
-        container.register(LocalPushService.self) { _ in
+        container.register(LocalPushServiceProtocol.self) { _ in
             if #available(iOS 10, *) {
-                return LocalPushServiceImpl()
+                return LocalPushService()
             } else {
-                return LocalPushServiceOldImpl()
+                return LocalPushServiceOld()
             }
         }
     }

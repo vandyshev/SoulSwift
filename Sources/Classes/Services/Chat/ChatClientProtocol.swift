@@ -17,7 +17,7 @@ extension ConnectionStatus {
     }
 }
 
-protocol ChatClient: AnyObject {
+protocol ChatClientProtocol: AnyObject {
 
     func start() throws
     func finish()
@@ -58,10 +58,10 @@ extension ChatClientError: LocalizedError {
     }
 }
 
-public final class ChatClientImpl: ChatClient {
+public final class ChatClient: ChatClientProtocol {
 
     private var socket: Socket?
-    private let socketFactory: SocketFactory
+    private let socketFactory: SocketFactoryProtocol
     private let errorService: InternalErrorService
     private let observable = Observable<Data>()
     private let statusObservable = Observable<ConnectionStatus>()
@@ -75,7 +75,7 @@ public final class ChatClientImpl: ChatClient {
     private var lastBroadcastedStatus: ConnectionStatus?
     private var isStarted = false
 
-    init(socketFactory: SocketFactory, errorService: InternalErrorService) {
+    init(socketFactory: SocketFactoryProtocol, errorService: InternalErrorService) {
         self.socketFactory = socketFactory
         self.errorService = errorService
     }

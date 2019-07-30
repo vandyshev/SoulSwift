@@ -6,77 +6,77 @@ final class ChatAssembly: Assembly {
 
     func assemble(container: Container) {
 
+        container.register(ChatClientURIFactoryProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
+            resolver ~> (ChatClientURIFactory.self, argument: config)
+        }
+
+        container.register(ChatApiURLFactoryProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
+            resolver ~> (ChatClientURIFactory.self, argument: config)
+        }
+
         container.register(ChatClientURIFactory.self) { (resolver: Resolver, config: SoulConfiguration) in
-            resolver ~> (ChatClientURIFactoryImpl.self, argument: config)
-        }
-
-        container.register(ChatApiURLFactory.self) { (resolver: Resolver, config: SoulConfiguration) in
-            resolver ~> (ChatClientURIFactoryImpl.self, argument: config)
-        }
-
-        container.register(ChatClientURIFactoryImpl.self) { (resolver: Resolver, config: SoulConfiguration) in
-            ChatClientURIFactoryImpl(config: config.chatURIFactoryConfig,
-                                     authHelper: resolver ~> (AuthHelper.self, argument: config.appName),
+            ChatClientURIFactory(config: config.chatURIFactoryConfig,
+                                     authHelper: resolver ~> (AuthHelperProtocol.self, argument: config.appName),
                                      deviceHandler: resolver~>)
         }
 
-        container.register(SocketFactory.self) { (resolver: Resolver, config: SoulConfiguration) in
-            SocketFactoryImpl(uriFactory: resolver ~> (ChatClientURIFactory.self, argument: config))
+        container.register(SocketFactoryProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
+            SocketFactory(uriFactory: resolver ~> (ChatClientURIFactoryProtocol.self, argument: config))
         }
 
-        container.register(ChatClientImpl.self) { (resolver: Resolver, config: SoulConfiguration) in
-            ChatClientImpl(socketFactory: resolver ~> (SocketFactory.self, argument: config),
+        container.register(ChatClient.self) { (resolver: Resolver, config: SoulConfiguration) in
+            ChatClient(socketFactory: resolver ~> (SocketFactoryProtocol.self, argument: config),
                            errorService: resolver~>)
         }.inObjectScope(.weak)
 
-        container.register(ChatClient.self) { (resolver: Resolver, config: SoulConfiguration) in
-            resolver ~> (ChatClientImpl.self, argument: config)
+        container.register(ChatClientProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
+            resolver ~> (ChatClient.self, argument: config)
         }
 
-        container.register(MessagesFactory.self) { resolver in
-            MessagesFactoryImpl(storage: resolver~>, dateService: resolver~>)
+        container.register(MessagesFactoryProtocol.self) { resolver in
+            MessagesFactory(storage: resolver~>, dateService: resolver~>)
         }
 
-        container.register(EventFactory.self) { resolver in
-            EventFactoryImpl(storage: resolver~>, dateService: resolver~>)
+        container.register(EventFactoryProtocol.self) { resolver in
+            EventFactory(storage: resolver~>, dateService: resolver~>)
         }
 
-        container.register(ChatServiceObserver.self) { (_: Resolver, client: ChatClient) in
-            ChatServiceObserverImpl(chatClient: client)
+        container.register(ChatServiceObserverProtocol.self) { (_: Resolver, client: ChatClientProtocol) in
+            ChatServiceObserver(chatClient: client)
         }.inObjectScope(.weak)
 
-        container.register(ChatServiceMessageSender.self) { (resolver: Resolver, client: ChatClient) in
-            ChatServiceMessageSenderImpl(chatClient: client,
+        container.register(ChatServiceMessageSenderProtocol.self) { (resolver: Resolver, client: ChatClientProtocol) in
+            ChatServiceMessageSender(chatClient: client,
                                          messagesFactory: resolver~>,
                                          eventFactory: resolver~>,
                                          errorService: resolver~>)
         }
 
-        container.register(ChatHistoryService.self) { (resolver: Resolver, config: SoulConfiguration) in
-            ChatHistoryServiceImpl(authHelper: resolver ~> (AuthHelper.self, argument: config.appName),
-                                   urlFactory: resolver ~> (ChatApiURLFactory.self, argument: config),
+        container.register(ChatHistoryServiceProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
+            ChatHistoryService(authHelper: resolver ~> (AuthHelperProtocol.self, argument: config.appName),
+                                   urlFactory: resolver ~> (ChatApiURLFactoryProtocol.self, argument: config),
                                    errorService: resolver~>)
         }
 
-        container.register(MessageMapper.self) { resolver in
-            MessageMapperImpl(storage: resolver~>)
+        container.register(MessageMapperProtocol.self) { resolver in
+            MessageMapper(storage: resolver~>)
         }
 
-        container.register(ChatManager.self) { (resolver: Resolver, config: SoulConfiguration) in
-            let client = resolver ~> (ChatClient.self, argument: config)
-            return ChatManagerImpl(chatServiceObserver: resolver ~> (ChatServiceObserver.self, argument: client),
-                                   chatServiceMessageSender: resolver ~> (ChatServiceMessageSender.self, argument: client),
-                                   chatHistoryService: resolver ~> (ChatHistoryService.self, argument: config),
-                                   chatClient: resolver ~> (ChatClient.self, argument: config),
-                                   pushManager: resolver ~> (ChatLocalPushManager.self, argument: config),
+        container.register(ChatManagerProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
+            let client = resolver ~> (ChatClientProtocol.self, argument: config)
+            return ChatManager(chatServiceObserver: resolver ~> (ChatServiceObserverProtocol.self, argument: client),
+                                   chatServiceMessageSender: resolver ~> (ChatServiceMessageSenderProtocol.self, argument: client),
+                                   chatHistoryService: resolver ~> (ChatHistoryServiceProtocol.self, argument: config),
+                                   chatClient: resolver ~> (ChatClientProtocol.self, argument: config),
+                                   pushManager: resolver ~> (ChatLocalPushManagerProtocol.self, argument: config),
                                    messageMapper: resolver~>,
                                    dateService: resolver~>)
         }
 
-        container.register(ChatLocalPushManager.self) { (resolver: Resolver, config: SoulConfiguration) in
-            let client = resolver ~> (ChatClient.self, argument: config)
-            let chatServiceObserver = resolver ~> (ChatServiceObserver.self, argument: client)
-            return ChatLocalPushManagerImpl(chatServiceObserver: chatServiceObserver,
+        container.register(ChatLocalPushManagerProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
+            let client = resolver ~> (ChatClientProtocol.self, argument: config)
+            let chatServiceObserver = resolver ~> (ChatServiceObserverProtocol.self, argument: client)
+            return ChatLocalPushManager(chatServiceObserver: chatServiceObserver,
                                             localPushService: resolver~>)
         }
     }

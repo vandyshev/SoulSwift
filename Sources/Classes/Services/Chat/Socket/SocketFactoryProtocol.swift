@@ -1,20 +1,20 @@
 import Starscream
 
 /// Generates socket if possible
-protocol SocketFactory: AnyObject {
+protocol SocketFactoryProtocol: AnyObject {
     var socket: Socket? { get }
     var hasSocket: Bool { get }
 }
 
-class SocketFactoryImpl: SocketFactory {
+class SocketFactory: SocketFactoryProtocol {
 
-    private let uriFactory: ChatClientURIFactory
+    private let uriFactory: ChatClientURIFactoryProtocol
 
     var hasSocket: Bool {
         return uriFactory.wsConnectionURI != nil
     }
 
-    init(uriFactory: ChatClientURIFactory) {
+    init(uriFactory: ChatClientURIFactoryProtocol) {
         self.uriFactory = uriFactory
     }
 

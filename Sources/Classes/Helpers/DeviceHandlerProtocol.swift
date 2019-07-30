@@ -1,10 +1,10 @@
 import Foundation
 
-protocol DeviceHandler {
+protocol DeviceHandlerProtocol {
     var deviceIdentifier: String { get }
 }
 
-class DeviceHandlerImpl: DeviceHandler {
+class DeviceHandler: DeviceHandlerProtocol {
 
     private let storage: DeviceIdStorage
 

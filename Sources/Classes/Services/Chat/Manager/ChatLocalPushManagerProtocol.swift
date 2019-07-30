@@ -1,7 +1,7 @@
 import UIKit
 
 /// It handles local push notifications
-protocol ChatLocalPushManager: AnyObject {
+protocol ChatLocalPushManagerProtocol: AnyObject {
     var isEnabled: Bool { get set }
 }
 
@@ -15,20 +15,20 @@ private enum LocalizationConstants {
     static let geoMessage = "chat_message_location"
 }
 
-class ChatLocalPushManagerImpl: ChatLocalPushManager {
+class ChatLocalPushManager: ChatLocalPushManagerProtocol {
 
     var isEnabled: Bool = true
 
-    private let chatServiceObserver: ChatServiceObserver
-    private let localPushService: LocalPushService
+    private let chatServiceObserver: ChatServiceObserverProtocol
+    private let localPushService: LocalPushServiceProtocol
 
-    init(chatServiceObserver: ChatServiceObserver, localPushService: LocalPushService) {
+    init(chatServiceObserver: ChatServiceObserverProtocol, localPushService: LocalPushServiceProtocol) {
         self.chatServiceObserver = chatServiceObserver
         self.localPushService = localPushService
 
         chatServiceObserver.subscribeToAllMessages(observer: self) { [weak self] messagePayload in
             guard self?.isEnabled == true else { return }
-            let pushPayload = ChatLocalPushManagerImpl.createPushPayload(from: messagePayload)
+            let pushPayload = ChatLocalPushManager.createPushPayload(from: messagePayload)
             self?.localPushService.sendLocalPush(with: pushPayload)
         }
     }

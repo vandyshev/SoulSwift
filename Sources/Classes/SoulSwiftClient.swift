@@ -5,12 +5,12 @@ public class SoulSwiftClient {
     public static var shared = SoulSwiftClient()
 
     private init() {
-        errorService = resolver ~> ErrorService.self
+        errorService = resolver ~> ErrorServiceProtocol.self
     }
 
-    public private(set) var soulApplicationService: ApplicationService?
-    public private(set) var chatManager: ChatManager?
-    public private(set) var errorService: ErrorService
+    public private(set) var soulApplicationService: ApplicationServiceProtocol?
+    public private(set) var chatManager: ChatManagerProtocol?
+    public private(set) var errorService: ErrorServiceProtocol
 
     private(set) var soulConfiguration: SoulConfiguration?
 
@@ -18,7 +18,7 @@ public class SoulSwiftClient {
 
     public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
         self.soulConfiguration = soulConfiguration
-        self.soulApplicationService = resolver.resolve(ApplicationService.self)
-        self.chatManager = resolver.resolve(ChatManager.self, argument: soulConfiguration)
+        self.soulApplicationService = resolver.resolve(ApplicationServiceProtocol.self)
+        self.chatManager = resolver.resolve(ChatManagerProtocol.self, argument: soulConfiguration)
     }
 }

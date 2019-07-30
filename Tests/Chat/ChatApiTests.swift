@@ -18,12 +18,12 @@ class URLTests: XCTestCase {
 
     var provider: MoyaProvider<ChatApi>!
     var fakeStorage: Storage!
-    var deviceHandler: DeviceHandler!
+    var deviceHandler: DeviceHandlerProtocol!
     var fakeDeviceIDStorage: DeviceIdStorage!
     var chatURIFactoryConfig: ChatURIFactoryConfig!
-    var chatApiURLFactory: ChatApiURLFactory!
-    var chatClientURIFactory: ChatClientURIFactory!
-    var authHelper: AuthHelper!
+    var chatApiURLFactory: ChatApiURLFactoryProtocol!
+    var chatClientURIFactory: ChatClientURIFactoryProtocol!
+    var authHelper: AuthHelperProtocol!
     var dateService: DateServiceMock!
 
     override func setUp() {
@@ -32,15 +32,15 @@ class URLTests: XCTestCase {
                                        sessionToken: Constants.fakeSessionID,
                                        serverTimeDelta: 1)
         self.fakeDeviceIDStorage = FakeDeviceIdStorage(deviceID: Constants.fakeDeviceID)
-        self.deviceHandler = DeviceHandlerImpl(storage: fakeDeviceIDStorage)
+        self.deviceHandler = DeviceHandler(storage: fakeDeviceIDStorage)
         self.chatURIFactoryConfig = ChatURIFactoryConfig(baseUrlString: Constants.fakeURL,
                                                          apiKey: Constants.fakeApiKey)
         self.dateService = DateServiceMock(currentAdjustedUnixTimeStamp: Constants.defaultTimeInterval,
                                            adjustedTimeStampFromDate: Constants.defaultAdjustedFromDateTimeInterval)
-        self.authHelper = AuthHelperImpl(storage: fakeStorage,
+        self.authHelper = AuthHelper(storage: fakeStorage,
                                          dateService: dateService,
                                          appName: Constants.fakeAppName)
-        let chatClientURIFactoryImpl = ChatClientURIFactoryImpl(config: chatURIFactoryConfig,
+        let chatClientURIFactoryImpl = ChatClientURIFactory(config: chatURIFactoryConfig,
                                                                 authHelper: authHelper,
                                                                 deviceHandler: deviceHandler)
         self.chatApiURLFactory = chatClientURIFactoryImpl

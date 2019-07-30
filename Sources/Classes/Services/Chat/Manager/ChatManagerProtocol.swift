@@ -1,7 +1,7 @@
 import Foundation
 
 /// Handle all messenger interactions
-public protocol ChatManager: AnyObject {
+public protocol ChatManagerProtocol: AnyObject {
 
     func start() throws
     func finish()
@@ -41,7 +41,7 @@ private enum Constants {
     static let defaultOffset = 0
 }
 
-final class ChatManagerImpl: ChatManager {
+final class ChatManager: ChatManagerProtocol {
 
     var connectionStatus: ConnectionStatus { return chatClient.connectionStatus }
     var isLocalPushNotificationsEnabled: Bool {
@@ -49,21 +49,21 @@ final class ChatManagerImpl: ChatManager {
         set { pushManager.isEnabled = newValue }
     }
 
-    private let chatServiceObserver: ChatServiceObserver
-    private let chatServiceMessageSender: ChatServiceMessageSender
-    private let chatHistoryService: ChatHistoryService
-    private let pushManager: ChatLocalPushManager
-    private let chatClient: ChatClient
-    private let messageMapper: MessageMapper
-    private let dateService: DateService
+    private let chatServiceObserver: ChatServiceObserverProtocol
+    private let chatServiceMessageSender: ChatServiceMessageSenderProtocol
+    private let chatHistoryService: ChatHistoryServiceProtocol
+    private let pushManager: ChatLocalPushManagerProtocol
+    private let chatClient: ChatClientProtocol
+    private let messageMapper: MessageMapperProtocol
+    private let dateService: DateServiceProtocol
 
-    init(chatServiceObserver: ChatServiceObserver,
-         chatServiceMessageSender: ChatServiceMessageSender,
-         chatHistoryService: ChatHistoryService,
-         chatClient: ChatClient,
-         pushManager: ChatLocalPushManager,
-         messageMapper: MessageMapper,
-         dateService: DateService) {
+    init(chatServiceObserver: ChatServiceObserverProtocol,
+         chatServiceMessageSender: ChatServiceMessageSenderProtocol,
+         chatHistoryService: ChatHistoryServiceProtocol,
+         chatClient: ChatClientProtocol,
+         pushManager: ChatLocalPushManagerProtocol,
+         messageMapper: MessageMapperProtocol,
+         dateService: DateServiceProtocol) {
         self.chatServiceObserver      = chatServiceObserver
         self.chatServiceMessageSender = chatServiceMessageSender
         self.chatHistoryService       = chatHistoryService

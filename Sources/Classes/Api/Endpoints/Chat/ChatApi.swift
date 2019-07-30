@@ -4,8 +4,8 @@ import Moya
 struct ChatApi {
     let chatHistoryConfig: ChatHistoryConfig
     let channel: String
-    let authHelper: AuthHelper
-    let urlFactory: ChatApiURLFactory
+    let authHelper: AuthHelperProtocol
+    let urlFactory: ChatApiURLFactoryProtocol
 }
 
 extension ChatApi: TargetType {

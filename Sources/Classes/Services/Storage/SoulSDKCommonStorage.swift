@@ -23,6 +23,7 @@ extension SoulSDKCommonStorage: Storage {
         get {
             return internalStorage.string(forKey: fixedKey(Constants.userIDKey))
         }
+        // swiftlint:disable unused_setter_value
         set {
             assertionFailure()
         }
@@ -32,6 +33,7 @@ extension SoulSDKCommonStorage: Storage {
         get {
             return internalStorage.string(forKey: fixedKey(Constants.sessionIDKey))
         }
+        // swiftlint:disable unused_setter_value
         set {
             assertionFailure()
         }
@@ -44,6 +46,7 @@ extension SoulSDKCommonStorage: Storage {
             }
             return Double(serverTimeString)
         }
+        // swiftlint:disable unused_setter_value
         set {
             assertionFailure()
         }

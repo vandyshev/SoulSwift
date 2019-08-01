@@ -7,19 +7,11 @@ protocol AuthorizedTargetType: TargetType {
 }
 
 struct HMACAuthPlugin: PluginType {
-    private struct AuthorizationData {
-        let userID: String
-        let sessionToken: String
-        let timeStamp: UnixTimeStamp
-        let httpMethod: String
-        let endpoint: String
-        let httpBody: String
-    }
 
-    private let storage: Storage
+    private let storageService: StorageServiceProtocol
 
-    init(storage: Storage) {
-        self.storage = storage
+    init(storageService: StorageServiceProtocol) {
+        self.storageService = storageService
     }
 
     func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
@@ -31,8 +23,8 @@ struct HMACAuthPlugin: PluginType {
     }
 
     private func getAuthorization(_ request: URLRequest, target: TargetType) -> String? {
-        guard let userId = storage.userID else { return nil }
-        guard let sessionToken = storage.sessionToken else { return nil }
+        guard let userId = storageService.userId else { return nil }
+        guard let sessionToken = storageService.sessionToken else { return nil }
         let httpMethod = target.method.rawValue
         let httpPath = target.path
         let httpBody = String(data: request.httpBody ?? Data(), encoding: .utf8) ?? ""

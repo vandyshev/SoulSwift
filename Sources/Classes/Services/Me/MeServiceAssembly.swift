@@ -8,7 +8,7 @@ final class MeServiceAssembly: Assembly {
             MeService(soulMeProvider:
                 MoyaProvider<SoulMeApi>(
                     plugins: [
-                        HMACAuthPlugin(storage: resolver ~> Storage.self),
+                        HMACAuthPlugin(storageService: resolver ~> StorageServiceProtocol.self),
                         UserAgentPlugin(),
                         NetworkLoggerPlugin(verbose: true)
                     ]

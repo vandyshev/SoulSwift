@@ -12,7 +12,8 @@ final class DependencyConfigurator {
     private init() {
         assembler = Assembler([
             ApplicationServiceAssembly(),
-            MeServiceAssembly()
+            MeServiceAssembly(),
+            StorageServiceAssembly()
         ])
     }
 }

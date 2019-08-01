@@ -11,12 +11,8 @@ final class DependencyConfigurator {
 
     private init() {
         assembler = Assembler([
-            CoreComponents(),
             ApplicationServiceAssembly(),
-            MeServiceAssembly(),
-            ChatAssembly(),
-            PushServiceAssembly(),
-            ErrorServiceAssembly()
+            MeServiceAssembly()
         ])
     }
 }

@@ -1,12 +1,25 @@
 import Foundation
 import Moya
 
+typealias SoulMeProvider = MoyaProvider<SoulMeApi>
+
 public enum SoulMeApi {
     // swiftlint:disable identifier_name
     case me(Moya.Method)
 }
 
-extension SoulMeApi: AuthorizedTargetType {
+extension SoulMeApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
+
+    var needsAuth: Bool {
+        switch self {
+        default:
+            return true
+        }
+    }
+
+    var needsAPIVersion: Bool {
+        return true
+    }
 
     public var baseURL: URL { return URL(string: SoulSwiftClient.shared.soulConfiguration!.baseURL)! }
 
@@ -16,12 +29,14 @@ extension SoulMeApi: AuthorizedTargetType {
             return "/me"
         }
     }
+
     public var method: Moya.Method {
         switch self {
         case .me(let method):
             return method
         }
     }
+
     public var task: Task {
         switch self {
         case .me(let method):
@@ -38,19 +53,15 @@ extension SoulMeApi: AuthorizedTargetType {
 
         }
     }
+
     public var sampleData: Data {
         switch self {
         case .me:
             return "{}".data(using: String.Encoding.utf8)!
         }
     }
+
     public var headers: [String: String]? {
         return [:]
-    }
-    var needsAuth: Bool {
-        switch self {
-        default:
-            return true
-        }
     }
 }

@@ -6,9 +6,9 @@ public protocol MeServiceProtocol: AnyObject {
 
 final class MeService: MeServiceProtocol {
 
-    let soulMeProvider: MoyaProvider<SoulMeApi>
+    let soulMeProvider: SoulMeProvider
 
-    init(soulMeProvider: MoyaProvider<SoulMeApi>) {
+    init(soulMeProvider: SoulMeProvider) {
         self.soulMeProvider = soulMeProvider
     }
 

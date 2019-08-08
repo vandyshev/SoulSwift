@@ -35,9 +35,9 @@ class ViewController: UIViewController {
     }
 
     private func downloadFeatures() {
-        SoulSwiftClient.shared.soulApplicationService?.features(anonymousId: "CF6421EB-B450-41A0-A572-89FCE3FB0C2F", completion: {
+        SoulSwiftClient.shared.soulApplicationService?.features {
             print("features completion")
-        })
+        }
 
         SoulSwiftClient.shared.soulMeService?.getMe {
             print("getMe completion")

@@ -12,7 +12,6 @@ struct UserAgentPlugin: PluginType {
 
     func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
         var request = request
-        SoulSwiftClient.shared.soulConfiguration
         request.addValue(getUserAgent(), forHTTPHeaderField: "User-Agent")
         return request
     }

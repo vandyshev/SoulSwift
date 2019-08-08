@@ -4,19 +4,19 @@ public protocol ApplicationServiceProtocol: AnyObject {
     /// Application feature toggles from Soul
     ///
     /// - Parameter completion: collection of features
-    func features(anonymousId: String?, completion: @escaping () -> Void)
+    func features(completion: @escaping () -> Void)
 }
 
 final class ApplicationService: ApplicationServiceProtocol {
 
-    let soulApplicationProvider: MoyaProvider<SoulApplicationApi>
+    let soulApplicationProvider: SoulApplicationProvider
 
-    init(soulApplicationProvider: MoyaProvider<SoulApplicationApi>) {
+    init(soulApplicationProvider: SoulApplicationProvider) {
         self.soulApplicationProvider = soulApplicationProvider
     }
 
-    func features(anonymousId: String?, completion: @escaping () -> Void) {
-        soulApplicationProvider.request(.features(anonymousId: anonymousId)) { _ in
+    func features(completion: @escaping () -> Void) {
+        soulApplicationProvider.request(.features) { _ in
             completion()
         }
     }

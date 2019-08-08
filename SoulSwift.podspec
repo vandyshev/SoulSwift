@@ -40,7 +40,6 @@ TODO: Add long description of the pod here.
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'Moya', '~> 13.0'
-  s.dependency 'Starscream', '~> 3.0.2'
   s.dependency 'Swinject', '~> 2.5'
   s.dependency 'SwinjectAutoregistration', '~> 2.5'
 end

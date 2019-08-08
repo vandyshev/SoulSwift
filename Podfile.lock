@@ -10,10 +10,8 @@ PODS:
   - Result (4.1.0)
   - SoulSwift (0.2.2):
     - Moya (~> 13.0)
-    - Starscream (~> 3.0.2)
     - Swinject (~> 2.5)
     - SwinjectAutoregistration (~> 2.5)
-  - Starscream (3.0.6)
   - SwiftLint (0.34.0)
   - Swinject (2.6.2)
   - SwinjectAutoregistration (2.6.0):
@@ -32,7 +30,6 @@ SPEC REPOS:
     - Nimble
     - Quick
     - Result
-    - Starscream
     - SwiftLint
     - Swinject
     - SwinjectAutoregistration
@@ -47,12 +44,11 @@ SPEC CHECKSUMS:
   Nimble: 622629381bda1dd5678162f21f1368cec7cbba60
   Quick: 4be43f6634acfa727dd106bdf3929ce125ffa79d
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
-  SoulSwift: bd84f00d36af9d140593ebb54671c51e0c387f52
-  Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
+  SoulSwift: aca954619a8d89a230fc363cd118f2209868c209
   SwiftLint: 79d48a17c6565dc286c37efb8322c7b450f95c67
   Swinject: cf7458774b1b00323080a9c67e47a1ee7f9d2af1
   SwinjectAutoregistration: 93a908f7543c401b0c315305ac0ae501efdbce89
 
-PODFILE CHECKSUM: fce1db7326f474b841791780cf08bc3e99a7ec8f
+PODFILE CHECKSUM: c1bbf3beb79a71158ae60d98997935c221b7af63
 
 COCOAPODS: 1.6.2

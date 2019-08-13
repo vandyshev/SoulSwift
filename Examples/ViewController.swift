@@ -39,6 +39,10 @@ class ViewController: UIViewController {
             print("features completion")
         }
 
+        SoulSwiftClient.shared.soulApplicationService?.constants(namespace: "test", completion: {
+            print("constants completion")
+        })
+
         SoulSwiftClient.shared.soulMeService?.getMe {
             print("getMe completion")
         }

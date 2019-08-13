@@ -6,3 +6,6 @@ line_length: 150
 identifier_name:
   excluded:
     - me
+    - a
+    - b
+    - id

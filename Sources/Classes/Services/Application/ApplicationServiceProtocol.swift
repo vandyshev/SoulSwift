@@ -5,6 +5,8 @@ public protocol ApplicationServiceProtocol: AnyObject {
     ///
     /// - Parameter completion: collection of features
     func features(completion: @escaping () -> Void)
+
+    func constants(namespace: String, completion: @escaping () -> Void)
 }
 
 final class ApplicationService: ApplicationServiceProtocol {
@@ -17,6 +19,12 @@ final class ApplicationService: ApplicationServiceProtocol {
 
     func features(completion: @escaping () -> Void) {
         soulApplicationProvider.request(.features) { _ in
+            completion()
+        }
+    }
+
+    func constants(namespace: String, completion: @escaping () -> Void) {
+        soulApplicationProvider.request(.constants(namespace)) { _ in
             completion()
         }
     }

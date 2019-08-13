@@ -5,6 +5,7 @@ typealias SoulApplicationProvider = MoyaProvider<SoulApplicationApi>
 
 public enum SoulApplicationApi {
     case features
+    case constants(String)
 }
 
 extension SoulApplicationApi: TargetType, APIVersionTargetType, AnonymousTargetType {
@@ -22,28 +23,21 @@ extension SoulApplicationApi: TargetType, APIVersionTargetType, AnonymousTargetT
         switch self {
         case .features:
             return "/application/features"
+        case .constants(let namespace):
+            return "/application/constants/\(namespace)"
         }
     }
 
     public var method: Moya.Method {
-        switch self {
-        case .features:
-            return .get
-        }
+        return .get
     }
 
     public var task: Task {
-        switch self {
-        case .features:
-            return .requestPlain
-        }
+        return .requestPlain
     }
 
     public var sampleData: Data {
-        switch self {
-        case .features:
-            return "{}".data(using: String.Encoding.utf8)!
-        }
+        return "{}".data(using: String.Encoding.utf8)!
     }
 
     public var headers: [String: String]? {

@@ -1,13 +1,13 @@
 import Foundation
 import Moya
 
-typealias SoulMeProvider = MoyaProvider<SoulMeApi>
+typealias SoulPurchasesProvider = MoyaProvider<SoulPurchasesApi>
 
-public enum SoulMeApi {
-    case me(Moya.Method)
+public enum SoulPurchasesApi {
+    case all
 }
 
-extension SoulMeApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
+extension SoulPurchasesApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
 
     var needsAuth: Bool {
         return true
@@ -21,15 +21,15 @@ extension SoulMeApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
 
     public var path: String {
         switch self {
-        case .me:
-            return "/me"
+        case .all:
+            return "/purchases/all"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .me(let method):
-            return method
+        case .all:
+            return .get
         }
     }
 
@@ -38,10 +38,7 @@ extension SoulMeApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
     }
 
     public var sampleData: Data {
-        switch self {
-        case .me:
-            return "{}".data(using: String.Encoding.utf8)!
-        }
+        return "{}".data(using: String.Encoding.utf8)!
     }
 
     public var headers: [String: String]? {

@@ -1,13 +1,13 @@
 import Foundation
 import Moya
 
-typealias SoulMeProvider = MoyaProvider<SoulMeApi>
+typealias SoulEventsProvider = MoyaProvider<SoulEventsApi>
 
-public enum SoulMeApi {
-    case me(Moya.Method)
+public enum SoulEventsApi {
+    case events
 }
 
-extension SoulMeApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
+extension SoulEventsApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
 
     var needsAuth: Bool {
         return true
@@ -20,17 +20,11 @@ extension SoulMeApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
     public var baseURL: URL { return URL(string: SoulSwiftClient.shared.soulConfiguration!.baseURL)! }
 
     public var path: String {
-        switch self {
-        case .me:
-            return "/me"
-        }
+        return "/events"
     }
 
     public var method: Moya.Method {
-        switch self {
-        case .me(let method):
-            return method
-        }
+        return .get
     }
 
     public var task: Task {
@@ -38,10 +32,7 @@ extension SoulMeApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
     }
 
     public var sampleData: Data {
-        switch self {
-        case .me:
-            return "{}".data(using: String.Encoding.utf8)!
-        }
+        return "{}".data(using: String.Encoding.utf8)!
     }
 
     public var headers: [String: String]? {

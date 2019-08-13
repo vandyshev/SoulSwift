@@ -4,6 +4,7 @@ inhibit_all_warnings!
 
 target 'SoulSwift_Example' do
   pod 'SoulSwift', :path => '.'
+#	pod 'SoulSwift/Chats', :path => '.'
   pod 'SwiftLint'
 
   target 'SoulSwift_Tests' do

@@ -5,7 +5,7 @@ typealias SoulApplicationProvider = MoyaProvider<SoulApplicationApi>
 
 public enum SoulApplicationApi {
     case features
-    case constants(String)
+    case constants(namespace: String)
 }
 
 extension SoulApplicationApi: TargetType, APIVersionTargetType, AnonymousTargetType {

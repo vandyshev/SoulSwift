@@ -24,7 +24,7 @@ final class ApplicationService: ApplicationServiceProtocol {
     }
 
     func constants(namespace: String, completion: @escaping () -> Void) {
-        soulApplicationProvider.request(.constants(namespace)) { _ in
+        soulApplicationProvider.request(.constants(namespace: namespace)) { _ in
             completion()
         }
     }

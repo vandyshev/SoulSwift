@@ -4,7 +4,10 @@ import Moya
 typealias SoulPurchasesProvider = MoyaProvider<SoulPurchasesApi>
 
 public enum SoulPurchasesApi {
+    case orderAppstore
     case all
+    case my
+    case consume
 }
 
 extension SoulPurchasesApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
@@ -21,14 +24,22 @@ extension SoulPurchasesApi: TargetType, AuthorizedTargetType, APIVersionTargetTy
 
     public var path: String {
         switch self {
+        case .orderAppstore:
+            return "/purchases/order/appstore"
         case .all:
             return "/purchases/all"
+        case .my:
+            return "/purchases/my"
+        case .consume:
+            return "/purchases/consume"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .all:
+        case .orderAppstore, .consume:
+            return .post
+        case .all, .my:
             return .get
         }
     }

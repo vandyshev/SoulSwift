@@ -5,7 +5,10 @@ typealias SoulChatsProvider = MoyaProvider<SoulChatsApi>
 
 public enum SoulChatsApi {
     case chats
-    case chatId(Moya.Method, String)
+    case chatId(
+        method: Moya.Method,
+        chatId: String
+    )
 }
 
 extension SoulChatsApi: TargetType, AuthorizedTargetType, APIVersionTargetType {

@@ -167,11 +167,11 @@
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "SoulSwift_Example" */;
 			buildPhases = (
 				9A0FFE00716608E23A7753A1 /* [CP] Check Pods Manifest.lock */,
+				7ECBC8DB21AEDE82006D9486 /* ShellScript */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				46B6DEDF856627FAA41DEF73 /* [CP] Embed Pods Frameworks */,
-				7ECBC8DB21AEDE82006D9486 /* ShellScript */,
 			);
 			buildRules = (
 			);

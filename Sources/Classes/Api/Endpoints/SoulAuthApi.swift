@@ -3,8 +3,8 @@ import Moya
 
 typealias SoulAuthProvider = MoyaProvider<SoulAuthApi>
 
-public enum SoulAuthApi {
-    case passwordRegister
+enum SoulAuthApi {
+    case passwordRegister(parameters: PasswordRegisterRequestParameters)
     case passwordLogin
     case phoneRequest
     case phoneVerify
@@ -27,7 +27,7 @@ extension SoulAuthApi: TargetType, APIVersionTargetType, AnonymousTargetType, Au
 
     var needsAnonymous: Bool {
         switch self {
-        case .logout:
+        case .logout, .passwordRegister:
             return false
         default:
             return true
@@ -68,7 +68,12 @@ extension SoulAuthApi: TargetType, APIVersionTargetType, AnonymousTargetType, Au
     }
 
     public var task: Task {
-        return .requestPlain
+        switch self {
+        case .passwordRegister(let parameters):
+            return .requestJSONEncodable(parameters)
+        default:
+            return .requestPlain
+        }
     }
 
     public var sampleData: Data {

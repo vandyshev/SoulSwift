@@ -1,6 +1,48 @@
-/// Application feature toggles
-///
-enum Feature {
+import Foundation
+
+struct Features: Decodable {
+    let features: [Feature]
+
+    enum CodingKeys: String, CodingKey {
+        case features
+    }
+
+    enum FeaturesCodingKeys: String, CodingKey {
+        case soulChat = "use_soul_chats"
+        case chainReaction
+        case kingOfTheHill = "king_of_the_hill"
+    }
+
+    enum EnabledCodingKeys: String, CodingKey {
+        case enabled
+        case chainReactionEnabled
+    }
+
+    init(from decoder: Decoder) throws {
+        var features: [Feature] = []
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let featuresContainer = try container.nestedContainer(keyedBy: FeaturesCodingKeys.self, forKey: .features)
+
+        if let enabledContainer = try? featuresContainer.nestedContainer(keyedBy: EnabledCodingKeys.self, forKey: .soulChat),
+            let enabled = try? enabledContainer.decode(Bool.self, forKey: .enabled) {
+            features.append(Feature.soulChat(enabled))
+        }
+
+        if let enabledContainer = try? featuresContainer.nestedContainer(keyedBy: EnabledCodingKeys.self, forKey: .chainReaction),
+            let enabled = try? enabledContainer.decode(Bool.self, forKey: .chainReactionEnabled) {
+            features.append(Feature.chainReaction(enabled))
+        }
+
+        if let enabledContainer = try? featuresContainer.nestedContainer(keyedBy: EnabledCodingKeys.self, forKey: .kingOfTheHill),
+            let enabled = try? enabledContainer.decode(Bool.self, forKey: .enabled) {
+            features.append(Feature.kingOfTheHill(enabled))
+        }
+
+        self.features = features
+    }
+}
+
+public enum Feature {
     case chainReaction(Bool)
     case audioCall(Bool, [GenderComboType])
     case kingOfTheHill(Bool)
@@ -105,14 +147,14 @@ enum Feature {
     }
 }
 
-enum GenderComboType: String {
+public enum GenderComboType: String {
     case maleFemale = "M_F"
     case femaleMale = "F_M"
     case femaleFemale = "F_F"
     case maleMale = "M_M"
 }
 
-enum PaygateType: String {
+public enum PaygateType: String {
     case trial
     case notTrial
 }

@@ -8,7 +8,11 @@ public enum SoulApplicationApi {
     case constants(namespace: String)
 }
 
-extension SoulApplicationApi: TargetType, APIVersionTargetType, AnonymousTargetType {
+extension SoulApplicationApi: TargetType, APIVersionTargetType, AnonymousTargetType, AuthorizedTargetType {
+    var needsAuth: Bool {
+        return true
+    }
+
     var needsAnonymous: Bool {
         return true
     }

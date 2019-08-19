@@ -5,13 +5,13 @@ typealias SoulAuthProvider = MoyaProvider<SoulAuthApi>
 
 enum SoulAuthApi {
     case passwordRegister(parameters: PasswordRegisterRequestParameters)
-    case passwordLogin
-    case phoneRequest
-    case phoneVerify
-    case phoneLogin
-    case emailcodeRequest
-    case emailcodeVerify
-    case emailcodeExtend
+    case passwordLogin(parameters: PasswordLoginRequestParameters)
+    case phoneRequest(parameters: PhoneRequestParameters)
+    case phoneVerify(parameters: PhoneVerifyRequestParameters)
+    case phoneLogin(parameters: PhoneLoginRequestParameters)
+    case emailcodeRequest(parameters: EmailCodeRequestParameters)
+    case emailcodeVerify(parameters: EmailCodeVerifyRequestParameters)
+    case emailcodeExtend(parameters: EmailCodeExtendRequestParameters)
     case logout
 }
 
@@ -26,12 +26,7 @@ extension SoulAuthApi: TargetType, APIVersionTargetType, AnonymousTargetType, Au
     }
 
     var needsAnonymous: Bool {
-        switch self {
-        case .logout, .passwordRegister:
-            return false
-        default:
-            return true
-        }
+        return false
     }
 
     var needsAPIVersion: Bool {
@@ -70,6 +65,20 @@ extension SoulAuthApi: TargetType, APIVersionTargetType, AnonymousTargetType, Au
     public var task: Task {
         switch self {
         case .passwordRegister(let parameters):
+            return .requestJSONEncodable(parameters)
+        case .passwordLogin(let parameters):
+            return .requestJSONEncodable(parameters)
+        case .phoneRequest(let parameters):
+            return .requestJSONEncodable(parameters)
+        case .phoneVerify(let parameters):
+            return .requestJSONEncodable(parameters)
+        case .phoneLogin(let parameters):
+            return .requestJSONEncodable(parameters)
+        case .emailcodeRequest(let parameters):
+            return .requestJSONEncodable(parameters)
+        case .emailcodeVerify(let parameters):
+            return .requestJSONEncodable(parameters)
+        case .emailcodeExtend(let parameters):
             return .requestJSONEncodable(parameters)
         default:
             return .requestPlain

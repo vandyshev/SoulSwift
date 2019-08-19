@@ -9,9 +9,9 @@ enum SoulAuthApi {
     case phoneRequest(parameters: PhoneRequestParameters)
     case phoneVerify(parameters: PhoneVerifyRequestParameters)
     case phoneLogin(parameters: PhoneLoginRequestParameters)
-    case emailcodeRequest(parameters: EmailCodeRequestParameters)
-    case emailcodeVerify(parameters: EmailCodeVerifyRequestParameters)
-    case emailcodeExtend(parameters: EmailCodeExtendRequestParameters)
+    case emailCodeRequest(parameters: EmailCodeRequestParameters)
+    case emailCodeVerify(parameters: EmailCodeVerifyRequestParameters)
+    case emailCodeExtend(parameters: EmailCodeExtendRequestParameters)
     case logout
 }
 
@@ -47,11 +47,11 @@ extension SoulAuthApi: TargetType, APIVersionTargetType, AnonymousTargetType, Au
             return "/auth/phone/verify"
         case .phoneLogin:
             return "/auth/phone/login"
-        case .emailcodeRequest:
+        case .emailCodeRequest:
             return "/auth/emailcode/request"
-        case .emailcodeVerify:
+        case .emailCodeVerify:
             return "/auth/emailcode/verify"
-        case .emailcodeExtend:
+        case .emailCodeExtend:
             return "/auth/emailcode/extend"
         case .logout:
             return "/auth/logout"
@@ -74,11 +74,11 @@ extension SoulAuthApi: TargetType, APIVersionTargetType, AnonymousTargetType, Au
             return .requestJSONEncodable(parameters)
         case .phoneLogin(let parameters):
             return .requestJSONEncodable(parameters)
-        case .emailcodeRequest(let parameters):
+        case .emailCodeRequest(let parameters):
             return .requestJSONEncodable(parameters)
-        case .emailcodeVerify(let parameters):
+        case .emailCodeVerify(let parameters):
             return .requestJSONEncodable(parameters)
-        case .emailcodeExtend(let parameters):
+        case .emailCodeExtend(let parameters):
             return .requestJSONEncodable(parameters)
         default:
             return .requestPlain

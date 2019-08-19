@@ -89,7 +89,7 @@ final class AuthService: AuthServiceProtocol {
         let parameters = EmailCodeRequestParameters(email: email,
                                                 apiKey: SoulSwiftClient.shared.soulConfiguration.apiKey,
                                                 anonymousUser: SoulSwiftClient.shared.soulConfiguration.anonymousUser)
-        soulAuthProvider.request(.emailcodeRequest(parameters: parameters)) { result in
+        soulAuthProvider.request(.emailCodeRequest(parameters: parameters)) { result in
             completion(result.map(EmailCodeRequestResponse.self))
         }
     }
@@ -100,7 +100,7 @@ final class AuthService: AuthServiceProtocol {
                                                           code: code,
                                                           merge: merge,
                                                           mergePreference: mergePreference)
-        soulAuthProvider.request(.emailcodeVerify(parameters: parameters)) { result in
+        soulAuthProvider.request(.emailCodeVerify(parameters: parameters)) { result in
             completion(result.map(AuthResponse.self))
         }
     }
@@ -110,7 +110,7 @@ final class AuthService: AuthServiceProtocol {
                                                           apiKey: SoulSwiftClient.shared.soulConfiguration.apiKey,
                                                           code: code,
                                                           lastSessionToken: lastSessionToken)
-        soulAuthProvider.request(.emailcodeExtend(parameters: parameters)) { result in
+        soulAuthProvider.request(.emailCodeExtend(parameters: parameters)) { result in
             completion(result.map(AuthResponse.self))
         }
     }

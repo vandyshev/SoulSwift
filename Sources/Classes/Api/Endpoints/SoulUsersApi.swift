@@ -1,4 +1,3 @@
-import Foundation
 import Moya
 
 typealias SoulUsersProvider = MoyaProvider<SoulUsersApi>

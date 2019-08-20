@@ -1,4 +1,3 @@
-import Foundation
 import Swinject
 import SwinjectAutoregistration
 import Moya

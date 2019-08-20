@@ -1,4 +1,3 @@
-import Foundation
 import Swinject
 
 final class DependencyConfigurator {

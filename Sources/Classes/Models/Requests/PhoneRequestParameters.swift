@@ -1,4 +1,3 @@
-import Foundation
 
 struct PhoneRequestParameters: Encodable {
     let phoneNumber: String

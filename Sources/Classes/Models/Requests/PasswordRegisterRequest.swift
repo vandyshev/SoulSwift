@@ -1,4 +1,3 @@
-import Foundation
 
 struct PasswordRegisterRequestParameters: Encodable {
     let login: String

@@ -1,4 +1,3 @@
-import Foundation
 
 // TODO: Закончить decoder
 struct Features: Decodable {

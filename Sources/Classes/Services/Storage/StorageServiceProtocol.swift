@@ -1,4 +1,3 @@
-import Foundation
 
 private enum Constants {
     static let userIdKey = "SOUL_SWIFT_USER_ID"

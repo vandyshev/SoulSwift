@@ -1,4 +1,3 @@
-import Foundation
 
 struct EmailCodeRequestParameters: Encodable {
     let email: String

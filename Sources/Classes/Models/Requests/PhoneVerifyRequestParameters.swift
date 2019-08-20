@@ -1,4 +1,3 @@
-
 struct PhoneVerifyRequestParameters: Encodable {
     let phoneNumber: String
     let apiKey: String

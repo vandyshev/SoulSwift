@@ -1,4 +1,3 @@
-
 private enum Constants {
     static let userIdKey = "SOUL_SWIFT_USER_ID"
     static let sessionTokenKey = "SOUL_SWIFT_SESSION_TOKEN"

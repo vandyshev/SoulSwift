@@ -1,4 +1,3 @@
-
 struct PasswordLoginRequestParameters: Encodable {
     let login: String
     let password: String

@@ -1,5 +1,3 @@
-import Moya
-
 public protocol MeServiceProtocol: AnyObject {
     func getMe(completion: @escaping () -> Void)
 }

@@ -1,4 +1,3 @@
-
 struct EmailCodeExtendRequestParameters: Encodable {
     let email: String
     let apiKey: String

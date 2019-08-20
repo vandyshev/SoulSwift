@@ -1,4 +1,3 @@
-
 struct PhoneRequestParameters: Encodable {
     let phoneNumber: String
     let method: PhoneRequestMethod

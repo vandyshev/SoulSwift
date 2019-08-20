@@ -1,4 +1,3 @@
-
 public struct AdditionalInfo: Decodable {
     let serverTime: TimeInterval
     let clientCountryCode: String

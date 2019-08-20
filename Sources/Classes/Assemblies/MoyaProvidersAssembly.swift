@@ -1,6 +1,6 @@
+import Moya
 import Swinject
 import SwinjectAutoregistration
-import Moya
 
 final class MoyaProvidersAssembly: Assembly {
 

@@ -1,5 +1,3 @@
-import Moya
-
 public protocol ApplicationServiceProtocol: AnyObject {
     /// Application feature toggles from Soul
     ///

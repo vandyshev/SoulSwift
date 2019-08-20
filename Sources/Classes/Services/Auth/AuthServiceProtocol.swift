@@ -1,5 +1,3 @@
-import Moya
-
 // swiftlint:disable function_parameter_count line_length
 public protocol AuthServiceProtocol: AnyObject {
     /// Auth password register

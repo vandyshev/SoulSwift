@@ -6,7 +6,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        setupFakeData()
+//        setupFakeData()
         initializeSoulSwift()
         downloadFeatures()
     }
@@ -24,7 +24,6 @@ class ViewController: UIViewController {
     }
 
     private func initializeSoulSwift() {
-        setupFakeData()
         let configuration = SoulConfiguration(
             baseURL: "https://testing-api.soulplatform.com",
             apiKey: "0f8380018608ab28061fe7c3a499065b",
@@ -35,17 +34,38 @@ class ViewController: UIViewController {
     }
 
     private func downloadFeatures() {
-        SoulSwiftClient.shared.soulApplicationService?.features {
-            print("features completion")
-        }
+//        SoulSwiftClient.shared.soulApplicationService?.features { result in
+//            switch result {
+//            case .success(let features):
+//                print(features)
+//            case .failure(let error):
+//                switch error {
+//                case .apiError(let apiError):
+//                    print(apiError.userMessage)
+//                default:
+//                    break
+//                }
+//            }
+//        }
+//
+//        SoulSwiftClient.shared.soulApplicationService?.constants(namespace: "test", completion: {
+//            print("constants completion")
+//        })
 
-        SoulSwiftClient.shared.soulApplicationService?.constants(namespace: "test", completion: {
-            print("constants completion")
+        SoulSwiftClient.shared.soulAuthService?.passwordRegister(
+            login: "login7",
+            password: "passwd7",
+            merge: nil,
+            mergePreference: nil,
+            completion: { result in
+                print("passwordRegister completion")
+                switch result {
+                case .success(let authResponse):
+                    print(authResponse)
+                case .failure(let error):
+                    print(error)
+                }
+
         })
-
-        SoulSwiftClient.shared.soulMeService?.getMe {
-            print("getMe completion")
-        }
     }
-
 }

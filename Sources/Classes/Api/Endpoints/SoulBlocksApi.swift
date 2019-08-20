@@ -1,15 +1,14 @@
 import Foundation
 import Moya
 
-typealias SoulApplicationProvider = MoyaProvider<SoulApplicationApi>
+typealias SoulBlocksProvider = MoyaProvider<SoulBlocksApi>
 
-public enum SoulApplicationApi {
-    case features
-    case constants(String)
+public enum SoulBlocksApi {
+    case soulKoth
 }
 
-extension SoulApplicationApi: TargetType, APIVersionTargetType, AnonymousTargetType {
-    var needsAnonymous: Bool {
+extension SoulBlocksApi: TargetType, APIVersionTargetType, AuthorizedTargetType {
+    var needsAuth: Bool {
         return true
     }
 
@@ -21,10 +20,8 @@ extension SoulApplicationApi: TargetType, APIVersionTargetType, AnonymousTargetT
 
     public var path: String {
         switch self {
-        case .features:
-            return "/application/features"
-        case .constants(let namespace):
-            return "/application/constants/\(namespace)"
+        case .soulKoth:
+            return "/blocks/soul/koth/"
         }
     }
 

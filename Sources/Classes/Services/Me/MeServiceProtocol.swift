@@ -13,7 +13,7 @@ final class MeService: MeServiceProtocol {
     }
 
     func getMe(completion: @escaping () -> Void) {
-        soulMeProvider.request(.me(.get)) { _ in
+        soulMeProvider.request(.me(method: .get)) { _ in
             completion()
         }
     }

@@ -40,7 +40,7 @@ class ApplicationServiceTests: QuickSpec {
                     var isDone = false
 
                     waitUntil { done in
-                        SoulSwiftClient.shared.soulApplicationService?.features { result in
+                        SoulSwiftClient.shared.soulApplicationService?.features { _ in
                             isDone = true
                             done()
                         }

@@ -1,4 +1,4 @@
-enum SoulAuthApiEndpoint {
+enum SoulAuthEndpoint {
     case passwordRegister
     case passwordLogin
     case phoneRequest
@@ -10,7 +10,7 @@ enum SoulAuthApiEndpoint {
     case logout
 }
 
-extension SoulAuthApiEndpoint: SoulApiEndpoint {
+extension SoulAuthEndpoint: SoulEndpoint {
     var path: String {
         switch self {
         case .passwordRegister:

@@ -1,5 +1,5 @@
 // swiftlint:disable identifier_name
-enum SoulUsersApiEndpoint {
+enum SoulUsersEndpoint {
     case recommendationsList
     case recommendationsRoulette
     case recommendationsFilter
@@ -17,7 +17,7 @@ enum SoulUsersApiEndpoint {
     case usersUserIdAlbumsAlbumNamePhotoId(userId: String, albumName: String, photoId: String)
 }
 
-extension SoulUsersApiEndpoint: SoulApiEndpoint {
+extension SoulUsersEndpoint: SoulEndpoint {
     var path: String {
         switch self {
         case .recommendationsList:

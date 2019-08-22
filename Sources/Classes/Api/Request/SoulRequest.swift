@@ -1,7 +1,7 @@
-struct SoulApiRequest {
+struct SoulRequest {
 
     let httpMethod: HTTPMethod
-    let soulApiEndpoint: SoulApiEndpoint
+    let soulEndpoint: SoulEndpoint
     let queryItems: [String: String]?
     let bodyParameters: [String: Any]?
     let needAuthorization: Bool

@@ -1,4 +1,4 @@
-enum SoulMeApiEndpoint {
+enum SoulMeEndpoint {
     case me
     case incognito
     case parameters(scope: String, path: String)
@@ -8,7 +8,7 @@ enum SoulMeApiEndpoint {
     case albumsAlbumNamePhotoId(albumName: String, photoId: String)
 }
 
-extension SoulMeApiEndpoint: SoulApiEndpoint {
+extension SoulMeEndpoint: SoulEndpoint {
     var path: String {
         switch self {
         case .me:

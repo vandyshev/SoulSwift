@@ -1,9 +1,9 @@
-enum SoulChatsApiEndpoint {
+enum SoulChatsEndpoint {
     case chats
     case chatId(chatId: String)
 }
 
-extension SoulChatsApiEndpoint: SoulApiEndpoint {
+extension SoulChatsEndpoint: SoulEndpoint {
     var path: String {
         switch self {
         case .chats:

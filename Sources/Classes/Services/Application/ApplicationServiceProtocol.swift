@@ -9,10 +9,10 @@ public protocol ApplicationServiceProtocol: AnyObject {
 
 final class ApplicationService: ApplicationServiceProtocol {
 
-    let soulApiProvider: SoulApiProviderProtocol
+    let soulProvider: SoulProviderProtocol
 
-    init(soulApiProvider: SoulApiProviderProtocol) {
-        self.soulApiProvider = soulApiProvider
+    init(soulProvider: SoulProviderProtocol) {
+        self.soulProvider = soulProvider
     }
 
     func features(completion: @escaping (Result<[Feature], SoulSwiftError>) -> Void) {
@@ -20,14 +20,14 @@ final class ApplicationService: ApplicationServiceProtocol {
             "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
             "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .GET,
-            soulApiEndpoint: SoulApplicationApiEndpoint.features,
+            soulEndpoint: SoulApplicationEndpoint.features,
             queryItems: queryItems,
             bodyParameters: nil,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<Features, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<Features, SoulSwiftError>) in
             completion(result.map { $0.features })
         }
     }

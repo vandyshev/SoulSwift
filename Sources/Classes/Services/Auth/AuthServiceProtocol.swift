@@ -20,10 +20,10 @@ public protocol AuthServiceProtocol: AnyObject {
 
 final class AuthService: AuthServiceProtocol {
 
-    let soulApiProvider: SoulApiProviderProtocol
+    let soulProvider: SoulProviderProtocol
 
-    init(soulApiProvider: SoulApiProviderProtocol) {
-        self.soulApiProvider = soulApiProvider
+    init(soulProvider: SoulProviderProtocol) {
+        self.soulProvider = soulProvider
     }
 
     func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<Authorization, SoulSwiftError>) -> Void) {
@@ -35,14 +35,14 @@ final class AuthService: AuthServiceProtocol {
             "merge": merge,
             "mergePreference": mergePreference
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .POST,
-            soulApiEndpoint: SoulAuthApiEndpoint.passwordRegister,
+            soulEndpoint: SoulAuthEndpoint.passwordRegister,
             queryItems: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
             completion(result.map { $0.authorization })
         }
     }
@@ -56,14 +56,14 @@ final class AuthService: AuthServiceProtocol {
             "merge": merge,
             "mergePreference": mergePreference
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .POST,
-            soulApiEndpoint: SoulAuthApiEndpoint.passwordLogin,
+            soulEndpoint: SoulAuthEndpoint.passwordLogin,
             queryItems: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
             completion(result.map { $0.authorization })
         }
     }
@@ -75,14 +75,14 @@ final class AuthService: AuthServiceProtocol {
             "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
             "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .POST,
-            soulApiEndpoint: SoulAuthApiEndpoint.phoneRequest,
+            soulEndpoint: SoulAuthEndpoint.phoneRequest,
             queryItems: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<PhoneRequestResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<PhoneRequestResponse, SoulSwiftError>) in
             completion(result)
         }
     }
@@ -96,14 +96,14 @@ final class AuthService: AuthServiceProtocol {
             "merge": merge,
             "mergePreference": mergePreference
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .POST,
-            soulApiEndpoint: SoulAuthApiEndpoint.phoneVerify,
+            soulEndpoint: SoulAuthEndpoint.phoneVerify,
             queryItems: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
             completion(result.map { $0.authorization })
         }
     }
@@ -115,14 +115,14 @@ final class AuthService: AuthServiceProtocol {
             "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
             "lastSessionToken": lastSessionToken
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .POST,
-            soulApiEndpoint: SoulAuthApiEndpoint.phoneLogin,
+            soulEndpoint: SoulAuthEndpoint.phoneLogin,
             queryItems: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
             completion(result.map { $0.authorization })
         }
     }
@@ -133,14 +133,14 @@ final class AuthService: AuthServiceProtocol {
             "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
             "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .POST,
-            soulApiEndpoint: SoulAuthApiEndpoint.emailCodeRequest,
+            soulEndpoint: SoulAuthEndpoint.emailCodeRequest,
             queryItems: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<EmailCodeRequestResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmailCodeRequestResponse, SoulSwiftError>) in
             completion(result)
         }
     }
@@ -153,14 +153,14 @@ final class AuthService: AuthServiceProtocol {
             "merge": merge,
             "mergePreference": mergePreference
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .POST,
-            soulApiEndpoint: SoulAuthApiEndpoint.emailCodeVerify,
+            soulEndpoint: SoulAuthEndpoint.emailCodeVerify,
             queryItems: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
             completion(result.map { $0.authorization })
         }
     }
@@ -172,14 +172,14 @@ final class AuthService: AuthServiceProtocol {
             "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
             "lastSessionToken": lastSessionToken
         ]
-        let request = SoulApiRequest(
+        let request = SoulRequest(
             httpMethod: .POST,
-            soulApiEndpoint: SoulAuthApiEndpoint.emailCodeExtend,
+            soulEndpoint: SoulAuthEndpoint.emailCodeExtend,
             queryItems: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
-        soulApiProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<AuthResponse, SoulSwiftError>) in
             completion(result.map { $0.authorization })
         }
     }

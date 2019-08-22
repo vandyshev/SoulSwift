@@ -4,15 +4,9 @@ public protocol MeServiceProtocol: AnyObject {
 
 final class MeService: MeServiceProtocol {
 
-//    let soulMeProvider: SoulMeProvider
-//
-//    init(soulMeProvider: SoulMeProvider) {
-//        self.soulMeProvider = soulMeProvider
-//    }
-//
-//    func getMe(completion: @escaping () -> Void) {
-//        soulMeProvider.request(.me(method: .get)) { _ in
-//            completion()
-//        }
-//    }
+    let soulProvider: SoulProviderProtocol
+
+    init(soulProvider: SoulProviderProtocol) {
+        self.soulProvider = soulProvider
+    }
 }

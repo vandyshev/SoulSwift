@@ -1,8 +1,8 @@
-enum SoulBlocksApiEndpoint {
+enum SoulBlocksEndpoint {
     case soulKoth
 }
 
-extension SoulBlocksApiEndpoint: SoulApiEndpoint {
+extension SoulBlocksEndpoint: SoulEndpoint {
     var path: String {
         switch self {
         case .soulKoth:

@@ -1,9 +1,9 @@
-enum SoulApplicationApiEndpoint {
+enum SoulApplicationEndpoint {
     case features
     case constants(namespace: String)
 }
 
-extension SoulApplicationApiEndpoint: SoulApiEndpoint {
+extension SoulApplicationEndpoint: SoulEndpoint {
     var path: String {
         switch self {
         case .features:

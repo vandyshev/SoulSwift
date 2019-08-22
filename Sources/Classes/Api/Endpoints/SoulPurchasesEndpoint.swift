@@ -1,11 +1,11 @@
-enum SoulPurchasesApiEndpoint {
+enum SoulPurchasesEndpoint {
     case orderAppstore
     case all
     case my
     case consume
 }
 
-extension SoulPurchasesApiEndpoint: SoulApiEndpoint {
+extension SoulPurchasesEndpoint: SoulEndpoint {
     var path: String {
         switch self {
         case .orderAppstore:

@@ -10,7 +10,7 @@ final class DependencyConfigurator {
 
     private init() {
         assembler = Assembler([
-            MoyaProvidersAssembly(),
+            ProvidersAssembly(),
             ServicesAssembly()
         ])
     }

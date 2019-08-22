@@ -1,11 +1,8 @@
-import Moya
-
-public typealias SoulMoyaError = MoyaError
-
 public enum SoulSwiftError: Swift.Error {
+    case requestError
     case apiError(SoulApiError)
-    case moyaError(SoulMoyaError)
     case underlying(Swift.Error)
+    case unknown
 }
 
 struct SoulApiErrorResponse: Codable {

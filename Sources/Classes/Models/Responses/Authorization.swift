@@ -1,4 +1,4 @@
-struct Authorization: Decodable {
+public struct Authorization: Decodable {
     let sessionToken: String
     let expiresTime: TimeInterval
 }

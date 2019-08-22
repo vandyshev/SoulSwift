@@ -42,7 +42,6 @@ TODO: Add long description of the pod here.
 
   s.subspec 'Core' do |ss|
     ss.source_files = 'Sources/Classes/**/*'
-    ss.dependency 'Moya', '~> 13.0'
     ss.dependency 'Swinject', '~> 2.5'
     ss.dependency 'SwinjectAutoregistration', '~> 2.5'
   end

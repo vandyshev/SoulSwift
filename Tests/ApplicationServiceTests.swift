@@ -1,6 +1,5 @@
 import Quick
 import Nimble
-import Moya
 import Swinject
 import SwinjectAutoregistration
 

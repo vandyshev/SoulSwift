@@ -1,4 +1,4 @@
-public protocol ChatsServiceProtocol: AnyObject {
+public protocol ChatsServiceProtocol {
     // TODO: Узнать у Soul, зачем тут по документации передавать myStatus
     func chats(offset: Int?, limit: Int?, showExpired: Bool?, completion: @escaping (Result<[Chat], SoulSwiftError>) -> Void)
     func getChat(withChatId chatId: String, completion: @escaping (Result<Chat, SoulSwiftError>) -> Void)

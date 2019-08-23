@@ -1,5 +1,5 @@
-public protocol EventsServiceProtocol: AnyObject {
-//    func getMe(completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+public protocol EventsServiceProtocol {
+    func events(since: TimeInterval?, until: TimeInterval?, limit: Int?, ascending: Bool, completion: @escaping (Result<[Event], SoulSwiftError>) -> Void)
 }
 
 final class EventsService: EventsServiceProtocol {
@@ -8,5 +8,9 @@ final class EventsService: EventsServiceProtocol {
 
     init(soulProvider: SoulProviderProtocol) {
         self.soulProvider = soulProvider
+    }
+
+    func events(since: TimeInterval?, until: TimeInterval?, limit: Int?, ascending: Bool, completion: @escaping (Result<[Event], SoulSwiftError>) -> Void) {
+
     }
 }

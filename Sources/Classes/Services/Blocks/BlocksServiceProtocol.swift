@@ -1,4 +1,4 @@
-public protocol BlocksServiceProtocol: AnyObject {
+public protocol BlocksServiceProtocol {
 //    func getMe(completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
 }
 

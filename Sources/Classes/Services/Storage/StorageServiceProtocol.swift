@@ -3,7 +3,7 @@ private enum Constants {
     static let sessionTokenKey = "SOUL_SWIFT_SESSION_TOKEN"
 }
 
-public protocol StorageServiceProtocol: AnyObject {
+public protocol StorageServiceProtocol {
     var userId: String? { get set }
     var sessionToken: String? { get set }
 }

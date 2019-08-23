@@ -1,10 +1,8 @@
-public protocol ApplicationServiceProtocol: AnyObject {
+public protocol ApplicationServiceProtocol {
     /// Application feature toggles from Soul
     ///
     /// - Parameter completion: collection of features
     func features(completion: @escaping (Result<[Feature], SoulSwiftError>) -> Void)
-
-    func constants(namespace: String, completion: @escaping () -> Void)
 }
 
 final class ApplicationService: ApplicationServiceProtocol {
@@ -30,9 +28,5 @@ final class ApplicationService: ApplicationServiceProtocol {
         soulProvider.request(request) { (result: Result<Features, SoulSwiftError>) in
             completion(result.map { $0.features })
         }
-    }
-
-    func constants(namespace: String, completion: @escaping () -> Void) {
-
     }
 }

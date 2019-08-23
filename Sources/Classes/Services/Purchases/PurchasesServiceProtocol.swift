@@ -1,4 +1,4 @@
-public protocol PurchasesServiceProtocol: AnyObject {
+public protocol PurchasesServiceProtocol {
 //    func getMe(completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
 }
 

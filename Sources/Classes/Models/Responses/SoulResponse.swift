@@ -5,4 +5,5 @@ public struct SoulResponse: Decodable {
     let chats: [Chat]
     let chat: Chat
     let events: [Event]
+    let currentKing: User
 }

@@ -58,9 +58,7 @@ final class AuthService: AuthServiceProtocol {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.passwordRegister,
-            queryItems: nil,
-            bodyParameters: bodyParameters,
-            needAuthorization: false
+            bodyParameters: bodyParameters
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
@@ -79,9 +77,7 @@ final class AuthService: AuthServiceProtocol {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.passwordLogin,
-            queryItems: nil,
-            bodyParameters: bodyParameters,
-            needAuthorization: false
+            bodyParameters: bodyParameters
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
@@ -98,9 +94,7 @@ final class AuthService: AuthServiceProtocol {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.phoneRequest,
-            queryItems: nil,
-            bodyParameters: bodyParameters,
-            needAuthorization: false
+            bodyParameters: bodyParameters
         )
         soulProvider.request(request) { (result: Result<PhoneRequestResponse, SoulSwiftError>) in
             completion(result)
@@ -119,9 +113,7 @@ final class AuthService: AuthServiceProtocol {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.phoneVerify,
-            queryItems: nil,
-            bodyParameters: bodyParameters,
-            needAuthorization: false
+            bodyParameters: bodyParameters
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
@@ -138,9 +130,7 @@ final class AuthService: AuthServiceProtocol {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.phoneLogin,
-            queryItems: nil,
-            bodyParameters: bodyParameters,
-            needAuthorization: false
+            bodyParameters: bodyParameters
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
@@ -156,9 +146,7 @@ final class AuthService: AuthServiceProtocol {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeRequest,
-            queryItems: nil,
-            bodyParameters: bodyParameters,
-            needAuthorization: false
+            bodyParameters: bodyParameters
         )
         soulProvider.request(request) { (result: Result<EmailCodeRequestResponse, SoulSwiftError>) in
             completion(result)
@@ -176,7 +164,7 @@ final class AuthService: AuthServiceProtocol {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeVerify,
-            queryItems: nil,
+            queryParameters: nil,
             bodyParameters: bodyParameters,
             needAuthorization: false
         )
@@ -195,9 +183,7 @@ final class AuthService: AuthServiceProtocol {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeExtend,
-            queryItems: nil,
-            bodyParameters: bodyParameters,
-            needAuthorization: false
+            bodyParameters: bodyParameters
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })

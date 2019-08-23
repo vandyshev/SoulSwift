@@ -20,16 +20,14 @@ final class ChatsService: ChatsServiceProtocol {
     }
 
     func chats(offset: Int?, limit: Int?, showExpired: Bool?, completion: @escaping (Result<[Chat], SoulSwiftError>) -> Void) {
-        var queryItems = [
-            "offset": "\(offset)",
-            "limit": "\(limit)",
-            "showExpired": String(showExpired ?? false)
+        let queryParameters: [String: Any?] = [
+            "offset": offset,
+            "limit": limit,
+            "showExpired": showExpired
         ]
         let request = SoulRequest(
-            httpMethod: .GET,
             soulEndpoint: SoulChatsEndpoint.chats,
-            queryItems: queryItems,
-            bodyParameters: nil,
+            queryParameters: queryParameters,
             needAuthorization: true
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
@@ -38,14 +36,12 @@ final class ChatsService: ChatsServiceProtocol {
     }
 
     func getChat(withChatId chatId: String, completion: @escaping (Result<Chat, SoulSwiftError>) -> Void) {
-        var queryItems = [
+        let queryParameters = [
             "chatId": chatId
         ]
         let request = SoulRequest(
-            httpMethod: .GET,
             soulEndpoint: SoulChatsEndpoint.chatId(chatId: chatId),
-            queryItems: queryItems,
-            bodyParameters: nil,
+            queryParameters: queryParameters,
             needAuthorization: true
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
@@ -57,7 +53,7 @@ final class ChatsService: ChatsServiceProtocol {
         let request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulChatsEndpoint.chatId(chatId: chatId),
-            queryItems: ["chatId": chatId],
+            queryParameters: ["chatId": chatId],
             bodyParameters: ["myStatus": myStatus],
             needAuthorization: true
         )

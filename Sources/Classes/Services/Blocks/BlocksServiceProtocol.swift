@@ -1,8 +1,8 @@
-public protocol MeServiceProtocol: AnyObject {
+public protocol BlocksServiceProtocol: AnyObject {
 //    func getMe(completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
 }
 
-final class MeService: MeServiceProtocol {
+final class BlocksService: BlocksServiceProtocol {
 
     let soulProvider: SoulProviderProtocol
 

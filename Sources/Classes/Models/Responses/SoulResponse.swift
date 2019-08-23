@@ -6,4 +6,6 @@ public struct SoulResponse: Decodable {
     let chat: Chat
     let events: [Event]
     let currentKing: User
+    let bundles: [SoulBundle]
+    let items: [InventoryItem]
 }

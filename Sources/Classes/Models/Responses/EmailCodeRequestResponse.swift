@@ -1,5 +1,3 @@
-import Foundation
-
 public struct EmailCodeRequestResponse: Decodable {
     let status: String
     let providerId: Int

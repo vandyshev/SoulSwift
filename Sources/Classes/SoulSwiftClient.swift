@@ -1,5 +1,3 @@
-import SwinjectAutoregistration
-
 public class SoulSwiftClient {
 
     public static var shared = SoulSwiftClient()

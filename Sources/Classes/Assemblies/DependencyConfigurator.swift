@@ -1,4 +1,3 @@
-import Foundation
 import Swinject
 
 final class DependencyConfigurator {
@@ -11,7 +10,7 @@ final class DependencyConfigurator {
 
     private init() {
         assembler = Assembler([
-            MoyaProvidersAssembly(),
+            ProvidersAssembly(),
             ServicesAssembly()
         ])
     }

@@ -34,38 +34,38 @@ class ViewController: UIViewController {
     }
 
     private func downloadFeatures() {
-//        SoulSwiftClient.shared.soulApplicationService?.features { result in
-//            switch result {
-//            case .success(let features):
-//                print(features)
-//            case .failure(let error):
-//                switch error {
-//                case .apiError(let apiError):
-//                    print(apiError.userMessage)
-//                default:
-//                    break
-//                }
-//            }
-//        }
+        SoulSwiftClient.shared.soulApplicationService?.features { result in
+            switch result {
+            case .success(let features):
+                print(features)
+            case .failure(let error):
+                switch error {
+                case .apiError(let apiError):
+                    print(apiError.userMessage)
+                default:
+                    break
+                }
+            }
+        }
 //
 //        SoulSwiftClient.shared.soulApplicationService?.constants(namespace: "test", completion: {
 //            print("constants completion")
 //        })
-
-        SoulSwiftClient.shared.soulAuthService?.passwordRegister(
-            login: "login7",
-            password: "passwd7",
-            merge: nil,
-            mergePreference: nil,
-            completion: { result in
-                print("passwordRegister completion")
-                switch result {
-                case .success(let authResponse):
-                    print(authResponse)
-                case .failure(let error):
-                    print(error)
-                }
-
-        })
+//
+//        SoulSwiftClient.shared.soulAuthService?.passwordRegister(
+//            login: "login7",
+//            password: "passwd7",
+//            merge: nil,
+//            mergePreference: nil,
+//            completion: { result in
+//                print("passwordRegister completion")
+//                switch result {
+//                case .success(let authResponse):
+//                    print(authResponse)
+//                case .failure(let error):
+//                    print(error)
+//                }
+//
+//        })
     }
 }

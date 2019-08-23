@@ -1,7 +1,6 @@
-import Foundation
 import Moya
 
-typealias SoulApplicationProvider = MoyaProvider<SoulApplicationApi>
+//typealias SoulApplicationProvider = MoyaProvider<SoulApplicationApi>
 
 public enum SoulApplicationApi {
     case features

@@ -1,5 +1,3 @@
-import Foundation
-
 public enum MergePreference: String {
     case session
     case credentials

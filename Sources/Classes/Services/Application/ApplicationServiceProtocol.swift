@@ -1,5 +1,3 @@
-import Moya
-
 public protocol ApplicationServiceProtocol: AnyObject {
     /// Application feature toggles from Soul
     ///
@@ -11,21 +9,30 @@ public protocol ApplicationServiceProtocol: AnyObject {
 
 final class ApplicationService: ApplicationServiceProtocol {
 
-    let soulApplicationProvider: SoulApplicationProvider
+    let soulProvider: SoulProviderProtocol
 
-    init(soulApplicationProvider: SoulApplicationProvider) {
-        self.soulApplicationProvider = soulApplicationProvider
+    init(soulProvider: SoulProviderProtocol) {
+        self.soulProvider = soulProvider
     }
 
     func features(completion: @escaping (Result<[Feature], SoulSwiftError>) -> Void) {
-        soulApplicationProvider.request(.features) { result in
-            completion(result.map(Features.self).map { $0.features })
+        let queryItems = [
+            "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
+            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey
+        ]
+        let request = SoulRequest(
+            httpMethod: .GET,
+            soulEndpoint: SoulApplicationEndpoint.features,
+            queryItems: queryItems,
+            bodyParameters: nil,
+            needAuthorization: false
+        )
+        soulProvider.request(request) { (result: Result<Features, SoulSwiftError>) in
+            completion(result.map { $0.features })
         }
     }
 
     func constants(namespace: String, completion: @escaping () -> Void) {
-        soulApplicationProvider.request(.constants(namespace: namespace)) { _ in
-            completion()
-        }
+
     }
 }

@@ -1,5 +1,3 @@
-import Foundation
-
 public struct PhoneRequestResponse: Decodable {
     let status: String
     let providerId: Int

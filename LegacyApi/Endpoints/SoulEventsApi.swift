@@ -1,13 +1,13 @@
-import Foundation
 import Moya
 
-typealias SoulBlocksProvider = MoyaProvider<SoulBlocksApi>
+typealias SoulEventsProvider = MoyaProvider<SoulEventsApi>
 
-public enum SoulBlocksApi {
-    case soulKoth
+public enum SoulEventsApi {
+    case events
 }
 
-extension SoulBlocksApi: TargetType, APIVersionTargetType, AuthorizedTargetType {
+extension SoulEventsApi: TargetType, AuthorizedTargetType, APIVersionTargetType {
+
     var needsAuth: Bool {
         return true
     }
@@ -16,13 +16,10 @@ extension SoulBlocksApi: TargetType, APIVersionTargetType, AuthorizedTargetType 
         return true
     }
 
-    public var baseURL: URL { return URL(string: SoulSwiftClient.shared.soulConfiguration.baseURL)! }
+    public var baseURL: URL { return URL(string: SoulSwiftClient.shared.soulConfiguration!.baseURL)! }
 
     public var path: String {
-        switch self {
-        case .soulKoth:
-            return "/blocks/soul/koth/"
-        }
+        return "/events"
     }
 
     public var method: Moya.Method {

@@ -1,20 +1,12 @@
-import Moya
-
 public protocol MeServiceProtocol: AnyObject {
-    func getMe(completion: @escaping () -> Void)
+//    func getMe(completion: @escaping () -> Void)
 }
 
 final class MeService: MeServiceProtocol {
 
-    let soulMeProvider: SoulMeProvider
+    let soulProvider: SoulProviderProtocol
 
-    init(soulMeProvider: SoulMeProvider) {
-        self.soulMeProvider = soulMeProvider
-    }
-
-    func getMe(completion: @escaping () -> Void) {
-        soulMeProvider.request(.me(method: .get)) { _ in
-            completion()
-        }
+    init(soulProvider: SoulProviderProtocol) {
+        self.soulProvider = soulProvider
     }
 }

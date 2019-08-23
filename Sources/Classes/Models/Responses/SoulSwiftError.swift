@@ -1,23 +1,19 @@
-import Foundation
-import Moya
-
-public typealias SoulMoyaError = MoyaError
-
 public enum SoulSwiftError: Swift.Error {
-    case apiError(SoulApiError)
-    case moyaError(SoulMoyaError)
+    case requestError
+    case apiError(SoulError)
     case underlying(Swift.Error)
+    case unknown
 }
 
-struct SoulApiErrorResponse: Codable {
-    let error: SoulApiError
+struct SoulErrorResponse: Codable {
+    let error: SoulError
 }
 
-public struct SoulApiError: Swift.Error {
+public struct SoulError: Swift.Error {
     public let alias: String
     public let code: Int
     public let userMessage: String
     public let developerMessage: String
 }
 
-extension SoulApiError: Codable {}
+extension SoulError: Codable {}

@@ -8,4 +8,8 @@ public struct SoulResponse: Decodable {
     let currentKing: User
     let bundles: [SoulBundle]
     let items: [InventoryItem]
+    let album: Album
+    let albums: [Album]
+    let photo: Photo
+    let photos: [Photo]
 }

@@ -26,6 +26,18 @@ struct SoulRequest {
         self.needAuthorization = needAuthorization
     }
 
+    init(httpMethod: HTTPMethod = .GET,
+         soulEndpoint: SoulEndpoint,
+         queryParameters: [String: Any?]? = nil,
+         body: Encodable,
+         needAuthorization: Bool = false) {
+        self.httpMethod = httpMethod
+        self.soulEndpoint = soulEndpoint
+        self.queryParameters = queryParameters
+        self.bodyParameters = body.dictionary
+        self.needAuthorization = needAuthorization
+    }
+
     // TODO: Если вывод типов будет занимать много времени, то сделать явное приведение типов
     var queryItems: [URLQueryItem]? {
         return queryParameters?.compactMapValues { $0 }
@@ -42,5 +54,12 @@ struct SoulRequest {
                 }
             }
             .map { URLQueryItem(name: $0, value: $1) }
+    }
+}
+
+extension Encodable {
+    var dictionary: [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
     }
 }

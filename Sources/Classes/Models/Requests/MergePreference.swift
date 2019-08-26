@@ -1,8 +1,6 @@
-public enum MergePreference: String {
+public enum MergePreference: String, Encodable {
     case session
     case credentials
     case older
     case newer
 }
-
-extension MergePreference: Encodable {}

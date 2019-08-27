@@ -1,3 +1,5 @@
+disabled_rules:
+  - todo
 included:
   - Sources
   - Examples

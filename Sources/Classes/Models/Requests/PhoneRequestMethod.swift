@@ -1,6 +1,4 @@
-public enum PhoneRequestMethod: String {
+public enum PhoneRequestMethod: String, Encodable {
     case sms
     case callout
 }
-
-extension PhoneRequestMethod: Encodable {}

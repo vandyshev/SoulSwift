@@ -34,6 +34,9 @@ class ViewController: UIViewController {
     }
 
     private func downloadFeatures() {
+        SoulSwiftClient.shared.soulChatsService?.chats(completion: { _ in
+
+        })
         SoulSwiftClient.shared.soulApplicationService?.features { result in
             switch result {
             case .success(let features):

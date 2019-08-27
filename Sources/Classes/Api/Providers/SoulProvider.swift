@@ -50,9 +50,7 @@ class SoulProvider: SoulProviderProtocol {
             return nil
         }
         components.path = soulRequest.soulEndpoint.path
-        if let items = soulRequest.queryItems {
-            components.queryItems = items.map { URLQueryItem(name: $0, value: $1) }
-        }
+        components.queryItems = soulRequest.queryItems
         guard let url = components.url else { return nil }
         var request = URLRequest(url: url)
         request.httpMethod = soulRequest.httpMethod.rawValue

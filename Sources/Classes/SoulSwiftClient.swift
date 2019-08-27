@@ -5,6 +5,13 @@ public class SoulSwiftClient {
     public private(set) var soulApplicationService: ApplicationServiceProtocol?
     public private(set) var soulAuthService: AuthServiceProtocol?
     public private(set) var soulMeService: MeServiceProtocol?
+    public private(set) var soulMeAlbumsService: MeAlbumsServiceProtocol?
+    public private(set) var soulUserService: UserServiceProtocol?
+    public private(set) var soulUsersService: UsersServiceProtocol?
+    public private(set) var soulChatsService: ChatsServiceProtocol?
+    public private(set) var soulEventsService: EventsServiceProtocol?
+    public private(set) var soulPurchasesService: PurchasesServiceProtocol?
+    public private(set) var soulBlocksService: BlocksServiceProtocol?
 
     private(set) var soulConfiguration: SoulConfiguration!
 
@@ -15,5 +22,12 @@ public class SoulSwiftClient {
         self.soulApplicationService = resolver.resolve(ApplicationServiceProtocol.self)
         self.soulAuthService = resolver.resolve(AuthServiceProtocol.self)
         self.soulMeService = resolver.resolve(MeServiceProtocol.self)
+        self.soulMeAlbumsService = resolver.resolve(MeAlbumsServiceProtocol.self)
+        self.soulUserService = resolver.resolve(UserServiceProtocol.self)
+        self.soulUsersService = resolver.resolve(UsersServiceProtocol.self)
+        self.soulChatsService = resolver.resolve(ChatsServiceProtocol.self)
+        self.soulEventsService = resolver.resolve(EventsServiceProtocol.self)
+        self.soulPurchasesService = resolver.resolve(PurchasesServiceProtocol.self)
+        self.soulBlocksService = resolver.resolve(BlocksServiceProtocol.self)
     }
 }

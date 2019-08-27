@@ -1,10 +1,8 @@
-public protocol ApplicationServiceProtocol: AnyObject {
+public protocol ApplicationServiceProtocol {
     /// Application feature toggles from Soul
     ///
     /// - Parameter completion: collection of features
     func features(completion: @escaping (Result<[Feature], SoulSwiftError>) -> Void)
-
-    func constants(namespace: String, completion: @escaping () -> Void)
 }
 
 final class ApplicationService: ApplicationServiceProtocol {
@@ -16,23 +14,16 @@ final class ApplicationService: ApplicationServiceProtocol {
     }
 
     func features(completion: @escaping (Result<[Feature], SoulSwiftError>) -> Void) {
-        let queryItems = [
+        let queryParameters = [
             "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
             "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey
         ]
         let request = SoulRequest(
-            httpMethod: .GET,
             soulEndpoint: SoulApplicationEndpoint.features,
-            queryItems: queryItems,
-            bodyParameters: nil,
-            needAuthorization: false
+            queryParameters: queryParameters
         )
         soulProvider.request(request) { (result: Result<Features, SoulSwiftError>) in
             completion(result.map { $0.features })
         }
-    }
-
-    func constants(namespace: String, completion: @escaping () -> Void) {
-
     }
 }

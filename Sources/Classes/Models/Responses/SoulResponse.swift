@@ -12,4 +12,6 @@ public struct SoulResponse: Decodable {
     let albums: [Album]
     let photo: Photo
     let photos: [Photo]
+    let user: User
+    let users: [User]
 }

@@ -47,144 +47,120 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        let bodyParameters: [String: Any] = [
-            "login": login,
-            "passwd": password,
-            "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
-            "merge": merge,
-            "mergePreference": mergePreference
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.passwordRegister,
-            bodyParameters: bodyParameters
+            soulEndpoint: SoulAuthEndpoint.passwordRegister
         )
+        request.setBodyParameters([ "login": login,
+                                    "passwd": password,
+                                    "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
+                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
+                                    "merge": merge,
+                                    "mergePreference": mergePreference ])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
         }
     }
 
     func passwordLogin(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        let bodyParameters: [String: Any] = [
-            "login": login,
-            "password": password,
-            "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
-            "merge": merge,
-            "mergePreference": mergePreference
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.passwordLogin,
-            bodyParameters: bodyParameters
+            soulEndpoint: SoulAuthEndpoint.passwordLogin
         )
+        request.setBodyParameters(["login": login,
+                                   "password": password,
+                                   "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
+                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
+                                   "merge": merge,
+                                   "mergePreference": mergePreference])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
         }
     }
 
     func phoneRequest(phoneNumber: String, method: PhoneRequestMethod, completion: @escaping (Result<PhoneRequestResponse, SoulSwiftError>) -> Void) {
-        let bodyParameters: [String: Any] = [
-            "phoneNumber": phoneNumber,
-            "method": method,
-            "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.phoneRequest,
-            bodyParameters: bodyParameters
+            soulEndpoint: SoulAuthEndpoint.phoneRequest
         )
+        request.setBodyParameters(["phoneNumber": phoneNumber,
+                                   "method": method,
+                                   "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
+                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey])
         soulProvider.request(request) { (result: Result<PhoneRequestResponse, SoulSwiftError>) in
             completion(result)
         }
     }
 
     func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        let bodyParameters: [String: Any] = [
-            "phoneNumber": phoneNumber,
-            "code": code,
-            "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
-            "merge": merge,
-            "mergePreference": mergePreference
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.phoneVerify,
-            bodyParameters: bodyParameters
+            soulEndpoint: SoulAuthEndpoint.phoneVerify
         )
+        request.setBodyParameters(["phoneNumber": phoneNumber,
+                                   "code": code,
+                                   "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
+                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
+                                   "merge": merge,
+                                   "mergePreference": mergePreference])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
         }
     }
 
     func phoneLogin(phoneNumber: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        let bodyParameters: [String: Any] = [
-            "phoneNumber": phoneNumber,
-            "code": code,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
-            "lastSessionToken": lastSessionToken
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.phoneLogin,
-            bodyParameters: bodyParameters
+            soulEndpoint: SoulAuthEndpoint.phoneLogin
         )
+        request.setBodyParameters(["phoneNumber": phoneNumber,
+                                   "code": code,
+                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
+                                   "lastSessionToken": lastSessionToken])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
         }
     }
 
     func emailCodeRequest(email: String, completion: @escaping (Result<EmailCodeRequestResponse, SoulSwiftError>) -> Void) {
-        let bodyParameters: [String: Any] = [
-            "email": email,
-            "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.emailCodeRequest,
-            bodyParameters: bodyParameters
+            soulEndpoint: SoulAuthEndpoint.emailCodeRequest
         )
+        request.setBodyParameters(["email": email,
+                                   "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
+                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey])
         soulProvider.request(request) { (result: Result<EmailCodeRequestResponse, SoulSwiftError>) in
             completion(result)
         }
     }
 
     func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        let bodyParameters: [String: Any] = [
-            "email": email,
-            "code": code,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
-            "merge": merge,
-            "mergePreference": mergePreference
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeVerify,
             queryParameters: nil,
-            bodyParameters: bodyParameters,
             needAuthorization: false
         )
+        request.setBodyParameters(["email": email,
+                                   "code": code,
+                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
+                                   "merge": merge,
+                                   "mergePreference": mergePreference])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
         }
     }
 
     func emailCodeExtend(email: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        let bodyParameters: [String: Any] = [
-            "email": email,
-            "code": code,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
-            "lastSessionToken": lastSessionToken
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.emailCodeExtend,
-            bodyParameters: bodyParameters
+            soulEndpoint: SoulAuthEndpoint.emailCodeExtend
         )
+        request.setBodyParameters(["email": email,
+                                   "code": code,
+                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
+                                   "lastSessionToken": lastSessionToken])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
         }

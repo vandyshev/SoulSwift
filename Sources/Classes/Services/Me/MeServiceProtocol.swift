@@ -20,7 +20,6 @@ final class MeService: MeServiceProtocol {
     func me(completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
         let request = SoulRequest(
             soulEndpoint: SoulMeEndpoint.me,
-            bodyParameters: nil,
             needAuthorization: true
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
@@ -29,12 +28,12 @@ final class MeService: MeServiceProtocol {
     }
 
     func setNotificationToken(apnsToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulMeEndpoint.me,
-            bodyParameters: ["notificationTokens": ["APNS": apnsToken]],
             needAuthorization: true
         )
+        request.setBodyParameters(["notificationTokens": ["APNS": apnsToken]])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
         }
@@ -56,7 +55,6 @@ final class MeService: MeServiceProtocol {
         let request = SoulRequest(
             httpMethod: .DELETE,
             soulEndpoint: SoulMeEndpoint.me,
-            bodyParameters: nil,
             needAuthorization: true
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in

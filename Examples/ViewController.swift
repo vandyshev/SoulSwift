@@ -5,6 +5,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+//        setenv("CFNETWORK_DIAGNOSTICS", "3", 1)
         // Do any additional setup after loading the view, typically from a nib.
 //        setupFakeData()
         initializeSoulSwift()

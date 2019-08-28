@@ -5,6 +5,8 @@ protocol SoulProviderProtocol {
 class SoulProvider: SoulProviderProtocol {
 
     private let session: URLSession = URLSession(configuration: .default)
+    private let encoder = JSONEncoder()
+    private let decoder = JSONDecoder()
     private let soulAuthorizationProvider: SoulAuthorizationProviderProtocol
     private let soulApiVersionProvider: SoulApiVersionProviderProtocol
     private let soulUserAgentProvider: SoulUserAgentProviderProtocol
@@ -22,15 +24,15 @@ class SoulProvider: SoulProviderProtocol {
             completion(.failure(SoulSwiftError.requestError))
             return
         }
+        let decoder = self.decoder
         let task = session.dataTask(with: request) { (data, response, error) in
             let result: Result<D, SoulSwiftError>
             if let error = error {
                 result = .failure(SoulSwiftError.underlying(error))
-            } else if let error = self.soulError(from: data, and: response) {
+            } else if let error = soulError(from: data, and: response) {
                 result = .failure(SoulSwiftError.apiError(error))
             } else if let data = data {
                 do {
-                    let decoder = JSONDecoder()
                     result = .success(try decoder.decode(D.self, from: data))
                 } catch {
                     result = .failure(SoulSwiftError.underlying(error))
@@ -43,6 +45,13 @@ class SoulProvider: SoulProviderProtocol {
             }
         }
         task.resume()
+
+        func soulError(from data: Data?, and response: URLResponse?) -> SoulError? {
+            guard let response = response as? HTTPURLResponse else { return nil }
+            guard let data = data else { return nil }
+            if (200...299).contains(response.statusCode) { return nil }
+            return try? decoder.decode(SoulErrorResponse.self, from: data).error
+        }
     }
 
     private func urlRequest(soulRequest: SoulRequest) -> URLRequest? {
@@ -50,13 +59,16 @@ class SoulProvider: SoulProviderProtocol {
             return nil
         }
         components.path = soulRequest.soulEndpoint.path
-        components.queryItems = soulRequest.queryItems
+        components.queryItems = soulRequest.queryParameters?.map { URLQueryItem(name: $0, value: $1) }
         guard let url = components.url else { return nil }
+
         var request = URLRequest(url: url)
         request.httpMethod = soulRequest.httpMethod.rawValue
-        if let parameters = soulRequest.bodyParameters {
-            let data = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-            request.httpBody = data
+
+        if let body = soulRequest.body {
+
+            let encodable = AnyEncodable(body)
+            request.httpBody = try? encoder.encode(encodable)
         }
 
         request = soulApiVersionProvider.addApiVersion(request)
@@ -67,13 +79,4 @@ class SoulProvider: SoulProviderProtocol {
         }
         return request
     }
-
-    private func soulError(from data: Data?, and response: URLResponse?) -> SoulError? {
-        guard let response = response as? HTTPURLResponse else { return nil }
-        guard let data = data else { return nil }
-        if (200...299).contains(response.statusCode) { return nil }
-        let decoder = JSONDecoder()
-        return try? decoder.decode(SoulErrorResponse.self, from: data).error
-    }
-
 }

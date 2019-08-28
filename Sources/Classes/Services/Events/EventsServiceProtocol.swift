@@ -12,17 +12,14 @@ final class EventsService: EventsServiceProtocol {
     }
 
     func events(since: TimeInterval?, until: TimeInterval?, limit: Int?, ascending: Bool, completion: @escaping (Result<[Event], SoulSwiftError>) -> Void) {
-        let queryParameters: [String: Any?] = [
-            "since": since,
-            "until": until,
-            "limit": limit,
-            "ascending": ascending
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             soulEndpoint: SoulEventsEndpoint.events,
-            queryParameters: queryParameters,
             needAuthorization: true
         )
+        request.setQueryParameters(["since": since,
+                                    "until": until,
+                                    "limit": limit,
+                                    "ascending": ascending])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.events })
         }

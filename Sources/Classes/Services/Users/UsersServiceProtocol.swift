@@ -18,16 +18,13 @@ final class UsersService: UsersServiceProtocol {
 
     // GET: /users/recommendations/list
     func recommendationsList(uniqueToken: String?, viewingSession: String?, limit: Int?, completion: @escaping (Result<[User], SoulSwiftError>) -> Void) {
-        let queryParameters: [String: Any] = [
-            "uniqueToken": uniqueToken,
-            "viewingSession": viewingSession,
-            "limit": limit
-        ]
-        let request = SoulRequest(
+        var request = SoulRequest(
             soulEndpoint: SoulUsersEndpoint.recommendationsList,
-            queryParameters: queryParameters,
             needAuthorization: true
         )
+        request.setQueryParameters(["uniqueToken": uniqueToken,
+                                    "viewingSession": viewingSession,
+                                    "limit": limit])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.users })
         }
@@ -35,18 +32,14 @@ final class UsersService: UsersServiceProtocol {
 
     // PATCH: /users/recommendations/filter
     func setRecommendationsFilter(filter: Filter, settings: Settings, completion: @escaping (Result<[User], SoulSwiftError>) -> Void) {
-        let queryParameters = [
-            "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
-            "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey
-        ]
-        let bodyParameters: [String: Any] = ["filter": filter, "settings": settings]
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulUsersEndpoint.recommendationsList,
-            queryParameters: queryParameters,
-            bodyParameters: bodyParameters,
             needAuthorization: true
         )
+        request.setQueryParameters(["anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
+                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey])
+        request.setBodyParameters(["filter": filter, "settings": settings])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.users })
         }

@@ -30,11 +30,11 @@ final class MeAlbumsService: MeAlbumsServiceProtocol {
     }
 
     func loadAlbums(offset: Int?, limit: Int?, completion: @escaping (Result<[Album], SoulSwiftError>) -> Void) {
-        let request = SoulRequest(
+        var request = SoulRequest(
             soulEndpoint: SoulMeEndpoint.albums,
-            queryParameters: ["offset": offset, "limit": limit],
             needAuthorization: true
         )
+        request.setQueryParameters(["offset": offset, "limit": limit])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.albums })
         }
@@ -53,36 +53,36 @@ final class MeAlbumsService: MeAlbumsServiceProtocol {
     }
 
     func loadAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping (Result<Album, SoulSwiftError>) -> Void) {
-        let request = SoulRequest(
+        var request = SoulRequest(
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
-            queryParameters: ["offset": offset, "limit": limit],
             needAuthorization: true
         )
+        request.setQueryParameters(["offset": offset, "limit": limit])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.album })
         }
     }
 
     func editAlbum(albumName: String, parameters: AlbumParameters, offset: Int?, limit: Int?, completion: @escaping (Result<Album, SoulSwiftError>) -> Void) {
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
-            queryParameters: ["offset": offset, "limit": limit],
             body: parameters,
             needAuthorization: true
         )
+        request.setQueryParameters(["offset": offset, "limit": limit])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.album })
         }
     }
 
     func deleteAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .DELETE,
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
-            queryParameters: ["offset": offset, "limit": limit],
             needAuthorization: true
         )
+        request.setQueryParameters(["offset": offset, "limit": limit])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
@@ -90,12 +90,12 @@ final class MeAlbumsService: MeAlbumsServiceProtocol {
 
     // TODO: multipart/form-data
     func addPhoto(albumName: String, photo: Data, offset: Int?, limit: Int?, completion: @escaping (Result<Photo, SoulSwiftError>) -> Void) {
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
-            queryParameters: ["offset": offset, "limit": limit],
             needAuthorization: true
         )
+        request.setQueryParameters(["offset": offset, "limit": limit])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.photo })
         }

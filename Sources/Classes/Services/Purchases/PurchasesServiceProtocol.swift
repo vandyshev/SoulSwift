@@ -33,12 +33,12 @@ final class PurchasesService: PurchasesServiceProtocol {
     }
 
     func orderAppstore(receipt: String, completion: @escaping (Result<([SoulBundle], [InventoryItem]), SoulSwiftError>) -> Void) {
-        let request = SoulRequest(
+        var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulPurchasesEndpoint.orderAppstore,
-            bodyParameters: ["receipt": receipt],
             needAuthorization: true
         )
+        request.setQueryParameters(["receipt": receipt])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { ($0.bundles, $0.items) })
         }

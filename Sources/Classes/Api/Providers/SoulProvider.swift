@@ -28,14 +28,14 @@ class SoulProvider: SoulProviderProtocol {
         let task = session.dataTask(with: request) { (data, response, error) in
             let result: Result<D, SoulSwiftError>
             if let error = error {
-                result = .failure(SoulSwiftError.underlying(error))
+                result = .failure(SoulSwiftError.networkError(error))
             } else if let error = soulError(from: data, and: response) {
                 result = .failure(SoulSwiftError.apiError(error))
             } else if let data = data {
                 do {
                     result = .success(try decoder.decode(D.self, from: data))
                 } catch {
-                    result = .failure(SoulSwiftError.underlying(error))
+                    result = .failure(SoulSwiftError.decoderError)
                 }
             } else {
                 result = .failure(SoulSwiftError.unknown)
@@ -66,9 +66,12 @@ class SoulProvider: SoulProviderProtocol {
         request.httpMethod = soulRequest.httpMethod.rawValue
 
         if let body = soulRequest.body {
-
             let encodable = AnyEncodable(body)
             request.httpBody = try? encoder.encode(encodable)
+            let contentTypeHeaderName = "Content-Type"
+            if request.value(forHTTPHeaderField: contentTypeHeaderName) == nil {
+                request.setValue("application/json", forHTTPHeaderField: contentTypeHeaderName)
+            }
         }
 
         request = soulApiVersionProvider.addApiVersion(request)

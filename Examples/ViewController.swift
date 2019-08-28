@@ -35,9 +35,6 @@ class ViewController: UIViewController {
     }
 
     private func downloadFeatures() {
-        SoulSwiftClient.shared.soulChatsService?.chats(completion: { _ in
-
-        })
         SoulSwiftClient.shared.soulApplicationService?.features { result in
             switch result {
             case .success(let features):
@@ -51,25 +48,21 @@ class ViewController: UIViewController {
                 }
             }
         }
-//
-//        SoulSwiftClient.shared.soulApplicationService?.constants(namespace: "test", completion: {
-//            print("constants completion")
-//        })
-//
-//        SoulSwiftClient.shared.soulAuthService?.passwordRegister(
-//            login: "login7",
-//            password: "passwd7",
-//            merge: nil,
-//            mergePreference: nil,
-//            completion: { result in
-//                print("passwordRegister completion")
-//                switch result {
-//                case .success(let authResponse):
-//                    print(authResponse)
-//                case .failure(let error):
-//                    print(error)
-//                }
-//
-//        })
+
+        SoulSwiftClient.shared.soulAuthService?.passwordRegister(
+            login: "login14",
+            password: "passwd14",
+            merge: nil,
+            mergePreference: nil,
+            completion: { result in
+                print("passwordRegister completion")
+                switch result {
+                case .success(let authResponse):
+                    print(authResponse)
+                case .failure(let error):
+                    print(error)
+                }
+
+        })
     }
 }

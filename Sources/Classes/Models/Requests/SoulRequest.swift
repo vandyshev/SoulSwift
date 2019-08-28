@@ -38,7 +38,7 @@ struct SoulRequest {
 extension Dictionary where Key == String {
     func compactMapValuesToAnyEncodable() -> [Key: AnyEncodable] {
         compactMapValues { value -> AnyEncodable? in
-            if let encodable = value as? AnyEncodable {
+            if let encodable = value as? Encodable {
                 return AnyEncodable(encodable)
             } else {
                 return nil

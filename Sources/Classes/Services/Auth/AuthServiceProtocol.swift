@@ -1,25 +1,27 @@
 // swiftlint:disable function_parameter_count line_length
 public protocol AuthServiceProtocol {
-
+    // POST: /auth/password/register
     func passwordRegister(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-
+    // POST: /auth/password/login
     func passwordLogin(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     func passwordLogin(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-
+    // POST: /auth/phone/request
     func phoneRequest(phoneNumber: String, method: PhoneRequestMethod, completion: @escaping (Result<PhoneRequestResponse, SoulSwiftError>) -> Void)
-
+    // POST: /auth/phone/verify
     func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-
+    // POST: /auth/phone/login
     func phoneLogin(phoneNumber: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-
+    // POST: /auth/emailcode/request
     func emailCodeRequest(email: String, completion: @escaping (Result<EmailCodeRequestResponse, SoulSwiftError>) -> Void)
-
+    // POST: /auth/emailcode/verify
     func emailCodeVerify(email: String, code: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-
+    // POST:/auth/emailcode/extend
     func emailCodeExtend(email: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+    // POST: /auth/logout
+    func logout(full: Bool?, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
 }
 
 final class AuthService: AuthServiceProtocol {
@@ -49,7 +51,8 @@ final class AuthService: AuthServiceProtocol {
     func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
         var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.passwordRegister
+            soulEndpoint: SoulAuthEndpoint.passwordRegister,
+            needAuthorization: merge ?? false
         )
         request.setBodyParameters([ "login": login,
                                     "passwd": password,
@@ -57,15 +60,23 @@ final class AuthService: AuthServiceProtocol {
                                     "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
                                     "merge": merge,
                                     "mergePreference": mergePreference ])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.me })
+        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+            let result = result.map { ($0.authorization, $0.me) }
+            switch result {
+            case .success(let authorization, let me):
+                self?.saveAuthorization(authorization)
+                completion(.success(me))
+            case .failure(let error):
+                completion(.failure(error))
+            }
         }
     }
 
     func passwordLogin(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
         var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.passwordLogin
+            soulEndpoint: SoulAuthEndpoint.passwordLogin,
+            needAuthorization: merge ?? false
         )
         request.setBodyParameters(["login": login,
                                    "password": password,
@@ -95,7 +106,8 @@ final class AuthService: AuthServiceProtocol {
     func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
         var request = SoulRequest(
             httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.phoneVerify
+            soulEndpoint: SoulAuthEndpoint.phoneVerify,
+            needAuthorization: merge ?? false
         )
         request.setBodyParameters(["phoneNumber": phoneNumber,
                                    "code": code,
@@ -140,7 +152,7 @@ final class AuthService: AuthServiceProtocol {
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeVerify,
             queryParameters: nil,
-            needAuthorization: false
+            needAuthorization: merge ?? false
         )
         request.setBodyParameters(["email": email,
                                    "code": code,
@@ -164,5 +176,21 @@ final class AuthService: AuthServiceProtocol {
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.me })
         }
+    }
+
+    func logout(full: Bool?, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {
+        var request = SoulRequest(
+            httpMethod: .POST,
+            soulEndpoint: SoulAuthEndpoint.logout,
+            needAuthorization: true
+        )
+        request.setQueryParameters(["full": full])
+        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map { _ in })
+        }
+    }
+
+    private func saveAuthorization(_ authorization: Authorization) {
+
     }
 }

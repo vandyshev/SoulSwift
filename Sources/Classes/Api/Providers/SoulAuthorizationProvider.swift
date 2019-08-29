@@ -23,12 +23,21 @@ struct SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
         guard let userId = storageService.userId else { return nil }
         guard let sessionToken = storageService.sessionToken else { return nil }
         guard let httpMethod = request.httpMethod else { return nil }
-        guard let httpPath = request.url?.path else { return nil }
+        guard let url = request.url else { return nil }
+        guard let httpPath = httpPath(for: url) else { return nil }
         let httpBody = String(data: request.httpBody ?? Data(), encoding: .utf8) ?? ""
         // TODO: adjust timestamp
         let unixtime = "\(Int(round(Date().timeIntervalSince1970)))"
         let digest = hmacSHA256(from: "\(httpMethod)+\(httpPath)+\(httpBody)+\(unixtime)", key: sessionToken)
         return "hmac \(userId):\(unixtime):\(digest)"
+    }
+
+    private func httpPath(for url: URL) -> String? {
+        var urlComponents = URLComponents()
+        urlComponents.path = url.path
+        urlComponents.query = url.query
+        urlComponents.fragment = url.fragment
+        return urlComponents.url?.absoluteString
     }
 
     private func hmacSHA256(from string: String, key: String) -> String {

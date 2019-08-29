@@ -1,4 +1,7 @@
 public struct SoulResponse: Decodable {
+    let features: Features?
+    let status: String?
+    let providerId: Int?
     let authorization: Authorization?
     let additionalInfo: AdditionalInfo?
     let me: MyUser?

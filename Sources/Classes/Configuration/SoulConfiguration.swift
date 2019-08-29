@@ -16,7 +16,7 @@ public struct SoulConfiguration {
 
     public init(baseURL: String,
                 apiKey: String,
-                apiVersion: String = "1.0.0",
+                apiVersion: String = "1.0.1",
                 anonymousUser: String = UUID().uuidString,
                 appName: String,
                 chatURL: String,

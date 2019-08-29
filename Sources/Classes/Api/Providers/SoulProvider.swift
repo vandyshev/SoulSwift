@@ -1,39 +1,47 @@
-protocol SoulProviderProtocol {
-    func request<D: Decodable>(_ request: SoulRequest, completion: @escaping (Result<D, SoulSwiftError>) -> Void)
+protocol SoulProviderProtocol: class {
+    func request(_ request: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void)
 }
 
 class SoulProvider: SoulProviderProtocol {
 
-    private let session: URLSession = URLSession(configuration: .default)
+    private var session = URLSession(configuration: .default)
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
+
     private let soulAuthorizationProvider: SoulAuthorizationProviderProtocol
     private let soulApiVersionProvider: SoulApiVersionProviderProtocol
     private let soulUserAgentProvider: SoulUserAgentProviderProtocol
+    private let soulRefreshTokenProvider: SoulRefreshTokenProviderProtocol
 
     init(soulAuthorizationProvider: SoulAuthorizationProviderProtocol,
          soulVersionProvider: SoulApiVersionProviderProtocol,
-         soulUserAgentVersionProvider: SoulUserAgentProviderProtocol) {
+         soulUserAgentVersionProvider: SoulUserAgentProviderProtocol,
+         soulRefreshTokenProvider: SoulRefreshTokenProviderProtocol) {
         self.soulAuthorizationProvider = soulAuthorizationProvider
         self.soulApiVersionProvider = soulVersionProvider
         self.soulUserAgentProvider = soulUserAgentVersionProvider
+        self.soulRefreshTokenProvider = soulRefreshTokenProvider
     }
 
-    func request<D: Decodable>(_ request: SoulRequest, completion: @escaping (Result<D, SoulSwiftError>) -> Void) {
-        guard let request = urlRequest(soulRequest: request) else {
+    func request(_ request: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {
+        guard let urlRequest = urlRequest(soulRequest: request) else {
             completion(.failure(SoulSwiftError.requestError))
             return
         }
-        let decoder = self.decoder
-        let task = session.dataTask(with: request) { (data, response, error) in
-            let result: Result<D, SoulSwiftError>
+        let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            guard let sSelf = self else { return }
+            if sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response) {
+                sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf, request: request, completion: completion)
+                return
+            }
+            let result: Result<SoulResponse, SoulSwiftError>
             if let error = error {
                 result = .failure(SoulSwiftError.networkError(error))
             } else if let error = soulError(from: data, and: response) {
                 result = .failure(SoulSwiftError.apiError(error))
             } else if let data = data {
                 do {
-                    result = .success(try decoder.decode(D.self, from: data))
+                    result = .success(try sSelf.decoder.decode(SoulResponse.self, from: data))
                 } catch {
                     result = .failure(SoulSwiftError.decoderError)
                 }
@@ -55,12 +63,11 @@ class SoulProvider: SoulProviderProtocol {
     }
 
     private func urlRequest(soulRequest: SoulRequest) -> URLRequest? {
-        guard var components = URLComponents(string: SoulSwiftClient.shared.soulConfiguration.baseURL) else {
-            return nil
-        }
+        var components = URLComponents()
         components.path = soulRequest.soulEndpoint.path
         components.queryItems = soulRequest.queryParameters?.map { URLQueryItem(name: $0, value: $1) }
-        guard let url = components.url else { return nil }
+        guard let baseURL = URL(string: SoulSwiftClient.shared.soulConfiguration.baseURL) else { return nil }
+        guard let url = components.url(relativeTo: baseURL) else { return nil }
 
         var request = URLRequest(url: url)
         request.httpMethod = soulRequest.httpMethod.rawValue

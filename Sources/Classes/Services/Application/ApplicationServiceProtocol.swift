@@ -22,8 +22,8 @@ final class ApplicationService: ApplicationServiceProtocol {
             soulEndpoint: SoulApplicationEndpoint.features,
             queryParameters: queryParameters
         )
-        soulProvider.request(request) { (result: Result<Features, SoulSwiftError>) in
-            completion(result.map { $0.features })
+        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map { $0.features?.features })
         }
     }
 }

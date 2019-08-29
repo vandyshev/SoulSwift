@@ -18,7 +18,7 @@ final class MeService: MeServiceProtocol {
     }
 
     func me(completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        let request = SoulRequest(
+        var request = SoulRequest(
             soulEndpoint: SoulMeEndpoint.me,
             needAuthorization: true
         )

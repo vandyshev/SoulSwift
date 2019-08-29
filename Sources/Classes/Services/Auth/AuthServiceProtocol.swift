@@ -61,14 +61,7 @@ final class AuthService: AuthServiceProtocol {
                                     "merge": merge,
                                     "mergePreference": mergePreference ])
         soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
-            let result = result.map { ($0.authorization, $0.me) }
-            switch result {
-            case .success(let authorization, let me):
-                self?.saveAuthorization(authorization)
-                completion(.success(me))
-            case .failure(let error):
-                completion(.failure(error))
-            }
+            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
         }
     }
 
@@ -84,8 +77,8 @@ final class AuthService: AuthServiceProtocol {
                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
                                    "merge": merge,
                                    "mergePreference": mergePreference])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.me })
+        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
         }
     }
 
@@ -98,8 +91,13 @@ final class AuthService: AuthServiceProtocol {
                                    "method": method,
                                    "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey])
-        soulProvider.request(request) { (result: Result<PhoneRequestResponse, SoulSwiftError>) in
-            completion(result)
+        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map {
+                guard let status = $0.status else { return nil }
+                guard let providerId = $0.providerId else { return nil }
+                guard let additionalInfo = $0.additionalInfo else { return nil }
+                return PhoneRequestResponse(status: status, providerId: providerId, additionalInfo: additionalInfo)
+            })
         }
     }
 
@@ -115,8 +113,8 @@ final class AuthService: AuthServiceProtocol {
                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
                                    "merge": merge,
                                    "mergePreference": mergePreference])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.me })
+        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
         }
     }
 
@@ -129,8 +127,8 @@ final class AuthService: AuthServiceProtocol {
                                    "code": code,
                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
                                    "lastSessionToken": lastSessionToken])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.me })
+        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
         }
     }
 
@@ -142,8 +140,13 @@ final class AuthService: AuthServiceProtocol {
         request.setBodyParameters(["email": email,
                                    "anonymousUser": SoulSwiftClient.shared.soulConfiguration.anonymousUser,
                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey])
-        soulProvider.request(request) { (result: Result<EmailCodeRequestResponse, SoulSwiftError>) in
-            completion(result)
+        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map {
+                guard let status = $0.status else { return nil }
+                guard let providerId = $0.providerId else { return nil }
+                guard let additionalInfo = $0.additionalInfo else { return nil }
+                return EmailCodeRequestResponse(status: status, providerId: providerId, additionalInfo: additionalInfo)
+            })
         }
     }
 
@@ -159,8 +162,8 @@ final class AuthService: AuthServiceProtocol {
                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
                                    "merge": merge,
                                    "mergePreference": mergePreference])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.me })
+        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
         }
     }
 
@@ -173,8 +176,8 @@ final class AuthService: AuthServiceProtocol {
                                    "code": code,
                                    "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
                                    "lastSessionToken": lastSessionToken])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.me })
+        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
         }
     }
 
@@ -190,7 +193,19 @@ final class AuthService: AuthServiceProtocol {
         }
     }
 
-    private func saveAuthorization(_ authorization: Authorization) {
+    private func saveAuthorization(authorization: Authorization) {
+        print(authorization)
+    }
+}
 
+private extension Result where Success == (Authorization, MyUser), Failure == SoulSwiftError {
+    func map(_ saveAuthorization: ((Authorization) -> Void)?) -> Result<MyUser, SoulSwiftError> {
+        switch self {
+        case .success(let authorization, let me):
+            saveAuthorization?(authorization)
+            return .success(me)
+        case .failure(let error):
+            return .failure(error)
+        }
     }
 }

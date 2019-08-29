@@ -3,11 +3,14 @@ import SoulSwift
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var codeTextField: UITextField!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 //        setenv("CFNETWORK_DIAGNOSTICS", "3", 1)
         // Do any additional setup after loading the view, typically from a nib.
-        setupFakeData()
+//        setupFakeData()
         initializeSoulSwift()
         downloadFeatures()
     }
@@ -35,40 +38,61 @@ class ViewController: UIViewController {
     }
 
     private func downloadFeatures() {
-//        SoulSwiftClient.shared.soulApplicationService?.features { result in
-//            switch result {
-//            case .success(let features):
-//                print(features)
-//            case .failure(let error):
-//                switch error {
-//                case .apiError(let apiError):
-//                    print(apiError.userMessage)
-//                default:
-//                    break
-//                }
-//            }
-//        }
+        SoulSwiftClient.shared.soulApplicationService?.features { result in
+            switch result {
+            case .success(let features):
+                print(features)
+            case .failure(let error):
+                switch error {
+                case .apiError(let apiError):
+                    print(apiError.userMessage)
+                default:
+                    break
+                }
+            }
+        }
+    }
 
-//        SoulSwiftClient.shared.soulAuthService?.passwordRegister(
-//            login: "login17",
-//            password: "passwd17",
-//            merge: nil,
-//            mergePreference: nil,
-//            completion: { result in
-//                print("passwordRegister completion")
-//                switch result {
-//                case .success(let authResponse):
-//                    print(authResponse)
-//                case .failure(let error):
-//                    print(error)
-//                }
-//
-//        })
-
-        SoulSwiftClient.shared.soulMeService?.me { result in
+    @IBAction func emailRequest(_ sender: Any) {
+        guard let email = emailTextField.text else { return }
+        SoulSwiftClient.shared.soulAuthService?.emailCodeRequest(email: email, completion: { result in
             switch result {
             case .success(let me):
                 print(me)
+            case .failure(let error):
+                switch error {
+                case .apiError(let apiError):
+                    print(apiError.userMessage)
+                default:
+                    break
+                }
+            }
+        })
+    }
+
+    @IBAction func emailVerify(_ sender: Any) {
+        guard let email = emailTextField.text else { return }
+        guard let code = codeTextField.text else { return }
+        SoulSwiftClient.shared.soulAuthService?.emailCodeVerify(email: email, code: code, completion: { result in
+            switch result {
+            case .success(let me):
+                print(me)
+            case .failure(let error):
+                switch error {
+                case .apiError(let apiError):
+                    print(apiError.userMessage)
+                default:
+                    break
+                }
+            }
+        })
+    }
+
+    @IBAction func me(_ sender: Any) {
+        SoulSwiftClient.shared.soulMeService?.me { result in
+            switch result {
+            case .success(let me):
+                print("me: \(me)")
             case .failure(let error):
                 switch error {
                 case .apiError(let apiError):

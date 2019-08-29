@@ -6,30 +6,30 @@ public protocol AuthServiceProtocol {
     // POST: /auth/password/login
     func passwordLogin(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     func passwordLogin(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+
     // POST: /auth/phone/request
     func phoneRequest(phoneNumber: String, method: PhoneRequestMethod, completion: @escaping (Result<PhoneRequestResponse, SoulSwiftError>) -> Void)
     // POST: /auth/phone/verify
     func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-    // POST: /auth/phone/login
-    func phoneLogin(phoneNumber: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+
     // POST: /auth/emailcode/request
     func emailCodeRequest(email: String, completion: @escaping (Result<EmailCodeRequestResponse, SoulSwiftError>) -> Void)
     // POST: /auth/emailcode/verify
     func emailCodeVerify(email: String, code: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-    // POST:/auth/emailcode/extend
-    func emailCodeExtend(email: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     // POST: /auth/logout
     func logout(full: Bool?, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
 }
 
 final class AuthService: AuthServiceProtocol {
 
-    let soulProvider: SoulProviderProtocol
+    private let soulProvider: SoulProviderProtocol
+    private var storageService: StorageServiceProtocol
 
-    init(soulProvider: SoulProviderProtocol) {
+    init(soulProvider: SoulProviderProtocol, storageService: StorageServiceProtocol) {
         self.soulProvider = soulProvider
+        self.storageService = storageService
     }
 
     func passwordRegister(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
@@ -61,7 +61,12 @@ final class AuthService: AuthServiceProtocol {
                                     "merge": merge,
                                     "mergePreference": mergePreference ])
         soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
+            completion(
+                result.afterSaveAuthorization(
+                    for: .password(login: login, password: password),
+                    with: self?.saveAuthorization
+                )
+            )
         }
     }
 
@@ -78,7 +83,12 @@ final class AuthService: AuthServiceProtocol {
                                    "merge": merge,
                                    "mergePreference": mergePreference])
         soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
+            completion(
+                result.afterSaveAuthorization(
+                    for: .password(login: login, password: password),
+                    with: self?.saveAuthorization
+                )
+            )
         }
     }
 
@@ -114,21 +124,12 @@ final class AuthService: AuthServiceProtocol {
                                    "merge": merge,
                                    "mergePreference": mergePreference])
         soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
-        }
-    }
-
-    func phoneLogin(phoneNumber: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        var request = SoulRequest(
-            httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.phoneLogin
-        )
-        request.setBodyParameters(["phoneNumber": phoneNumber,
-                                   "code": code,
-                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
-                                   "lastSessionToken": lastSessionToken])
-        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
+            completion(
+                result.afterSaveAuthorization(
+                    for: .phone(phoneNumber: phoneNumber, code: code),
+                    with: self?.saveAuthorization
+                )
+            )
         }
     }
 
@@ -163,21 +164,12 @@ final class AuthService: AuthServiceProtocol {
                                    "merge": merge,
                                    "mergePreference": mergePreference])
         soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
-        }
-    }
-
-    func emailCodeExtend(email: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
-        var request = SoulRequest(
-            httpMethod: .POST,
-            soulEndpoint: SoulAuthEndpoint.emailCodeExtend
-        )
-        request.setBodyParameters(["email": email,
-                                   "code": code,
-                                   "apiKey": SoulSwiftClient.shared.soulConfiguration.apiKey,
-                                   "lastSessionToken": lastSessionToken])
-        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.authorization, $0.me) }.map(self?.saveAuthorization))
+            completion(
+                result.afterSaveAuthorization(
+                    for: .email(email: email, code: code),
+                    with: self?.saveAuthorization
+                )
+            )
         }
     }
 
@@ -193,16 +185,19 @@ final class AuthService: AuthServiceProtocol {
         }
     }
 
-    private func saveAuthorization(authorization: Authorization) {
-        print(authorization)
+    private func saveAuthorization(method: AuthMethod, authorization: Authorization, me: MyUser) {
+        let credential = SoulCredential(method: method, authorization: authorization, me: me)
+        storageService.credential = credential
     }
 }
 
-private extension Result where Success == (Authorization, MyUser), Failure == SoulSwiftError {
-    func map(_ saveAuthorization: ((Authorization) -> Void)?) -> Result<MyUser, SoulSwiftError> {
-        switch self {
+private extension Result where Success == SoulResponse, Failure == SoulSwiftError {
+
+    func afterSaveAuthorization(for method: AuthMethod, with saveClosure: ((AuthMethod, Authorization, MyUser) -> Void)?) -> Result<MyUser, SoulSwiftError> {
+        let result = map { ($0.authorization, $0.me) }
+        switch result {
         case .success(let authorization, let me):
-            saveAuthorization?(authorization)
+            saveClosure?(method, authorization, me)
             return .success(me)
         case .failure(let error):
             return .failure(error)

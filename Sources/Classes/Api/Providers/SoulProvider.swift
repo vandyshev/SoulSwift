@@ -24,13 +24,17 @@ class SoulProvider: SoulProviderProtocol {
     }
 
     func request(_ request: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {
+        self.request(refreshToken: true, request, completion: completion)
+    }
+
+    func request(refreshToken: Bool, _ request: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {
         guard let urlRequest = urlRequest(soulRequest: request) else {
             completion(.failure(SoulSwiftError.requestError))
             return
         }
         let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             guard let sSelf = self else { return }
-            if sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response) {
+            if refreshToken && sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response) {
                 sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf, request: request, completion: completion)
                 return
             }

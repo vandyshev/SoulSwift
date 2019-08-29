@@ -20,8 +20,8 @@ struct SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
     }
 
     private func getAuthorization(_ request: URLRequest) -> String? {
-        guard let userId = storageService.userId else { return nil }
-        guard let sessionToken = storageService.sessionToken else { return nil }
+        guard let userId = storageService.credential?.me.id else { return nil }
+        guard var sessionToken = storageService.credential?.authorization.sessionToken else { return nil }
         guard let httpMethod = request.httpMethod else { return nil }
         guard let url = request.url else { return nil }
         guard let httpPath = httpPath(for: url) else { return nil }

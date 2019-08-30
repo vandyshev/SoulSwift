@@ -1,3 +1,7 @@
+private enum Constants {
+    static let maxRetryCount = 3
+}
+
 protocol SoulProviderProtocol: class {
     func request(_ soulRequest: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void)
 }
@@ -24,7 +28,7 @@ class SoulProvider: SoulProviderProtocol {
     }
 
     func request(_ soulRequest: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {
-        request(soulRequest, retryCount: 1, completion: completion)
+        request(soulRequest, retryCount: Constants.maxRetryCount, completion: completion)
     }
 
     func request(_ soulRequest: SoulRequest, retryCount: Int, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {

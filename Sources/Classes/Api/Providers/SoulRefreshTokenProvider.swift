@@ -1,12 +1,12 @@
 import Foundation
 
-typealias VoidHandler = () -> Void
+typealias CompletionHandler = (Result<MyUser, SoulSwiftError>) -> Void
 
 protocol SoulRefreshTokenProviderProtocol {
 
     var isTokenRefreshing: Bool { get }
     func isNeedRefreshToken(for response: URLResponse?) -> Bool
-    func refreshToken(provider: SoulProvider, completion: @escaping () -> Void)
+    func refreshToken(provider: SoulProvider, completion: @escaping CompletionHandler)
 }
 // swiftlint:disable line_length
 class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
@@ -14,7 +14,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
     var isTokenRefreshing = false
 
     private var storageService: StorageServiceProtocol
-    private var requestStorage: [VoidHandler] = []
+    private var requestStorage: [CompletionHandler] = []
 
     init(storageService: StorageServiceProtocol) {
         self.storageService = storageService
@@ -25,18 +25,18 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
         return httpResponse.statusCode == 401
     }
 
-    func refreshToken(provider: SoulProvider, completion: @escaping () -> Void) {
+    func refreshToken(provider: SoulProvider, completion: @escaping CompletionHandler) {
         if isTokenRefreshing {
             requestStorage.append(completion)
         } else {
             isTokenRefreshing = true
             requestStorage.append(completion)
-            requestRefreshToken(provider: provider) { [weak self] _ in
+            requestRefreshToken(provider: provider) { [weak self] result in
                 guard let sSelf = self else { return }
                 sSelf.isTokenRefreshing = false
                 while sSelf.requestStorage.count > 0 {
                     let item = sSelf.requestStorage.removeFirst()
-                    completion()
+                    completion(result)
                 }
             }
         }

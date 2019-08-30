@@ -1,5 +1,5 @@
 private enum Constants {
-    static let maxRetryCount = 3
+    static let maxRetryCount = 5
 }
 
 protocol SoulProviderProtocol: class {
@@ -39,8 +39,13 @@ class SoulProvider: SoulProviderProtocol {
         let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             guard let sSelf = self else { return }
             if sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response), retryCount > 0 {
-                sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf) {
-                    sSelf.request(soulRequest, retryCount: retryCount - 1, completion: completion)
+                sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf) { result in
+                    switch result {
+                    case .success:
+                        sSelf.request(soulRequest, retryCount: retryCount - 1, completion: completion)
+                    case .failure:
+                        sSelf.request(soulRequest, retryCount: 0, completion: completion)
+                    }
                 }
             } else {
                 soulResponse(data, response, error)

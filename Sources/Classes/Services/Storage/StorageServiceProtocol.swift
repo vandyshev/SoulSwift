@@ -46,13 +46,13 @@ final class StorageService: StorageServiceProtocol {
         }
     }
 
-    private func fetchObject<Key, Element>(for key: Key) throws -> Element? where Key: Hashable, Element: Decodable {
+    private func fetchObject<Key, Element>(for key: Key) throws -> Element where Key: Hashable, Element: Decodable {
         guard let stringKey = key as? String else {
             throw StorageServiceError.wrongKeyType
         }
 
         guard let data = userDefaults.data(forKey: stringKey) else {
-            return nil
+            throw StorageServiceError.wrongKeyType
         }
 
         return try jsonDecoder.decode(Element.self, from: data)

@@ -23,7 +23,7 @@ class ApplicationServiceTests: QuickSpec {
                 it("call completion") {
                     var isDone = false
 
-                    waitUntil { done in
+                    waitUntil(timeout: 60) { done in
                         SoulSwiftClient.shared.soulApplicationService?.features { _ in
                             isDone = true
                             done()

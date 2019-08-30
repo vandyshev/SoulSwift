@@ -9,8 +9,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        setenv("CFNETWORK_DIAGNOSTICS", "3", 1)
-        // Do any additional setup after loading the view, typically from a nib.
-//        setupFakeData()
         initializeSoulSwift()
         downloadFeatures()
     }
@@ -21,11 +19,6 @@ class ViewController: UIViewController {
     }
 
     // MARK: - API Stuff
-
-    private func setupFakeData() {
-        UserDefaults.standard.set("5d67779ece8cec11674dbf89", forKey: "SOUL_SWIFT_USER_ID")
-        UserDefaults.standard.set("14881bfa38505885d1cc9d42d62ce2e2", forKey: "SOUL_SWIFT_SESSION_TOKEN")
-    }
 
     private func initializeSoulSwift() {
         let configuration = SoulConfiguration(

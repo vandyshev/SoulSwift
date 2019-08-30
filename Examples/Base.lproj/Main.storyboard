@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14766.13"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+        <capability name="iOS 13.0 system colors" minToolsVersion="11.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -19,37 +20,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Gqs-WP-w37">
-                                <rect key="frame" x="0.0" y="50" width="375" height="98"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="Gqs-WP-w37">
+                                <rect key="frame" x="10" y="50" width="355" height="198"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="lpc-GX-IbC">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="34"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="lpc-GX-IbC">
+                                        <rect key="frame" x="0.0" y="0.0" width="355" height="34"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="e.vandyshev@gmail.com" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="okg-5n-f9e">
-                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="34"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="172.5" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZ6-xD-00k">
-                                                <rect key="frame" x="187.5" y="0.0" width="187.5" height="34"/>
-                                                <state key="normal" title="Email request"/>
+                                                <rect key="frame" x="182.5" y="0.0" width="172.5" height="34"/>
+                                                <color key="backgroundColor" name="systemIndigoColor" catalog="System" colorSpace="catalog"/>
+                                                <state key="normal" title="Email request">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="emailRequest:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="x8z-yu-LEv"/>
                                                 </connections>
                                             </button>
                                         </subviews>
                                     </stackView>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="gol-Yc-vBf">
-                                        <rect key="frame" x="0.0" y="34" width="375" height="34"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gol-Yc-vBf">
+                                        <rect key="frame" x="0.0" y="84" width="355" height="34"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b4t-Or-SU7">
-                                                <rect key="frame" x="0.0" y="0.0" width="187.5" height="34"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="172.5" height="34"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GjB-AG-obL">
-                                                <rect key="frame" x="187.5" y="0.0" width="187.5" height="34"/>
-                                                <state key="normal" title="Email verify"/>
+                                                <rect key="frame" x="182.5" y="0.0" width="172.5" height="34"/>
+                                                <color key="backgroundColor" name="systemIndigoColor" catalog="System" colorSpace="catalog"/>
+                                                <state key="normal" title="Email verify">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="emailVerify:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="pqD-FT-R8H"/>
                                                 </connections>
@@ -57,8 +64,11 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MeE-m2-cFQ">
-                                        <rect key="frame" x="0.0" y="68" width="375" height="30"/>
-                                        <state key="normal" title="Me"/>
+                                        <rect key="frame" x="0.0" y="168" width="355" height="30"/>
+                                        <color key="backgroundColor" name="systemIndigoColor" catalog="System" colorSpace="catalog"/>
+                                        <state key="normal" title="Me">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
                                         <connections>
                                             <action selector="me:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="ai2-bb-lyf"/>
                                         </connections>
@@ -69,8 +79,8 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Gqs-WP-w37" secondAttribute="bottom" id="HyO-eF-YiC"/>
-                            <constraint firstAttribute="trailing" secondItem="Gqs-WP-w37" secondAttribute="trailing" id="P2m-WE-WI8"/>
-                            <constraint firstItem="Gqs-WP-w37" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="SFa-qt-d5V"/>
+                            <constraint firstAttribute="trailing" secondItem="Gqs-WP-w37" secondAttribute="trailing" constant="10" id="P2m-WE-WI8"/>
+                            <constraint firstItem="Gqs-WP-w37" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="10" id="SFa-qt-d5V"/>
                             <constraint firstItem="Gqs-WP-w37" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="50" id="rYk-Dx-0d0"/>
                         </constraints>
                     </view>

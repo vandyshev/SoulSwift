@@ -1,12 +1,12 @@
 import Foundation
 
-typealias CompletionHandler = (Result<SoulResponse, SoulSwiftError>) -> Void
+typealias VoidHandler = () -> Void
 
 protocol SoulRefreshTokenProviderProtocol {
 
     var isTokenRefreshing: Bool { get }
     func isNeedRefreshToken(for response: URLResponse?) -> Bool
-    func refreshToken(provider: SoulProvider, request: SoulRequest, completion: @escaping CompletionHandler)
+    func refreshToken(provider: SoulProvider, completion: @escaping () -> Void)
 }
 // swiftlint:disable line_length
 class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
@@ -14,9 +14,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
     var isTokenRefreshing = false
 
     private var storageService: StorageServiceProtocol
-
-    private var isTokenHasBeenUpdated = false
-    private var requestStorage: [(SoulRequest, CompletionHandler)] = []
+    private var requestStorage: [VoidHandler] = []
 
     init(storageService: StorageServiceProtocol) {
         self.storageService = storageService
@@ -27,18 +25,18 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
         return httpResponse.statusCode == 401
     }
 
-    func refreshToken(provider: SoulProvider, request: SoulRequest, completion: @escaping CompletionHandler) {
+    func refreshToken(provider: SoulProvider, completion: @escaping () -> Void) {
         if isTokenRefreshing {
-            requestStorage.append((request, completion))
+            requestStorage.append(completion)
         } else {
             isTokenRefreshing = true
-            requestStorage.append((request, completion))
+            requestStorage.append(completion)
             requestRefreshToken(provider: provider) { [weak self] _ in
                 guard let sSelf = self else { return }
                 sSelf.isTokenRefreshing = false
                 while sSelf.requestStorage.count > 0 {
                     let item = sSelf.requestStorage.removeFirst()
-                    provider.request(refreshToken: false, item.0, completion: item.1)
+                    completion()
                 }
             }
         }

@@ -1,5 +1,5 @@
 protocol SoulProviderProtocol: class {
-    func request(_ request: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void)
+    func request(_ soulRequest: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void)
 }
 
 class SoulProvider: SoulProviderProtocol {
@@ -23,37 +23,23 @@ class SoulProvider: SoulProviderProtocol {
         self.soulRefreshTokenProvider = soulRefreshTokenProvider
     }
 
-    func request(_ request: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {
-        self.request(refreshToken: true, request, completion: completion)
+    func request(_ soulRequest: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {
+        request(soulRequest, retryCount: 1, completion: completion)
     }
 
-    func request(refreshToken: Bool, _ request: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {
-        guard let urlRequest = urlRequest(soulRequest: request) else {
+    func request(_ soulRequest: SoulRequest, retryCount: Int, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void) {
+        guard let urlRequest = urlRequest(soulRequest: soulRequest) else {
             completion(.failure(SoulSwiftError.requestError))
             return
         }
         let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
             guard let sSelf = self else { return }
-            if refreshToken && sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response) {
-                sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf, request: request, completion: completion)
-                return
-            }
-            let result: Result<SoulResponse, SoulSwiftError>
-            if let error = error {
-                result = .failure(SoulSwiftError.networkError(error))
-            } else if let error = soulError(from: data, and: response) {
-                result = .failure(SoulSwiftError.apiError(error))
-            } else if let data = data {
-                do {
-                    result = .success(try sSelf.decoder.decode(SoulResponse.self, from: data))
-                } catch {
-                    result = .failure(SoulSwiftError.decoderError)
+            if sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response), retryCount > 0 {
+                sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf) {
+                    sSelf.request(soulRequest, retryCount: retryCount - 1, completion: completion)
                 }
             } else {
-                result = .failure(SoulSwiftError.unknown)
-            }
-            DispatchQueue.main.async {
-                completion(result)
+                soulResponse(data, response, error)
             }
         }
         task.resume()
@@ -63,6 +49,26 @@ class SoulProvider: SoulProviderProtocol {
             guard let data = data else { return nil }
             if (200...299).contains(response.statusCode) { return nil }
             return try? decoder.decode(SoulErrorResponse.self, from: data).error
+        }
+
+        func soulResponse(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
+            let result: Result<SoulResponse, SoulSwiftError>
+            if let error = error {
+                result = .failure(SoulSwiftError.networkError(error))
+            } else if let error = soulError(from: data, and: response) {
+                result = .failure(SoulSwiftError.apiError(error))
+            } else if let data = data {
+                do {
+                    result = .success(try decoder.decode(SoulResponse.self, from: data))
+                } catch {
+                    result = .failure(SoulSwiftError.decoderError)
+                }
+            } else {
+                result = .failure(SoulSwiftError.unknown)
+            }
+            DispatchQueue.main.async {
+                completion(result)
+            }
         }
     }
 

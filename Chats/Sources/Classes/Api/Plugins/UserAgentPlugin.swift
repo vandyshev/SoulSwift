@@ -12,13 +12,13 @@ struct UserAgentPlugin: PluginType {
 
     func prepare(_ request: URLRequest, target: TargetType) -> URLRequest {
         var request = request
-        SoulSwiftClient.shared.soulConfiguration
+        SoulSwiftChatClient.shared.soulConfiguration
         request.addValue(getUserAgent(), forHTTPHeaderField: "User-Agent")
         return request
     }
 
     private func getUserAgent() -> String {
-        let appName = SoulSwiftClient.shared.soulConfiguration.appName
+        let appName = SoulSwiftChatClient.shared.soulConfiguration.appName
         let appVersion = stringFromBundle(for: Constants.bundleShortVersionStringKey) ?? "" // 1.2.3-production
         let systemName = UIDevice.current.systemName // iOS
         let systemVersion = UIDevice.current.systemVersion // 8.3

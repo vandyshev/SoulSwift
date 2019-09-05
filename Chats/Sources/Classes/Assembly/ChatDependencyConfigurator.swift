@@ -1,9 +1,9 @@
 import Foundation
 import Swinject
 
-final class DependencyConfigurator {
+final class ChatDependencyConfigurator {
 
-    static let shared = DependencyConfigurator()
+    static let shared = ChatDependencyConfigurator()
 
     private var assembler: Assembler
 
@@ -12,8 +12,6 @@ final class DependencyConfigurator {
     private init() {
         assembler = Assembler([
             CoreComponents(),
-            ApplicationServiceAssembly(),
-            MeServiceAssembly(),
             ChatAssembly(),
             PushServiceAssembly(),
             ErrorServiceAssembly()

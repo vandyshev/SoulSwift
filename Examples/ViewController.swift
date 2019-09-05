@@ -28,6 +28,14 @@ class ViewController: UIViewController {
             chatURL: "wss://chats-testing.soulplatform.com/",
             chatApiKey: "1b7e5656-b0f3-4190-a368-c8ac01ac0373")
         SoulSwiftClient.shared.setup(withSoulConfiguration: configuration)
+
+//        let configuration = SoulConfiguration(
+//            baseURL: "https://testing-api.soulplatform.com/",
+//            apiKey: "c5d5fee0d04e64b6cf2d898e83c21fc6",
+//            appName: "Pure",
+//            chatURL: "wss://chats-testing.soulplatform.com/",
+//            chatApiKey: "1b7e5656-b0f3-4190-a368-c8ac01ac0373")
+//        SoulSwiftChatClient.shared.setup(withSoulConfiguration: configuration)
     }
 
     private func downloadFeatures() {

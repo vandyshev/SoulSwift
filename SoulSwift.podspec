@@ -48,5 +48,10 @@ TODO: Add long description of the pod here.
 
   s.subspec 'Chats' do |ss|
     ss.source_files = 'Chats/Sources/Classes/**/*'
+    ss.dependency "SoulSwift/Core"
+    ss.dependency 'Moya', '~> 13.0'
+    ss.dependency 'Starscream', '~> 3.0.2'
+    ss.dependency 'Swinject', '~> 2.5'
+    ss.dependency 'SwinjectAutoregistration', '~> 2.5'
   end
 end

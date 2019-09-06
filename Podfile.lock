@@ -1,21 +1,11 @@
 PODS:
-  - Alamofire (4.8.2)
-  - Moya (13.0.1):
-    - Moya/Core (= 13.0.1)
-  - Moya/Core (13.0.1):
-    - Alamofire (~> 4.1)
-    - Result (~> 4.1)
   - Nimble (8.0.2)
   - Quick (2.1.0)
-  - Result (4.1.0)
   - SoulSwift (0.2.2):
     - SoulSwift/Core (= 0.2.2)
   - SoulSwift/Chats (0.2.2):
-    - Moya (~> 13.0)
     - SoulSwift/Core
     - Starscream (~> 3.0.2)
-    - Swinject (~> 2.5)
-    - SwinjectAutoregistration (~> 2.5)
   - SoulSwift/Core (0.2.2):
     - Swinject (~> 2.5)
     - SwinjectAutoregistration (~> 2.5)
@@ -32,11 +22,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - Alamofire
-    - Moya
     - Nimble
     - Quick
-    - Result
     - Starscream
     - Swinject
     - SwinjectAutoregistration
@@ -46,12 +33,9 @@ EXTERNAL SOURCES:
     :path: "."
 
 SPEC CHECKSUMS:
-  Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
-  Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
   Nimble: 622629381bda1dd5678162f21f1368cec7cbba60
   Quick: 4be43f6634acfa727dd106bdf3929ce125ffa79d
-  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
-  SoulSwift: 39d68b1e1c1c5fd87e7731cbea612e36966f384c
+  SoulSwift: 2080f62973dfb156b686ab229c5abb1e356a4513
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   Swinject: cf7458774b1b00323080a9c67e47a1ee7f9d2af1
   SwinjectAutoregistration: d0de7e48db3601b8b130f2f84e5a8399e0224135

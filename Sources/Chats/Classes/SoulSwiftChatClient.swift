@@ -1,8 +1,8 @@
 import SwinjectAutoregistration
 
-public class SoulSwiftChatClient {
+public class SoulChatServiceClient {
 
-    public static var shared = SoulSwiftChatClient()
+    public static var shared = SoulChatServiceClient()
 
     private init() {
         errorService = resolver ~> ErrorServiceProtocol.self

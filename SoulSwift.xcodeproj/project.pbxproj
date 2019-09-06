@@ -13,7 +13,12 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		65F3C617262397DA7B388446 /* Pods_SoulSwift_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC2CD5BDA3D29CB693EEAA56 /* Pods_SoulSwift_Example.framework */; };
-		7E1769EA2305988400E4B800 /* ApplicationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E1769E92305988400E4B800 /* ApplicationServiceTests.swift */; };
+		7E0D328023216784008F79F6 /* ChatApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327923216784008F79F6 /* ChatApiTests.swift */; };
+		7E0D328123216784008F79F6 /* ChatMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327A23216784008F79F6 /* ChatMappingTests.swift */; };
+		7E0D328223216784008F79F6 /* DateServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327B23216784008F79F6 /* DateServiceMock.swift */; };
+		7E0D328323216784008F79F6 /* ChatClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327C23216784008F79F6 /* ChatClientTests.swift */; };
+		7E0D328423216784008F79F6 /* FakeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327D23216784008F79F6 /* FakeStorage.swift */; };
+		7E0D328523216784008F79F6 /* ApplicationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327F23216784008F79F6 /* ApplicationServiceTests.swift */; };
 		EFF2D32C28E51FCA84402F80 /* Pods_SoulSwift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E1DE2AEEB2304281EFC3B5 /* Pods_SoulSwift_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,7 +46,12 @@
 		607FACE51AFB9204008FA782 /* SoulSwift_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoulSwift_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7BEFF74E7D8D958AD3648074 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		7E1769E92305988400E4B800 /* ApplicationServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationServiceTests.swift; sourceTree = "<group>"; };
+		7E0D327923216784008F79F6 /* ChatApiTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatApiTests.swift; sourceTree = "<group>"; };
+		7E0D327A23216784008F79F6 /* ChatMappingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMappingTests.swift; sourceTree = "<group>"; };
+		7E0D327B23216784008F79F6 /* DateServiceMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateServiceMock.swift; sourceTree = "<group>"; };
+		7E0D327C23216784008F79F6 /* ChatClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatClientTests.swift; sourceTree = "<group>"; };
+		7E0D327D23216784008F79F6 /* FakeStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeStorage.swift; sourceTree = "<group>"; };
+		7E0D327F23216784008F79F6 /* ApplicationServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationServiceTests.swift; sourceTree = "<group>"; };
 		AC2CD5BDA3D29CB693EEAA56 /* Pods_SoulSwift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSwift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE9475118BBE221A369061AC /* SoulSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = SoulSwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		C3E1DE2AEEB2304281EFC3B5 /* Pods_SoulSwift_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSwift_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,8 +125,9 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				7E0D327723216784008F79F6 /* Chats */,
+				7E0D327E23216784008F79F6 /* Core */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
-				7E1769E92305988400E4B800 /* ApplicationServiceTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -137,6 +148,34 @@
 				7BEFF74E7D8D958AD3648074 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		7E0D327723216784008F79F6 /* Chats */ = {
+			isa = PBXGroup;
+			children = (
+				7E0D327823216784008F79F6 /* Chat */,
+				7E0D327B23216784008F79F6 /* DateServiceMock.swift */,
+				7E0D327C23216784008F79F6 /* ChatClientTests.swift */,
+				7E0D327D23216784008F79F6 /* FakeStorage.swift */,
+			);
+			path = Chats;
+			sourceTree = "<group>";
+		};
+		7E0D327823216784008F79F6 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				7E0D327923216784008F79F6 /* ChatApiTests.swift */,
+				7E0D327A23216784008F79F6 /* ChatMappingTests.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		7E0D327E23216784008F79F6 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				7E0D327F23216784008F79F6 /* ApplicationServiceTests.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 		8491D8DC37E0724777E4E638 /* Frameworks */ = {
@@ -292,9 +331,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SoulSwift_Example/Pods-SoulSwift_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
-				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/SoulSwift/SoulSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
@@ -302,9 +338,6 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SoulSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
@@ -392,7 +425,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7E1769EA2305988400E4B800 /* ApplicationServiceTests.swift in Sources */,
+				7E0D328523216784008F79F6 /* ApplicationServiceTests.swift in Sources */,
+				7E0D328123216784008F79F6 /* ChatMappingTests.swift in Sources */,
+				7E0D328223216784008F79F6 /* DateServiceMock.swift in Sources */,
+				7E0D328323216784008F79F6 /* ChatClientTests.swift in Sources */,
+				7E0D328023216784008F79F6 /* ChatApiTests.swift in Sources */,
+				7E0D328423216784008F79F6 /* FakeStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

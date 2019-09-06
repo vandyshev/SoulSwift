@@ -51,7 +51,7 @@ final class ChatManager: ChatManagerProtocol {
 
     private let chatServiceObserver: ChatServiceObserverProtocol
     private let chatServiceMessageSender: ChatServiceMessageSenderProtocol
-    private let chatHistoryService: ChatHistoryServiceProtocol
+    private let chatHistoryService: DreamChatServiceProtocol
     private let pushManager: ChatLocalPushManagerProtocol
     private let chatClient: ChatClientProtocol
     private let messageMapper: MessageMapperProtocol
@@ -59,7 +59,7 @@ final class ChatManager: ChatManagerProtocol {
 
     init(chatServiceObserver: ChatServiceObserverProtocol,
          chatServiceMessageSender: ChatServiceMessageSenderProtocol,
-         chatHistoryService: ChatHistoryServiceProtocol,
+         chatHistoryService: DreamChatServiceProtocol,
          chatClient: ChatClientProtocol,
          pushManager: ChatLocalPushManagerProtocol,
          messageMapper: MessageMapperProtocol,

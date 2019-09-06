@@ -53,11 +53,13 @@ final class ChatAssembly: Assembly {
                                          errorService: resolver~>)
         }
 
-        container.register(ChatHistoryServiceProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
-            ChatHistoryService(authHelper: resolver ~> (AuthHelperProtocol.self, argument: config.appName),
-                                   urlFactory: resolver ~> (ChatApiURLFactoryProtocol.self, argument: config),
-                                   errorService: resolver~>)
-        }
+//        container.register(ChatHistoryServiceProtocol.self) { (resolver: Resolver, config: SoulConfiguration) in
+//            ChatHistoryService(authHelper: resolver ~> (AuthHelperProtocol.self, argument: config.appName),
+//                                   urlFactory: resolver ~> (ChatApiURLFactoryProtocol.self, argument: config),
+//                                   errorService: resolver~>)
+//        }
+
+        container.autoregister(DreamChatServiceProtocol.self, initializer: DreamChatService.init)
 
         container.register(MessageMapperProtocol.self) { resolver in
             MessageMapper(storage: resolver~>)
@@ -67,7 +69,7 @@ final class ChatAssembly: Assembly {
             let client = resolver ~> (ChatClientProtocol.self, argument: config)
             return ChatManager(chatServiceObserver: resolver ~> (ChatServiceObserverProtocol.self, argument: client),
                                    chatServiceMessageSender: resolver ~> (ChatServiceMessageSenderProtocol.self, argument: client),
-                                   chatHistoryService: resolver ~> (ChatHistoryServiceProtocol.self, argument: config),
+                                   chatHistoryService: resolver ~> (DreamChatServiceProtocol.self, argument: config),
                                    chatClient: resolver ~> (ChatClientProtocol.self, argument: config),
                                    pushManager: resolver ~> (ChatLocalPushManagerProtocol.self, argument: config),
                                    messageMapper: resolver~>,

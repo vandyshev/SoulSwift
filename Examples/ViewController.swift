@@ -25,9 +25,9 @@ class ViewController: UIViewController {
             baseURL: "https://testing-api.soulplatform.com/",
             apiKey: "c5d5fee0d04e64b6cf2d898e83c21fc6",
             appName: "Pure",
-            chatURL: "wss://chats-testing.soulplatform.com/",
+            chatURL: "https://chats-testing.soulplatform.com/",
             chatApiKey: "1b7e5656-b0f3-4190-a368-c8ac01ac0373")
-        SoulSwiftClient.shared.setup(withSoulConfiguration: configuration)
+        SoulClient.shared.setup(withSoulConfiguration: configuration)
 
 //        let configuration = SoulConfiguration(
 //            baseURL: "https://testing-api.soulplatform.com/",
@@ -39,7 +39,7 @@ class ViewController: UIViewController {
     }
 
     private func downloadFeatures() {
-        SoulSwiftClient.shared.soulApplicationService?.features { result in
+        SoulClient.shared.soulApplicationService?.features { result in
             switch result {
             case .success(let features):
                 print(features)
@@ -56,7 +56,7 @@ class ViewController: UIViewController {
 
     @IBAction func emailRequest(_ sender: Any) {
         guard let email = emailTextField.text else { return }
-        SoulSwiftClient.shared.soulAuthService?.emailCodeRequest(email: email, completion: { result in
+        SoulClient.shared.soulAuthService?.emailCodeRequest(email: email, completion: { result in
             switch result {
             case .success(let me):
                 print(me)
@@ -74,7 +74,7 @@ class ViewController: UIViewController {
     @IBAction func emailVerify(_ sender: Any) {
         guard let email = emailTextField.text else { return }
         guard let code = codeTextField.text else { return }
-        SoulSwiftClient.shared.soulAuthService?.emailCodeVerify(email: email, code: code, completion: { result in
+        SoulClient.shared.soulAuthService?.emailCodeVerify(email: email, code: code, completion: { result in
             switch result {
             case .success(let me):
                 print(me)
@@ -90,7 +90,7 @@ class ViewController: UIViewController {
     }
 
     @IBAction func me(_ sender: Any) {
-        SoulSwiftClient.shared.soulMeService?.me { result in
+        SoulClient.shared.soulMeService?.me { result in
             switch result {
             case .success(let me):
                 print("me: \(me)")

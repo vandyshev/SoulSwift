@@ -3,8 +3,8 @@ use_frameworks!
 inhibit_all_warnings!
 
 target 'SoulSwift_Example' do
-  pod 'SoulSwift', :path => '.'
-	pod 'SoulSwift/Chats', :path => '.'
+  pod 'SoulSwift/Soul', :path => '.'
+	pod 'SoulSwift/Dream', :path => '.'
 
   target 'SoulSwift_Tests' do
     inherit! :search_paths

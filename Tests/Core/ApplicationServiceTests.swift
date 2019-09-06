@@ -14,7 +14,7 @@ class ApplicationServiceTests: QuickSpec {
             appName: "Pure",
             chatURL: "wss://chats-testing.soulplatform.com/",
             chatApiKey: "1b7e5656-b0f3-4190-a368-c8ac01ac0373")
-        SoulSwiftClient.shared.setup(withSoulConfiguration: configuration)
+        SoulClient.shared.setup(withSoulConfiguration: configuration)
     }
 
     override func spec() {
@@ -24,7 +24,7 @@ class ApplicationServiceTests: QuickSpec {
                     var isDone = false
 
                     waitUntil(timeout: 60) { done in
-                        SoulSwiftClient.shared.soulApplicationService?.features { _ in
+                        SoulClient.shared.soulApplicationService?.features { _ in
                             isDone = true
                             done()
                         }

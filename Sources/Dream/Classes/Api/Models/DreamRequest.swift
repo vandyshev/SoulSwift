@@ -1,5 +1,5 @@
 class DreamRequest: SoulRequest {
-    override init(baseURL: String = SoulClient.shared.soulConfiguration.chatURL,
+    override init(baseURL: String = DreamClient.shared.dreamConfiguration.chatHttpURL,
                   httpMethod: SoulRequest.HTTPMethod = .GET,
                   soulEndpoint: SoulEndpoint,
                   queryParameters: [String: String]? = nil,

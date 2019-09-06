@@ -11,12 +11,12 @@ public class DreamClient {
     public private(set) var chatManager: ChatManagerProtocol?
     public private(set) var errorService: ErrorServiceProtocol
 
-    private(set) var soulConfiguration: SoulConfiguration!
+    private(set) var dreamConfiguration: DreamConfiguration!
 
     private let resolver = ChatDependencyConfigurator.shared.resolver
 
-    public func setup(withSoulConfiguration soulConfiguration: SoulConfiguration) {
-        self.soulConfiguration = soulConfiguration
-        self.chatManager = resolver.resolve(ChatManagerProtocol.self, argument: soulConfiguration)
+    public func setup(withDreamConfiguration dreamConfiguration: DreamConfiguration) {
+        self.dreamConfiguration = dreamConfiguration
+        self.chatManager = resolver.resolve(ChatManagerProtocol.self, argument: SoulClient.shared.soulConfiguration)
     }
 }

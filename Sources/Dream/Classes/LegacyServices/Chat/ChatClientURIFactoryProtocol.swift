@@ -86,8 +86,8 @@ final class ChatClientURIFactory: ChatClientURIFactoryProtocol, ChatApiURLFactor
     }
 }
 
-extension SoulConfiguration {
+extension DreamConfiguration {
     var chatURIFactoryConfig: ChatURIFactoryConfig {
-        return ChatURIFactoryConfig(baseUrlString: chatURL, apiKey: chatApiKey)
+        return ChatURIFactoryConfig(baseUrlString: chatHttpURL, apiKey: chatApiKey)
     }
 }

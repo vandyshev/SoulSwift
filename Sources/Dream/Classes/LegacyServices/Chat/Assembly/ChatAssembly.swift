@@ -15,9 +15,9 @@ final class ChatAssembly: Assembly {
             resolver ~> (ChatClientURIFactory.self, argument: config)
         }
 
-        container.register(ChatClientURIFactory.self) { (resolver: Resolver, config: SoulConfiguration) in
-            ChatClientURIFactory(config: config.chatURIFactoryConfig,
-                                     authHelper: resolver ~> (AuthHelperProtocol.self, argument: config.appName),
+        container.register(ChatClientURIFactory.self) { (resolver: Resolver, config: DreamConfiguration) in
+            ChatClientURIFactory(config: DreamClient.shared.dreamConfiguration.chatURIFactoryConfig,
+                                     authHelper: resolver ~> (AuthHelperProtocol.self, argument: SoulClient.shared.soulConfiguration.appName),
                                      deviceHandler: resolver~>)
         }
 

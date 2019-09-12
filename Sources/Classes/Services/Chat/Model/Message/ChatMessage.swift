@@ -26,18 +26,22 @@ public struct ChatMessage: Equatable {
 
     /// `lng` - longitude
     let longitude: Double?
+
+    /// `s` - system data
+    let systemData: SystemDataRepresentation?
 }
 
 extension ChatMessage: Codable {
     enum CodingKeys: String, CodingKey {
-        case messageId = "id"
-        case userId    = "u"
-        case timestamp = "t"
-        case text      = "m"
-        case photoId   = "p"
-        case albumName = "pa"
-        case latitude  = "lat"
-        case longitude = "lng"
+        case messageId  = "id"
+        case userId     = "u"
+        case timestamp  = "t"
+        case text       = "m"
+        case photoId    = "p"
+        case albumName  = "pa"
+        case latitude   = "lat"
+        case longitude  = "lng"
+        case systemData = "s"
     }
 }
 
@@ -50,8 +54,12 @@ extension ChatMessage {
         return latitude != nil && longitude != nil
     }
 
+    var isSystemMessage: Bool {
+        return systemData != nil
+    }
+
     var isTextMessage: Bool {
-        return !isPhotoMessage && !isLocationMessage
+        return !isSystemMessage && !isPhotoMessage && !isLocationMessage
     }
 
     var content: MessageContent {
@@ -59,8 +67,12 @@ extension ChatMessage {
             return .location(latitude: lat, longitude: lng)
         } else if let photoId = photoId, let albumName = albumName {
             return .photo(photoId: photoId, albumName: albumName)
-        } else {
+        } else if let systemData = systemData {
+            return .system(data: systemData)
+        } else if !text.isEmpty {
             return .text(text)
+        } else {
+            return .unknown
         }
     }
 }

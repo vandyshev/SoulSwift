@@ -27,7 +27,7 @@ TODO: Add long description of the pod here.
   s.author           = { 'Evgeny Vandyshev' => 'evgeny.vandyshev@soulplatform.com' }
   s.source           = { :git => 'https://github.com/Evgeny Vandyshev/SoulSwift.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/e_vandyshev'
-  s.default_subspec = 'Soul'
+  # s.default_subspec = 'Soul'
 
   s.ios.deployment_target = '8.0'
   s.swift_version = '5.0'
@@ -39,16 +39,22 @@ TODO: Add long description of the pod here.
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   
+  s.subspec 'Core' do |ss|
+    ss.source_files = 'Sources/Core/Classes/**/*'
+    # ss.dependency 'Swinject', '~> 2.5'
+    # ss.dependency 'SwinjectAutoregistration', '~> 2.5'
+  end
 
   s.subspec 'Soul' do |ss|
     ss.source_files = 'Sources/Soul/Classes/**/*'
+    ss.dependency "SoulSwift/Core"
     ss.dependency 'Swinject', '~> 2.5'
     ss.dependency 'SwinjectAutoregistration', '~> 2.5'
   end
 
   s.subspec 'Dream' do |ss|
     ss.source_files = 'Sources/Dream/Classes/**/*'
-    ss.dependency "SoulSwift/Soul"
+    ss.dependency "SoulSwift/Core"
     ss.dependency 'Starscream', '~> 3.0.2'
   end
 end

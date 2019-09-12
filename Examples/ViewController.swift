@@ -43,7 +43,7 @@ class ViewController: UIViewController {
                 print(features)
             case .failure(let error):
                 switch error {
-                case .apiError(let apiError):
+                case .soulError(let apiError):
                     print(apiError.userMessage)
                 default:
                     break
@@ -60,7 +60,7 @@ class ViewController: UIViewController {
                 print(me)
             case .failure(let error):
                 switch error {
-                case .apiError(let apiError):
+                case .soulError(let apiError):
                     print(apiError.userMessage)
                 default:
                     break
@@ -78,7 +78,7 @@ class ViewController: UIViewController {
                 print(me)
             case .failure(let error):
                 switch error {
-                case .apiError(let apiError):
+                case .soulError(let apiError):
                     print(apiError.userMessage)
                 default:
                     break
@@ -94,7 +94,7 @@ class ViewController: UIViewController {
                 print("me: \(me)")
             case .failure(let error):
                 switch error {
-                case .apiError(let apiError):
+                case .soulError(let apiError):
                     print(apiError.userMessage)
                 default:
                     break

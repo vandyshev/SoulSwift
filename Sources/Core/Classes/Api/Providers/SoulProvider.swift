@@ -66,7 +66,7 @@ class SoulProvider: SoulProviderProtocol {
             if let error = error {
                 result = .failure(SoulSwiftError.networkError(error))
             } else if let error = soulError(from: data, and: response) {
-                result = .failure(SoulSwiftError.apiError(error))
+                result = .failure(SoulSwiftError.soulError(error))
             } else if let data = data {
                 do {
                     result = .success(try decoder.decode(Response.self, from: data))

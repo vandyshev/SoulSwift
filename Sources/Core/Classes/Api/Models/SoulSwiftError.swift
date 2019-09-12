@@ -2,7 +2,7 @@ public enum SoulSwiftError: Swift.Error {
     case requestError
     case decoderError
     case refreshToken
-    case apiError(SoulError)
+    case soulError(SoulError)
     case networkError(Swift.Error)
     case unknown
 }

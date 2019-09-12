@@ -1,10 +1,16 @@
 PODS:
   - Nimble (8.0.2)
   - Quick (2.1.0)
+  - SoulSwift (0.2.2):
+    - SoulSwift/Core (= 0.2.2)
+    - SoulSwift/Dream (= 0.2.2)
+    - SoulSwift/Soul (= 0.2.2)
+  - SoulSwift/Core (0.2.2)
   - SoulSwift/Dream (0.2.2):
-    - SoulSwift/Soul
+    - SoulSwift/Core
     - Starscream (~> 3.0.2)
   - SoulSwift/Soul (0.2.2):
+    - SoulSwift/Core
     - Swinject (~> 2.5)
     - SwinjectAutoregistration (~> 2.5)
   - Starscream (3.0.6)
@@ -15,8 +21,7 @@ PODS:
 DEPENDENCIES:
   - Nimble
   - Quick
-  - SoulSwift/Dream (from `.`)
-  - SoulSwift/Soul (from `.`)
+  - SoulSwift (from `.`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -33,11 +38,11 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Nimble: 622629381bda1dd5678162f21f1368cec7cbba60
   Quick: 4be43f6634acfa727dd106bdf3929ce125ffa79d
-  SoulSwift: d226adc8a4228894c93569769b3fc1a303d206d2
+  SoulSwift: 545ae9f32ea3a420f9dbcf8f34f1b0a1e2355b04
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   Swinject: cf7458774b1b00323080a9c67e47a1ee7f9d2af1
   SwinjectAutoregistration: d0de7e48db3601b8b130f2f84e5a8399e0224135
 
-PODFILE CHECKSUM: a286bcd2218b3cd0ed4e24bb8a813497cf3b525e
+PODFILE CHECKSUM: 3774f230cecba03dfc680dc0ea16b0af41ba6619
 
 COCOAPODS: 1.6.2

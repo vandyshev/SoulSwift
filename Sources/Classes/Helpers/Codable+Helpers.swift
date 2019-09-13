@@ -41,7 +41,9 @@ extension KeyedDecodingContainer where Key == DictionaryCodingKeys {
             } else if let value = try? decode(Float.self, forKey: key) {
                 data[key.stringValue] = value
             } else {
-                print("Key %@ type not supported", key.stringValue)
+                if let nested = try? nestedContainer(keyedBy: DictionaryCodingKeys.self, forKey: key) {
+                    data[key.stringValue] = nested.decodeUnknownKeyValues()
+                }
             }
         }
         return data

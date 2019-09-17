@@ -6,6 +6,7 @@ protocol MessagesFactory {
 
 enum MessagesFactoryError: Error {
     case cannotCreateMessage
+    case contentTypeError
 }
 
 extension MessagesFactoryError: LocalizedError {
@@ -13,6 +14,8 @@ extension MessagesFactoryError: LocalizedError {
         switch self {
         case .cannotCreateMessage:
             return "Cannot create message"
+        case .contentTypeError:
+            return "Wrong type of message"
         }
     }
 }
@@ -41,6 +44,8 @@ final class MessagesFactoryImpl: MessagesFactory {
             return try createPhotoMessage(photoId: photoId, albumName: albumName)
         case let .location(latitude: latitude, longitude: longitude):
             return try createGeoMessage(lat: latitude, lng: longitude)
+        case .unknown, .system:
+            throw MessagesFactoryError.contentTypeError
         }
     }
 
@@ -53,7 +58,8 @@ final class MessagesFactoryImpl: MessagesFactory {
                                   photoId: nil,
                                   albumName: nil,
                                   latitude: nil,
-                                  longitude: nil)
+                                  longitude: nil,
+                                  systemData: nil)
         return message
     }
 
@@ -66,7 +72,8 @@ final class MessagesFactoryImpl: MessagesFactory {
                                   photoId: photoId,
                                   albumName: albumName,
                                   latitude: nil,
-                                  longitude: nil)
+                                  longitude: nil,
+                                  systemData: nil)
         return message
     }
 
@@ -79,7 +86,8 @@ final class MessagesFactoryImpl: MessagesFactory {
                                   photoId: nil,
                                   albumName: nil,
                                   latitude: lat,
-                                  longitude: lng)
+                                  longitude: lng,
+                                  systemData: nil)
         return message
     }
 

@@ -95,7 +95,8 @@ class ChatClientTests: XCTestCase {
                                       photoId: nil,
                                       albumName: nil,
                                       latitude: nil,
-                                      longitude: nil)
+                                      longitude: nil,
+                                      systemData: nil)
             do {
                 try self.client.sendMessage(message)
             } catch {

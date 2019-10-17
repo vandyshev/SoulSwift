@@ -19,6 +19,9 @@ public struct ChatHistoryObject {
 
     /// `message` - message object
     let message: ChatMessage
+
+    /// `read_status` - is message read
+    let isRead: Bool
 }
 
 extension ChatHistoryObject: Codable {
@@ -29,5 +32,6 @@ extension ChatHistoryObject: Codable {
         case channel        = "channel"
         case sentAt         = "sent_at"
         case message        = "message"
+        case isRead         = "read_status"
     }
 }

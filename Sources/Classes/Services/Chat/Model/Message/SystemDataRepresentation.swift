@@ -3,6 +3,10 @@ import UIKit
 public struct SystemDataRepresentation: Equatable {
     public let type: String
     public let data: Data
+    public init(type: String, data: Data) {
+        self.type = type
+        self.data = data
+    }
 }
 
 extension SystemDataRepresentation: Codable {
@@ -10,7 +14,7 @@ extension SystemDataRepresentation: Codable {
         case type = "t"
         case data = "d"
     }
-    
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.type = try container.decode(String.self, forKey: .type)
@@ -18,7 +22,7 @@ extension SystemDataRepresentation: Codable {
         let dict = dictContainer.decodeUnknownKeyValues()
         self.data = try JSONSerialization.data(withJSONObject: dict)
     }
-    
+
     public func encode(to encoder: Encoder) throws {
         assertionFailure()
     }

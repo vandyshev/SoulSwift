@@ -18,9 +18,9 @@ platform :ios do
   end
 
   lane :coverage do
-    xcov(workspace: "SoulSwift.xcworkspace",
-         scheme: "SoulSwift-Example",
-         include_targets: "SoulSwift.framework",
-         output_directory: "fastlane/xcov_output")
+ #   xcov(workspace: "SoulSwift.xcworkspace",
+ #        scheme: "SoulSwift-Example",
+ #        include_targets: "SoulSwift.framework",
+ #        output_directory: "fastlane/xcov_output")
   end
 end

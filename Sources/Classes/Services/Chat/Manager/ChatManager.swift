@@ -14,8 +14,11 @@ public protocol ChatManager: AnyObject {
     func sendMessage(_ messageContent: MessageContent,
                      to channel: String) throws -> Message
 
-    func sendReadEvent(to channel: String, lastMessageDate: Date)
+    func resendMessage(_ message: Message, to channel: String) throws
 
+    func sendReadEvent(to channel: String, lastMessageDate: Date)
+    
+    func subscribe(to channel: String, observer: AnyObject, onMessageEvent: @escaping (MessageEventType) -> Void)
     func subscribe(to channel: String, observer: AnyObject, onMessage: @escaping (Message) -> Void)
     func unsubscribe(from channel: String, observer: AnyObject)
 
@@ -126,9 +129,15 @@ final class ChatManagerImpl: ChatManager {
 
     func sendMessage(_ messageContent: MessageContent,
                      to channel: String) throws -> Message {
-            let chatMessage = try chatServiceMessageSender.sendNewMessage(messageContent, channel: channel)
-            return messageMapper.mapToMessage(chatMessage: chatMessage, channel: channel)
+        let chatMessage = try chatServiceMessageSender.sendNewMessage(messageContent, channel: channel)
+        return messageMapper.mapToMessage(chatMessage: chatMessage, channel: channel)
     }
+    
+    func resendMessage(_ message: Message, to channel: String) throws {
+        let chatMessage = messageMapper.mapToChatMessage(message: message, channel: channel)
+        try chatServiceMessageSender.send(message: chatMessage, channel: channel)
+    }
+    
 
     func sendReadEvent(to channel: String, lastMessageDate: Date) {
         let timestamp = DateHelper.timestamp(from: lastMessageDate)
@@ -153,6 +162,27 @@ final class ChatManagerImpl: ChatManager {
             let mappedMessage = stelf.messageMapper.mapToMessage(chatMessage: message,
                                                                  channel: channel)
             onMessage(mappedMessage)
+        }
+    }
+    
+    func subscribe(to channel: String, observer: AnyObject, onMessageEvent: @escaping (MessageEventType) -> Void) {
+        chatServiceObserver.subscribeToEvents(inChannel: channel, observer: observer) { [weak self] eventPayload in
+            switch eventPayload.event {
+            case .messageFailed(let event):
+                onMessageEvent(.failed(messageId: event.messageId))
+
+            case .messageAcknowledgment(let event):
+                onMessageEvent(.ack(messageId: event.messageId))
+
+            case .deliveryConfirmation(let event):
+                onMessageEvent(.delivered(messageId: event.deliveredMessageId))
+
+            case .readEvent(let event):
+                onMessageEvent(.read(timestamp: event.lastReadMessageTimestamp))
+    
+            case .historySync:
+                break
+            }
         }
     }
 

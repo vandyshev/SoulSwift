@@ -19,7 +19,7 @@ public struct ChatHistoryObject {
 
     /// `message` - message object
     let message: ChatMessage
-    
+
     /// `read_status` - is message read
     let readStatus: Bool
 }

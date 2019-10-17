@@ -9,7 +9,7 @@ public struct Message {
     public let content: MessageContent
     public let direction: MessageDirection
     public let status: MessageStatus
-    
+
     public init(messageID: String,
                 date: Date,
                 userID: String,

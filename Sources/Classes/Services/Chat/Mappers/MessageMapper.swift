@@ -31,7 +31,7 @@ final class MessageMapperImpl: MessageMapper {
                        channel: chatHistoryObject.channel,
                        content: historyMessage.content,
                        direction: getDirection(by: chatHistoryObject.userIdentifier),
-                       status: chatHistoryObject.readStatus ? .read : .sent)
+                       status: chatHistoryObject.isRead ? .read : .sent)
     }
 
     func mapToMessage(chatMessage: ChatMessage, channel: String) -> Message {
@@ -44,7 +44,7 @@ final class MessageMapperImpl: MessageMapper {
                        direction: direction,
                        status: direction == .income ? .sent : .sending)
     }
-    
+
     func mapToChatMessage(message: Message, channel: String) -> ChatMessage {
         var text = ""
         var photoId: String?
@@ -66,7 +66,7 @@ final class MessageMapperImpl: MessageMapper {
         case .unknown:
             break
         }
-        
+
         return ChatMessage(messageId: message.messageID,
                            userId: message.userID,
                            timestamp: message.date.timeIntervalSince1970,

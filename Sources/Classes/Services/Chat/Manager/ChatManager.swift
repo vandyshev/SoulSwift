@@ -11,8 +11,9 @@ public protocol ChatManager: AnyObject {
     func history(with config: HistoryLoadingConfig,
                  completion: @escaping  (Result<[Message], ApiError>) -> Void)
 
-    func sendMessage(_ messageContent: MessageContent,
-                     to channel: String) throws -> Message
+    func sendMessage(messageId: String?,
+                     messageContent: MessageContent,
+                     channel: String) throws -> Message
 
     func resendMessage(_ message: Message, to channel: String) throws
 
@@ -127,9 +128,12 @@ final class ChatManagerImpl: ChatManager {
         }
     }
 
-    func sendMessage(_ messageContent: MessageContent,
-                     to channel: String) throws -> Message {
-        let chatMessage = try chatServiceMessageSender.sendNewMessage(messageContent, channel: channel)
+    func sendMessage(messageId: String?,
+                     messageContent: MessageContent,
+                     channel: String) throws -> Message {
+        let chatMessage = try chatServiceMessageSender.sendNewMessage(messageId: messageId,
+                                                                      messageContent: messageContent,
+                                                                      channel: channel)
         return messageMapper.mapToMessage(chatMessage: chatMessage, channel: channel)
     }
 

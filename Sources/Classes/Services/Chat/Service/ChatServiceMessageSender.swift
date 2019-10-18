@@ -2,7 +2,10 @@ import Foundation
 
 protocol ChatServiceMessageSender {
     @discardableResult
-    func sendNewMessage(_ messageContent: MessageContent, channel: String) throws -> ChatMessage
+    func sendNewMessage(messageId: String?,
+                        messageContent: MessageContent,
+                        channel: String) throws -> ChatMessage
+
     func send(message: ChatMessage, channel: String) throws
 
     func sendReadEvent(lastReadMessageTimestamp: UnixTimeStamp, channel: String) throws
@@ -29,10 +32,13 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
         self.errorService = errorService
     }
 
-    func sendNewMessage(_ messageContent: MessageContent, channel: String) throws -> ChatMessage {
+    func sendNewMessage(messageId: String?,
+                        messageContent: MessageContent,
+                        channel: String) throws -> ChatMessage {
         let message: ChatMessage
         do {
-            message = try messagesFactory.createMessage(messageContent)
+            message = try messagesFactory.createMessage(messageId: messageId,
+                                                        messageContnet: messageContent)
         } catch {
             handleError(error)
             throw error

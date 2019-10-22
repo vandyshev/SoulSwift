@@ -19,7 +19,6 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
     private let errorService: InternalErrorService
     private let provider: MoyaProvider<ChatApi>
     private let decoder: JSONDecoder
-    private let decoderWithoutMilliseconds: JSONDecoder
 
     init(authHelper: AuthHelper,
          urlFactory: ChatApiURLFactory,
@@ -28,11 +27,7 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
         self.urlFactory   = urlFactory
         self.errorService = errorService
         self.provider     = MoyaProvider<ChatApi>(plugins: [NetworkLoggerPlugin(verbose: true)])
-        self.decoder      = ChatHistoryServiceImpl.createJSONDecoder()
-
-        let formatterWithoutMilliseconds = DateFormatter.iso8601WithoutMilliseconds
-        self.decoderWithoutMilliseconds = ChatHistoryServiceImpl
-            .createJSONDecoder(formatterWithoutMilliseconds)
+        self.decoder      = JSONDecoder()
     }
 
     func loadHistory(channel: String,
@@ -47,7 +42,7 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
             switch result {
             case .success(let value):
                 do {
-                    let history = try stelf.decodeHistory(value.data)
+                    let history = try stelf.decoder.decode([ChatHistoryObject].self, from: value.data)
                     completion(.success(history))
                 } catch {
                     let decodableError: ApiError
@@ -60,21 +55,5 @@ final class ChatHistoryServiceImpl: ChatHistoryService {
                 completion(.failure(apiError))
             }
         }
-    }
-
-    private func decodeHistory(_ data: Data) throws -> [ChatHistoryObject] {
-        if let history = try? decoder.decode([ChatHistoryObject].self, from: data) {
-            return history
-        } else {
-            return try decoderWithoutMilliseconds.decode([ChatHistoryObject].self,
-                                                         from: data)
-        }
-    }
-
-    private static func createJSONDecoder(_ formatter: DateFormatter
-                                            = DateFormatter.iso8601Full) -> JSONDecoder {
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .formatted(formatter)
-        return decoder
     }
 }

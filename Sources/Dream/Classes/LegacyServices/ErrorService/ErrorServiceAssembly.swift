@@ -4,14 +4,14 @@ import SwinjectAutoregistration
 class ErrorServiceAssembly: Assembly {
 
     func assemble(container: Container) {
-        container.register(ErrorService.self) { _ in
-            ErrorService()
+        container.register(ErrorServiceImpl.self) { _ in
+            ErrorServiceImpl()
         }.inObjectScope(.container)
-        container.register(ErrorServiceProtocol.self) { resolver in
-            resolver ~> ErrorService.self
+        container.register(ErrorService.self) { resolver in
+            resolver ~> ErrorServiceImpl.self
         }
         container.register(InternalErrorService.self) { resolver in
-            resolver ~> ErrorService.self
+            resolver ~> ErrorServiceImpl.self
         }
     }
 }

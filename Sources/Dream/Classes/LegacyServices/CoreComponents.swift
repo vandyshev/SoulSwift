@@ -14,18 +14,18 @@ final class CoreComponents: Assembly {
             SoulSDKCommonStorage()
         }
 
-        container.register(DeviceHandlerProtocol.self) { resolver in
-            DeviceHandler(storage: resolver~>)
+        container.register(DeviceHandler.self) { resolver in
+            DeviceHandlerImpl(storage: resolver~>)
         }
 
-        container.register(AuthHelperProtocol.self) { (resolver: Resolver, appName: String) in
-            AuthHelper(storage: resolver~>,
+        container.register(AuthHelper.self) { (resolver: Resolver, appName: String) in
+            AuthHelperImpl(storage: resolver~>,
                            dateService: resolver~>,
                            appName: appName)
         }
 
-        container.register(DateServiceProtocol.self) { resolver in
-            DateService(storage: resolver~>)
+        container.register(DateService.self) { resolver in
+            DateServiceImpl(storage: resolver~>)
         }
     }
 }

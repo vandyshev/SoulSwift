@@ -1,11 +1,11 @@
 import UIKit
 
-protocol DateServiceProtocol: AnyObject {
+protocol DateService: AnyObject {
     var currentAdjustedUnixTimeStamp: UnixTimeStamp { get }
     func getAdjustedTimeStamp(from date: Date) -> UnixTimeStamp
 }
 
-final class DateService: DateServiceProtocol {
+final class DateServiceImpl: DateService {
     private let storage: Storage
 
     init(storage: Storage) {

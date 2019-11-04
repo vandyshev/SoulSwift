@@ -1,6 +1,6 @@
 import UIKit
 
-protocol EventFactoryProtocol {
+protocol EventFactory {
     func createReadEvent(lastReadMessageTimestamp: UnixTimeStamp) throws -> ReadEvent
     func createDeliveryConfirmation(deliveredMessageId: String, userIdInMessage: String) throws -> DeliveryConfirmationEvent
 }
@@ -18,12 +18,12 @@ extension EventFactoryError: LocalizedError {
     }
 }
 
-final class EventFactory: EventFactoryProtocol {
+final class EventFactoryImpl: EventFactory {
 
     private let storage: Storage
-    private let dateService: DateServiceProtocol
+    private let dateService: DateService
 
-    init(storage: Storage, dateService: DateServiceProtocol) {
+    init(storage: Storage, dateService: DateService) {
         self.storage = storage
         self.dateService = dateService
     }

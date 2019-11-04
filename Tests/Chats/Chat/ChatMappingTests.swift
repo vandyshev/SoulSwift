@@ -6,19 +6,19 @@ class ChatMappingTests: XCTestCase {
 
     let userIdentifier = "userIdentifier"
 
-    var messagesFactory: MessagesFactoryProtocol!
+    var messagesFactory: MessagesFactory!
     var storage: Storage!
-    var eventFactory: EventFactoryProtocol!
-    var dateService: DateServiceProtocol!
+    var eventFactory: EventFactory!
+    var dateService: DateService!
 
     override func setUp() {
 
         storage = FakeStorage(userID: userIdentifier, sessionToken: "token", serverTimeDelta: 0.1)
         dateService = DateServiceMock(currentAdjustedUnixTimeStamp: 1556020950,
                                       adjustedTimeStampFromDate: 1556020952)
-        messagesFactory = MessagesFactory(storage: storage,
+        messagesFactory = MessagesFactoryImpl(storage: storage,
                                               dateService: dateService)
-        eventFactory = EventFactory(storage: storage,
+        eventFactory = EventFactoryImpl(storage: storage,
                                         dateService: dateService)
     }
 

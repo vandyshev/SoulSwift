@@ -1,6 +1,6 @@
 import Foundation
 
-protocol ChatServiceObserverProtocol {
+protocol ChatServiceObserver {
     func subscribeToAllMessages(observer: AnyObject, onMessage: @escaping (MessagePayload) -> Void)
     func subscribeToAllEvents(observer: AnyObject, onEvent: @escaping (EventPayload) -> Void)
 
@@ -14,12 +14,12 @@ protocol ChatServiceObserverProtocol {
     func unsubscribeFromEventsInChannel(_ channel: String, observer: AnyObject)
 }
 
-final class ChatServiceObserver: ChatServiceObserverProtocol {
+final class ChatServiceObserverImpl: ChatServiceObserver {
 
-    private let chatClient: ChatClientProtocol
+    private let chatClient: ChatClient
     private let decoder = JSONDecoder()
 
-    init(chatClient: ChatClientProtocol) {
+    init(chatClient: ChatClient) {
         self.chatClient = chatClient
         chatClient.subscribe(self) { [weak self] data in
             self?.onPayload(data)

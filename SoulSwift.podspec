@@ -56,5 +56,6 @@ TODO: Add long description of the pod here.
     ss.source_files = 'Sources/Dream/Classes/**/*'
     ss.dependency "SoulSwift/Core"
     ss.dependency 'Starscream', '~> 3.0.2'
+    ss.dependency 'Moya', '~> 13.0'
   end
 end

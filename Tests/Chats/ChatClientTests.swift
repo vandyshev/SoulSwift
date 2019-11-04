@@ -34,21 +34,21 @@ private class SocketMock: Socket {
     }
 }
 
-private class FakeSocketFactory: SocketFactoryProtocol {
+private class FakeSocketFactory: SocketFactory {
     var socket: Socket?
     var hasSocket: Bool { return socket != nil }
 }
 
 class ChatClientTests: XCTestCase {
 
-    private var client: ChatClient!
-    private var errorService: ErrorService!
+    private var client: ChatClientImpl!
+    private var errorService: ErrorServiceImpl!
     private var factory: FakeSocketFactory!
 
     override func setUp() {
         factory = FakeSocketFactory()
-        errorService = ErrorService()
-        client = ChatClient(socketFactory: factory,
+        errorService = ErrorServiceImpl()
+        client = ChatClientImpl(socketFactory: factory,
                                 errorService: errorService)
     }
 

@@ -33,12 +33,12 @@ struct PushPayload {
 }
 
 /// Sends local push notifications
-protocol LocalPushServiceProtocol {
+protocol LocalPushService {
     func sendLocalPush(with payload: PushPayload)
 }
 
 @available (iOS 10, *)
-class LocalPushService: LocalPushServiceProtocol {
+class LocalPushServiceImpl: LocalPushService {
 
     func sendLocalPush(with payload: PushPayload) {
         let content = UNMutableNotificationContent()
@@ -59,7 +59,7 @@ class LocalPushService: LocalPushServiceProtocol {
 }
 
 @available(iOS, deprecated:10.0, message:"Use generateContactInfo()")
-class LocalPushServiceOld: LocalPushServiceProtocol {
+class LocalPushServiceOldImpl: LocalPushService {
 
     func sendLocalPush(with payload: PushPayload) {
         let notification = UILocalNotification()

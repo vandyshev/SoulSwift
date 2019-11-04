@@ -1,11 +1,11 @@
 import UIKit
 
 /// generates uri for ChatClient
-protocol ChatClientURIFactoryProtocol {
+protocol ChatClientURIFactory {
     var wsConnectionURI: URL? { get }
 }
 
-protocol ChatApiURLFactoryProtocol {
+protocol ChatApiURLFactory {
     var httpUrlWithApiKey: String { get }
     var chatAuthMethod: String { get }
     var chatAuthEndpoint: String { get }
@@ -35,18 +35,18 @@ private enum Constants {
     static let deviceIDQueryItemName = "device-id"
 }
 
-final class ChatClientURIFactory: ChatClientURIFactoryProtocol, ChatApiURLFactoryProtocol {
+final class ChatClientURIFactoryImpl: ChatClientURIFactory, ChatApiURLFactory {
 
     private let config: ChatURIFactoryConfig
-    private let authHelper: AuthHelperProtocol
-    private let deviceHandler: DeviceHandlerProtocol
+    private let authHelper: AuthHelper
+    private let deviceHandler: DeviceHandler
 
     var httpUrlWithApiKey: String { return buildBaseUrl(withScheme: Constants.httpScheme) }
     var wsConnectionURI: URL? { return buildWSURI() }
     var chatAuthMethod: String { return Constants.wsAuthMethod }
     var chatAuthEndpoint: String { return Constants.wsAuthEndpoint }
 
-    init(config: ChatURIFactoryConfig, authHelper: AuthHelperProtocol, deviceHandler: DeviceHandlerProtocol) {
+    init(config: ChatURIFactoryConfig, authHelper: AuthHelper, deviceHandler: DeviceHandler) {
         self.authHelper = authHelper
         self.config = config
         self.deviceHandler = deviceHandler

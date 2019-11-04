@@ -1,7 +1,7 @@
 import UIKit
 @testable import SoulSwift
 
-class DateServiceMock: DateServiceProtocol {
+class DateServiceMock: DateService {
     private(set) var currentAdjustedUnixTimeStamp: UnixTimeStamp
 
     private let adjustedTimeStampFromDate: UnixTimeStamp

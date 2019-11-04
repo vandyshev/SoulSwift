@@ -1,7 +1,7 @@
 import Foundation
 
 /// Handle all messenger interactions
-public protocol ChatManagerProtocol: AnyObject {
+public protocol ChatManager: AnyObject {
 
     func start() throws
     func finish()
@@ -9,7 +9,7 @@ public protocol ChatManagerProtocol: AnyObject {
     var isLocalPushNotificationsEnabled: Bool { get set }
 
     func history(with config: HistoryLoadingConfig,
-                 completion: @escaping  (Result<[Message], SoulSwiftError>) -> Void)
+                 completion: @escaping  (Result<[Message], ApiError>) -> Void)
 
     func sendMessage(messageId: String?,
                      messageContent: MessageContent,
@@ -45,7 +45,7 @@ private enum Constants {
     static let defaultOffset = 0
 }
 
-final class ChatManager: ChatManagerProtocol {
+final class ChatManagerImpl: ChatManager {
 
     var connectionStatus: ConnectionStatus { return chatClient.connectionStatus }
     var isLocalPushNotificationsEnabled: Bool {
@@ -53,21 +53,21 @@ final class ChatManager: ChatManagerProtocol {
         set { pushManager.isEnabled = newValue }
     }
 
-    private let chatServiceObserver: ChatServiceObserverProtocol
-    private let chatServiceMessageSender: ChatServiceMessageSenderProtocol
-    private let chatHistoryService: DreamChatServiceProtocol
-    private let pushManager: ChatLocalPushManagerProtocol
-    private let chatClient: ChatClientProtocol
-    private let messageMapper: MessageMapperProtocol
-    private let dateService: DateServiceProtocol
+    private let chatServiceObserver: ChatServiceObserver
+    private let chatServiceMessageSender: ChatServiceMessageSender
+    private let chatHistoryService: ChatHistoryService
+    private let pushManager: ChatLocalPushManager
+    private let chatClient: ChatClient
+    private let messageMapper: MessageMapper
+    private let dateService: DateService
 
-    init(chatServiceObserver: ChatServiceObserverProtocol,
-         chatServiceMessageSender: ChatServiceMessageSenderProtocol,
-         chatHistoryService: DreamChatServiceProtocol,
-         chatClient: ChatClientProtocol,
-         pushManager: ChatLocalPushManagerProtocol,
-         messageMapper: MessageMapperProtocol,
-         dateService: DateServiceProtocol) {
+    init(chatServiceObserver: ChatServiceObserver,
+         chatServiceMessageSender: ChatServiceMessageSender,
+         chatHistoryService: ChatHistoryService,
+         chatClient: ChatClient,
+         pushManager: ChatLocalPushManager,
+         messageMapper: MessageMapper,
+         dateService: DateService) {
         self.chatServiceObserver      = chatServiceObserver
         self.chatServiceMessageSender = chatServiceMessageSender
         self.chatHistoryService       = chatHistoryService
@@ -102,7 +102,7 @@ final class ChatManager: ChatManagerProtocol {
     }
 
     func history(with config: HistoryLoadingConfig,
-                 completion: @escaping (Result<[Message], SoulSwiftError>) -> Void) {
+                 completion: @escaping (Result<[Message], ApiError>) -> Void) {
         let olderThan = config.olderThan ?? Date()
         let adjustedOlderThan = dateService.getAdjustedTimeStamp(from: olderThan)
         let limit = config.limit.flatMap { Int($0) } ?? Constants.defaultLimit

@@ -34,7 +34,7 @@ class ChatMappingTests: XCTestCase {
         let content: MessageContent = .text(messageText)
         let message: ChatMessage
         do {
-            message = try messagesFactory.createMessage(content)
+            message = try messagesFactory.createMessage(messageId: nil, messageContnet: content)
         } catch {
             fatalError()
         }
@@ -53,7 +53,7 @@ class ChatMappingTests: XCTestCase {
         let content: MessageContent = .photo(photoId: photoId, albumName: albumId)
         let message: ChatMessage
         do {
-            message = try messagesFactory.createMessage(content)
+            message = try messagesFactory.createMessage(messageId: nil, messageContnet: content)
         } catch {
             fatalError()
         }
@@ -73,7 +73,7 @@ class ChatMappingTests: XCTestCase {
         let content: MessageContent = .location(latitude: lat, longitude: lng)
         let message: ChatMessage
         do {
-            message = try messagesFactory.createMessage(content)
+            message = try messagesFactory.createMessage(messageId: nil, messageContnet: content)
         } catch {
             fatalError()
         }
@@ -91,7 +91,7 @@ class ChatMappingTests: XCTestCase {
         let content: MessageContent = .text(messageText)
         let message: ChatMessage
         do {
-            message = try messagesFactory.createMessage(content)
+            message = try messagesFactory.createMessage(messageId: nil, messageContnet: content)
         } catch {
             fatalError()
         }
@@ -125,7 +125,7 @@ class ChatMappingTests: XCTestCase {
         let content: MessageContent = .text("message text")
         let message: ChatMessage
         do {
-            message = try messagesFactory.createMessage(content)
+            message = try messagesFactory.createMessage(messageId: nil, messageContnet: content)
         } catch {
             fatalError()
         }

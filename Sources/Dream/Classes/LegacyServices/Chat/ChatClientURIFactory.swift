@@ -88,6 +88,6 @@ final class ChatClientURIFactoryImpl: ChatClientURIFactory, ChatApiURLFactory {
 
 extension DreamConfiguration {
     var chatURIFactoryConfig: ChatURIFactoryConfig {
-        return ChatURIFactoryConfig(baseUrlString: chatHttpURL, apiKey: chatApiKey)
+        return ChatURIFactoryConfig(baseUrlString: chatURL, apiKey: chatApiKey)
     }
 }

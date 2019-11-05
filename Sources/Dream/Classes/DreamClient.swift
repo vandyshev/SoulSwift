@@ -17,6 +17,6 @@ public class DreamClient {
 
     public func setup(withDreamConfiguration dreamConfiguration: DreamConfiguration) {
         self.dreamConfiguration = dreamConfiguration
-        self.chatManager = resolver.resolve(ChatManager.self, argument: DreamClient.shared.dreamConfiguration)
+        self.chatManager = resolver.resolve(ChatManager.self, argument: dreamConfiguration)
     }
 }

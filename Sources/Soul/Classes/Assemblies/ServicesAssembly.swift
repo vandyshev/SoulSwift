@@ -13,6 +13,7 @@ final class ServicesAssembly: Assembly {
         container.autoregister(SoulEventsServiceProtocol.self, initializer: SoulEventsService.init).inObjectScope(.container)
         container.autoregister(SoulPurchasesServiceProtocol.self, initializer: SoulPurchasesService.init).inObjectScope(.container)
         container.autoregister(SoulBlocksServiceProtocol.self, initializer: SoulBlocksService.init).inObjectScope(.container)
+        container.autoregister(SoulContactsServiceProtocol.self, initializer: SoulContactsService.init).inObjectScope(.container)
         container.autoregister(StorageServiceProtocol.self, initializer: StorageService.init).inObjectScope(.container)
     }
 }

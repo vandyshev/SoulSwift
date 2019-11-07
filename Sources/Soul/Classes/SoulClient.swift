@@ -12,6 +12,7 @@ public class SoulClient {
     public private(set) var soulEventsService: SoulEventsServiceProtocol?
     public private(set) var soulPurchasesService: SoulPurchasesServiceProtocol?
     public private(set) var soulBlocksService: SoulBlocksServiceProtocol?
+    public private(set) var soulContactsService: SoulContactsServiceProtocol?
 
     private(set) var soulConfiguration: SoulConfiguration!
 
@@ -29,5 +30,6 @@ public class SoulClient {
         self.soulEventsService = resolver.resolve(SoulEventsServiceProtocol.self)
         self.soulPurchasesService = resolver.resolve(SoulPurchasesServiceProtocol.self)
         self.soulBlocksService = resolver.resolve(SoulBlocksServiceProtocol.self)
+        self.soulContactsService = resolver.resolve(SoulContactsServiceProtocol.self)
     }
 }

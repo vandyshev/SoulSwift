@@ -1,5 +1,8 @@
 // swiftlint:disable function_parameter_count line_length
 public protocol SoulAuthServiceProtocol {
+    var isAuthorized: Bool { get }
+    var account: String? { get }
+
     // POST: /auth/password/register
     func passwordRegister(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
     func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
@@ -26,6 +29,14 @@ final class SoulAuthService: SoulAuthServiceProtocol {
 
     private let soulProvider: SoulProviderProtocol
     private var storageService: StorageServiceProtocol
+
+    var isAuthorized: Bool {
+        return storageService.credential != nil
+    }
+
+    var account: String? {
+        return storageService.credential?.method.account
+    }
 
     init(soulProvider: SoulProviderProtocol, storageService: StorageServiceProtocol) {
         self.soulProvider = soulProvider

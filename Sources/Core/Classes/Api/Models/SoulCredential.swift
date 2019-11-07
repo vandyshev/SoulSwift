@@ -62,3 +62,16 @@ enum AuthMethod: Codable {
         }
     }
 }
+
+extension AuthMethod {
+    var account: String {
+        switch self {
+        case .password(let login, _):
+            return login
+        case .phone(let phoneNumber, _):
+            return phoneNumber
+        case .email(let email, _):
+            return email
+        }
+    }
+}

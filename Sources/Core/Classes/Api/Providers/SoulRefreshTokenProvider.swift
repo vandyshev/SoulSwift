@@ -1,12 +1,12 @@
 import Foundation
 
-typealias CompletionHandler = (Result<MyUser, SoulSwiftError>) -> Void
+typealias RefreshTokenCompletion = SoulResult<MyUser>.Completion
 
 protocol SoulRefreshTokenProviderProtocol {
 
     var isTokenRefreshing: Bool { get }
     func isNeedRefreshToken(for response: URLResponse?) -> Bool
-    func refreshToken(provider: SoulProvider, completion: @escaping CompletionHandler)
+    func refreshToken(provider: SoulProvider, completion: @escaping RefreshTokenCompletion)
 }
 // swiftlint:disable line_length
 class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
@@ -14,7 +14,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
     var isTokenRefreshing = false
 
     private var storageService: StorageServiceProtocol
-    private var requestStorage: [CompletionHandler] = []
+    private var requestStorage: [RefreshTokenCompletion] = []
 
     init(storageService: StorageServiceProtocol) {
         self.storageService = storageService
@@ -25,7 +25,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
         return httpResponse.statusCode == 401
     }
 
-    func refreshToken(provider: SoulProvider, completion: @escaping CompletionHandler) {
+    func refreshToken(provider: SoulProvider, completion: @escaping RefreshTokenCompletion) {
         if isTokenRefreshing {
             requestStorage.append(completion)
         } else {
@@ -42,7 +42,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
         }
     }
 
-    private func requestRefreshToken(provider: SoulProvider, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    private func requestRefreshToken(provider: SoulProvider, completion: @escaping SoulResult<MyUser>.Completion) {
         guard let credential = storageService.credential else {
             completion(.failure(SoulSwiftError.refreshToken))
             return
@@ -58,7 +58,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
         }
     }
 
-    private func phoneLogin(provider: SoulProvider, phoneNumber: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    private func phoneLogin(provider: SoulProvider, phoneNumber: String, code: String, lastSessionToken: String, completion: @escaping SoulResult<MyUser>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.phoneLogin
@@ -77,7 +77,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
         }
     }
 
-    private func emailCodeExtend(provider: SoulProvider, email: String, code: String, lastSessionToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    private func emailCodeExtend(provider: SoulProvider, email: String, code: String, lastSessionToken: String, completion: @escaping SoulResult<MyUser>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeExtend

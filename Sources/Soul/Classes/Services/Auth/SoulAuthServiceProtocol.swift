@@ -4,25 +4,25 @@ public protocol SoulAuthServiceProtocol {
     var account: String? { get }
 
     // POST: /auth/password/register
-    func passwordRegister(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-    func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+    func passwordRegister(login: String, password: String, completion: @escaping SoulResult<MyUser>.Completion)
+    func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
     // POST: /auth/password/login
-    func passwordLogin(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-    func passwordLogin(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+    func passwordLogin(login: String, password: String, completion: @escaping SoulResult<MyUser>.Completion)
+    func passwordLogin(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
 
     // POST: /auth/phone/request
-    func phoneRequest(phoneNumber: String, method: PhoneRequestMethod, completion: @escaping (Result<PhoneRequestResponse, SoulSwiftError>) -> Void)
+    func phoneRequest(phoneNumber: String, method: PhoneRequestMethod, completion: @escaping SoulResult<PhoneRequestResponse>.Completion)
     // POST: /auth/phone/verify
-    func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-    func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+    func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, completion: @escaping SoulResult<MyUser>.Completion)
+    func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
 
     // POST: /auth/emailcode/request
-    func emailCodeRequest(email: String, completion: @escaping (Result<EmailCodeRequestResponse, SoulSwiftError>) -> Void)
+    func emailCodeRequest(email: String, completion: @escaping SoulResult<EmailCodeRequestResponse>.Completion)
     // POST: /auth/emailcode/verify
-    func emailCodeVerify(email: String, code: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
-    func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+    func emailCodeVerify(email: String, code: String, completion: @escaping SoulResult<MyUser>.Completion)
+    func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
     // POST: /auth/logout
-    func logout(full: Bool?, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
+    func logout(full: Bool?, completion: @escaping SoulResult<Void>.Completion)
 }
 
 final class SoulAuthService: SoulAuthServiceProtocol {
@@ -43,23 +43,23 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         self.storageService = storageService
     }
 
-    func passwordRegister(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func passwordRegister(login: String, password: String, completion: @escaping SoulResult<MyUser>.Completion) {
         passwordRegister(login: login, password: password, merge: nil, mergePreference: nil, completion: completion)
     }
 
-    func passwordLogin(login: String, password: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func passwordLogin(login: String, password: String, completion: @escaping SoulResult<MyUser>.Completion) {
         passwordLogin(login: login, password: password, merge: nil, mergePreference: nil, completion: completion)
     }
 
-    func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, completion: @escaping SoulResult<MyUser>.Completion) {
         phoneVerify(phoneNumber: phoneNumber, code: code, method: method, merge: nil, mergePreference: nil, completion: completion)
     }
 
-    func emailCodeVerify(email: String, code: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func emailCodeVerify(email: String, code: String, completion: @escaping SoulResult<MyUser>.Completion) {
         emailCodeVerify(email: email, code: code, merge: nil, mergePreference: nil, completion: completion)
     }
 
-    func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.passwordRegister,
@@ -81,7 +81,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         }
     }
 
-    func passwordLogin(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func passwordLogin(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.passwordLogin,
@@ -103,7 +103,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         }
     }
 
-    func phoneRequest(phoneNumber: String, method: PhoneRequestMethod, completion: @escaping (Result<PhoneRequestResponse, SoulSwiftError>) -> Void) {
+    func phoneRequest(phoneNumber: String, method: PhoneRequestMethod, completion: @escaping SoulResult<PhoneRequestResponse>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.phoneRequest
@@ -122,7 +122,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         }
     }
 
-    func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.phoneVerify,
@@ -144,7 +144,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         }
     }
 
-    func emailCodeRequest(email: String, completion: @escaping (Result<EmailCodeRequestResponse, SoulSwiftError>) -> Void) {
+    func emailCodeRequest(email: String, completion: @escaping SoulResult<EmailCodeRequestResponse>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeRequest
@@ -162,7 +162,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         }
     }
 
-    func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeVerify,
@@ -184,7 +184,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         }
     }
 
-    func logout(full: Bool?, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {
+    func logout(full: Bool?, completion: @escaping SoulResult<Void>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.logout,

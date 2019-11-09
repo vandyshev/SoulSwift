@@ -1,24 +1,23 @@
-// swiftlint:disable line_length
 public protocol SoulMeAlbumsServiceProtocol {
     // GET: /me/albums
     func loadAlbums(offset: Int?, limit: Int?, completion: @escaping (Result<[Album], SoulSwiftError>) -> Void)
     // POST: /me/albums
-    func addAlbum(parameters: AlbumParameters, completion: @escaping (Result<Album, SoulSwiftError>) -> Void)
+    func addAlbum(parameters: AlbumParameters, completion: @escaping SoulResult<Album>.Completion)
     // GET: /me/albums/{albumName}
-    func loadAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping (Result<Album, SoulSwiftError>) -> Void)
+    func loadAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping SoulResult<Album>.Completion)
     // PATCH: /me/albums/{albumName}
-    func editAlbum(albumName: String, parameters: AlbumParameters, offset: Int?, limit: Int?, completion: @escaping (Result<Album, SoulSwiftError>) -> Void)
+    func editAlbum(albumName: String, parameters: AlbumParameters, offset: Int?, limit: Int?, completion: @escaping SoulResult<Album>.Completion)
     // DELETE: /me/albums/{albumName}
-    func deleteAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
+    func deleteAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping SoulResult<Void>.Completion)
 
     // POST: /me/albums/{albumName} multipart
-    func addPhoto(albumName: String, photo: Data, offset: Int?, limit: Int?, completion: @escaping (Result<Photo, SoulSwiftError>) -> Void)
+    func addPhoto(albumName: String, photo: Data, offset: Int?, limit: Int?, completion: @escaping SoulResult<Photo>.Completion)
     // GET: /me/albums/{albumName}/{photoId}
-    func photo(albumName: String, photoId: String, completion: @escaping (Result<Photo, SoulSwiftError>) -> Void)
+    func photo(albumName: String, photoId: String, completion: @escaping SoulResult<Photo>.Completion)
     // PATCH: /me/albums/{albumName}/{photoId}
-    func editPhoto(albumName: String, photoId: String, parameters: PhotoParameters, completion: @escaping (Result<Photo, SoulSwiftError>) -> Void)
+    func editPhoto(albumName: String, photoId: String, parameters: PhotoParameters, completion: @escaping SoulResult<Photo>.Completion)
     // DELETE: /me/albums/{albumName}/{photoId}
-    func deletePhoto(albumName: String, photoId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
+    func deletePhoto(albumName: String, photoId: String, completion: @escaping SoulResult<Void>.Completion)
 }
 
 final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
@@ -40,7 +39,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         }
     }
 
-    func addAlbum(parameters: AlbumParameters, completion: @escaping (Result<Album, SoulSwiftError>) -> Void) {
+    func addAlbum(parameters: AlbumParameters, completion: @escaping SoulResult<Album>.Completion) {
         let request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulMeEndpoint.albums,
@@ -52,7 +51,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         }
     }
 
-    func loadAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping (Result<Album, SoulSwiftError>) -> Void) {
+    func loadAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping SoulResult<Album>.Completion) {
         var request = SoulRequest(
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
             needAuthorization: true
@@ -63,7 +62,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         }
     }
 
-    func editAlbum(albumName: String, parameters: AlbumParameters, offset: Int?, limit: Int?, completion: @escaping (Result<Album, SoulSwiftError>) -> Void) {
+    func editAlbum(albumName: String, parameters: AlbumParameters, offset: Int?, limit: Int?, completion: @escaping SoulResult<Album>.Completion) {
         var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
@@ -76,7 +75,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         }
     }
 
-    func deleteAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {
+    func deleteAlbum(albumName: String, offset: Int?, limit: Int?, completion: @escaping SoulResult<Void>.Completion) {
         var request = SoulRequest(
             httpMethod: .DELETE,
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
@@ -89,7 +88,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
     }
 
     // TODO: multipart/form-data
-    func addPhoto(albumName: String, photo: Data, offset: Int?, limit: Int?, completion: @escaping (Result<Photo, SoulSwiftError>) -> Void) {
+    func addPhoto(albumName: String, photo: Data, offset: Int?, limit: Int?, completion: @escaping SoulResult<Photo>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
@@ -101,7 +100,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         }
     }
 
-    func photo(albumName: String, photoId: String, completion: @escaping (Result<Photo, SoulSwiftError>) -> Void) {
+    func photo(albumName: String, photoId: String, completion: @escaping SoulResult<Photo>.Completion) {
         let request = SoulRequest(
             soulEndpoint: SoulMeEndpoint.albumsAlbumNamePhotoId(albumName: albumName, photoId: photoId),
             needAuthorization: true
@@ -111,7 +110,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         }
     }
 
-    func editPhoto(albumName: String, photoId: String, parameters: PhotoParameters, completion: @escaping (Result<Photo, SoulSwiftError>) -> Void) {
+    func editPhoto(albumName: String, photoId: String, parameters: PhotoParameters, completion: @escaping SoulResult<Photo>.Completion) {
         let request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulMeEndpoint.albumsAlbumNamePhotoId(albumName: albumName, photoId: photoId),
@@ -123,7 +122,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         }
     }
 
-    func deletePhoto(albumName: String, photoId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {
+    func deletePhoto(albumName: String, photoId: String, completion: @escaping SoulResult<Void>.Completion) {
         let request = SoulRequest(
             httpMethod: .DELETE,
             soulEndpoint: SoulMeEndpoint.albumsAlbumNamePhotoId(albumName: albumName, photoId: photoId),

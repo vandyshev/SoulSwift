@@ -1,12 +1,12 @@
 public protocol SoulMeServiceProtocol {
     // GET: /me
-    func me(completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+    func me(completion: @escaping SoulResult<MyUser>.Completion)
      // PATCH: /me
-    func setNotificationToken(apnsToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+    func setNotificationToken(apnsToken: String, completion: @escaping SoulResult<MyUser>.Completion)
      // PATCH: /me
-    func setParameters(parameters: MeParameters, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void)
+    func setParameters(parameters: MeParameters, completion: @escaping SoulResult<MyUser>.Completion)
     // DELETE: /me
-    func deleteMe(completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
+    func deleteMe(completion: @escaping SoulResult<Void>.Completion)
 }
 
 final class SoulMeService: SoulMeServiceProtocol {
@@ -17,7 +17,7 @@ final class SoulMeService: SoulMeServiceProtocol {
         self.soulProvider = soulProvider
     }
 
-    func me(completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func me(completion: @escaping SoulResult<MyUser>.Completion) {
         var request = SoulRequest(
             soulEndpoint: SoulMeEndpoint.me,
             needAuthorization: true
@@ -27,7 +27,7 @@ final class SoulMeService: SoulMeServiceProtocol {
         }
     }
 
-    func setNotificationToken(apnsToken: String, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func setNotificationToken(apnsToken: String, completion: @escaping SoulResult<MyUser>.Completion) {
         var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulMeEndpoint.me,
@@ -39,7 +39,7 @@ final class SoulMeService: SoulMeServiceProtocol {
         }
     }
 
-    func setParameters(parameters: MeParameters, completion: @escaping (Result<MyUser, SoulSwiftError>) -> Void) {
+    func setParameters(parameters: MeParameters, completion: @escaping SoulResult<MyUser>.Completion) {
         let request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulMeEndpoint.me,
@@ -51,7 +51,7 @@ final class SoulMeService: SoulMeServiceProtocol {
         }
     }
 
-    func deleteMe(completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {
+    func deleteMe(completion: @escaping SoulResult<Void>.Completion) {
         let request = SoulRequest(
             httpMethod: .DELETE,
             soulEndpoint: SoulMeEndpoint.me,

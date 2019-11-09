@@ -9,4 +9,3 @@ public struct MyUser: Codable {
 //        case gender
     }
 }
-

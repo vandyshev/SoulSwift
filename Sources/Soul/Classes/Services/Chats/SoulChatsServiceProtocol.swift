@@ -1,8 +1,8 @@
 public protocol SoulChatsServiceProtocol {
     // TODO: Узнать у Soul, зачем тут по документации передавать myStatus
     func chats(offset: Int?, limit: Int?, showExpired: Bool?, completion: @escaping (Result<[Chat], SoulSwiftError>) -> Void)
-    func getChat(withChatId chatId: String, completion: @escaping (Result<Chat, SoulSwiftError>) -> Void)
-    func editChat(withChatId chatId: String, myStatus: String, completion: @escaping (Result<Chat, SoulSwiftError>) -> Void)
+    func getChat(withChatId chatId: String, completion: @escaping SoulResult<Chat>.Completion)
+    func editChat(withChatId chatId: String, myStatus: String, completion: @escaping SoulResult<Chat>.Completion)
 }
 
 public extension SoulChatsServiceProtocol {
@@ -32,7 +32,7 @@ final class SoulChatsService: SoulChatsServiceProtocol {
         }
     }
 
-    func getChat(withChatId chatId: String, completion: @escaping (Result<Chat, SoulSwiftError>) -> Void) {
+    func getChat(withChatId chatId: String, completion: @escaping SoulResult<Chat>.Completion) {
         let queryParameters = [
             "chatId": chatId
         ]
@@ -46,7 +46,7 @@ final class SoulChatsService: SoulChatsServiceProtocol {
         }
     }
 
-    func editChat(withChatId chatId: String, myStatus: String, completion: @escaping (Result<Chat, SoulSwiftError>) -> Void) {
+    func editChat(withChatId chatId: String, myStatus: String, completion: @escaping SoulResult<Chat>.Completion) {
         var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulChatsEndpoint.chatId(chatId: chatId),

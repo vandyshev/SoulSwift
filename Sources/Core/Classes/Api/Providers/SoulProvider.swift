@@ -2,8 +2,14 @@ private enum Constants {
     static let maxRetryCount = 5
 }
 
+public typealias SoulResult<T> = Result<T, SoulSwiftError>
+
+public extension SoulResult {
+    typealias Completion = (Self) -> Void
+}
+
 protocol SoulProviderProtocol: class {
-    func request(_ soulRequest: SoulRequest, completion: @escaping (Result<SoulResponse, SoulSwiftError>) -> Void)
+    func request(_ soulRequest: SoulRequest, completion: @escaping SoulResult<SoulResponse>.Completion)
 }
 
 // swiftlint:disable line_length
@@ -28,11 +34,11 @@ class SoulProvider: SoulProviderProtocol {
         self.soulRefreshTokenProvider = soulRefreshTokenProvider
     }
 
-    func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, completion: @escaping (Result<Response, SoulSwiftError>) -> Void) {
+    func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, completion: @escaping SoulResult<Response>.Completion) {
         request(soulRequest, retryCount: Constants.maxRetryCount, completion: completion)
     }
 
-    func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, retryCount: Int, completion: @escaping (Result<Response, SoulSwiftError>) -> Void) {
+    func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, retryCount: Int, completion: @escaping SoulResult<Response>.Completion) {
         guard let urlRequest = urlRequest(soulRequest: soulRequest) else {
             completion(.failure(SoulSwiftError.requestError))
             return

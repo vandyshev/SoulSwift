@@ -1,10 +1,10 @@
 public protocol SoulContactsServiceProtocol {
     func sendContactRequest(to userId: String, completion: @escaping (Result<[ContactRequest], SoulSwiftError>) -> Void)
-    func cancelContactRequest(_ userId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
-    func approveContactRequest(_ userId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
-    func declineContactRequest(_ userId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
-    func changeContactName(_ userId: String, newName: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
-    func deleteContact(userId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void)
+    func cancelContactRequest(_ userId: String, completion: @escaping SoulResult<Void>.Completion)
+    func approveContactRequest(_ userId: String, completion: @escaping SoulResult<Void>.Completion)
+    func declineContactRequest(_ userId: String, completion: @escaping SoulResult<Void>.Completion)
+    func changeContactName(_ userId: String, newName: String, completion: @escaping SoulResult<Void>.Completion)
+    func deleteContact(userId: String, completion: @escaping SoulResult<Void>.Completion)
     func getLastSentRequest(chatId: String, completion: @escaping (Result<ContactRequest?, SoulSwiftError>) -> Void)
 }
 
@@ -17,10 +17,10 @@ final class SoulContactsService: SoulContactsServiceProtocol {
     }
 
     func sendContactRequest(to userId: String, completion: @escaping (Result<[ContactRequest], SoulSwiftError>) -> Void) {}
-    func cancelContactRequest(_ userId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {}
-    func approveContactRequest(_ userId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {}
-    func declineContactRequest(_ userId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {}
-    func changeContactName(_ userId: String, newName: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {}
-    func deleteContact(userId: String, completion: @escaping (Result<Void, SoulSwiftError>) -> Void) {}
+    func cancelContactRequest(_ userId: String, completion: @escaping SoulResult<Void>.Completion) {}
+    func approveContactRequest(_ userId: String, completion: @escaping SoulResult<Void>.Completion) {}
+    func declineContactRequest(_ userId: String, completion: @escaping SoulResult<Void>.Completion) {}
+    func changeContactName(_ userId: String, newName: String, completion: @escaping SoulResult<Void>.Completion) {}
+    func deleteContact(userId: String, completion: @escaping SoulResult<Void>.Completion) {}
     func getLastSentRequest(chatId: String, completion: @escaping (Result<ContactRequest?, SoulSwiftError>) -> Void) {}
 }

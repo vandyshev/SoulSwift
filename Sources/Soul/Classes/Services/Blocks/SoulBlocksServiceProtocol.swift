@@ -1,5 +1,5 @@
 public protocol SoulBlocksServiceProtocol {
-    func koth(completion: @escaping (Result<User, SoulSwiftError>) -> Void)
+    func koth(completion: @escaping SoulResult<User>.Completion)
 }
 
 final class SoulBlocksService: SoulBlocksServiceProtocol {
@@ -10,7 +10,7 @@ final class SoulBlocksService: SoulBlocksServiceProtocol {
         self.soulProvider = soulProvider
     }
 
-    func koth(completion: @escaping (Result<User, SoulSwiftError>) -> Void) {
+    func koth(completion: @escaping SoulResult<User>.Completion) {
         let request = SoulRequest(
             soulEndpoint: SoulBlocksEndpoint.soulKoth,
             needAuthorization: true

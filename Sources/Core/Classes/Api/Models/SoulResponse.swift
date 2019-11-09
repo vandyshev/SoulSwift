@@ -17,6 +17,7 @@ public class SoulResponse: Decodable {
     let photos: [Photo]?
     let user: User?
     let users: [User]?
+    let contactRequest: ContactRequest?
 }
 
 extension Result where Success == SoulResponse, Failure == SoulSwiftError {

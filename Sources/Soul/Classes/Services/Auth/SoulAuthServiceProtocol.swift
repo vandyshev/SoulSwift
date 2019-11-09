@@ -21,6 +21,11 @@ public protocol SoulAuthServiceProtocol {
     // POST: /auth/emailcode/verify
     func emailCodeVerify(email: String, code: String, completion: @escaping SoulResult<MyUser>.Completion)
     func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
+
+    // POST: /auth/apple/verify
+    func appleVerify(email: String?, code: String, token: String, userStatus: Int, completion: @escaping SoulResult<MyUser>.Completion)
+    func appleVerify(email: String?, code: String, token: String, userStatus: Int, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
+
     // POST: /auth/logout
     func logout(full: Bool?, completion: @escaping SoulResult<Void>.Completion)
 }
@@ -57,6 +62,10 @@ final class SoulAuthService: SoulAuthServiceProtocol {
 
     func emailCodeVerify(email: String, code: String, completion: @escaping SoulResult<MyUser>.Completion) {
         emailCodeVerify(email: email, code: code, merge: nil, mergePreference: nil, completion: completion)
+    }
+
+    func appleVerify(email: String?, code: String, token: String, userStatus: Int, completion: @escaping SoulResult<MyUser>.Completion) {
+        appleVerify(email: email, code: code, token: token, userStatus: userStatus, merge: nil, mergePreference: nil, completion: completion)
     }
 
     func passwordRegister(login: String, password: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion) {
@@ -178,6 +187,30 @@ final class SoulAuthService: SoulAuthServiceProtocol {
             completion(
                 result.afterSaveAuthorization(
                     for: .email(email: email, code: code),
+                    with: self?.saveAuthorization
+                )
+            )
+        }
+    }
+
+    func appleVerify(email: String?, code: String, token: String, userStatus: Int, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion) {
+        var request = SoulRequest(
+            httpMethod: .POST,
+            soulEndpoint: SoulAuthEndpoint.appleVerify,
+            queryParameters: nil,
+            needAuthorization: merge ?? false
+        )
+        request.setBodyParameters(["email": email,
+                                   "code": code,
+                                   "id_token": token,
+                                   "user_status": userStatus,
+                                   "apiKey": SoulClient.shared.soulConfiguration.apiKey,
+                                   "merge": merge,
+                                   "mergePreference": mergePreference])
+        soulProvider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(
+                result.afterSaveAuthorization(
+                    for: .apple(email: email, code: code, token: token),
                     with: self?.saveAuthorization
                 )
             )

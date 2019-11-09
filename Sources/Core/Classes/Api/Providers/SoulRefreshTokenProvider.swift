@@ -3,8 +3,6 @@ import Foundation
 typealias RefreshTokenCompletion = SoulResult<MyUser>.Completion
 
 protocol SoulRefreshTokenProviderProtocol {
-
-    var isTokenRefreshing: Bool { get }
     func isNeedRefreshToken(for response: URLResponse?) -> Bool
     func refreshToken(provider: SoulProvider, completion: @escaping RefreshTokenCompletion)
 }
@@ -55,6 +53,8 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
             phoneLogin(provider: provider, phoneNumber: phoneNumber, code: code, lastSessionToken: sessionToken, completion: completion)
         case .email(let email, let code):
             emailCodeExtend(provider: provider, email: email, code: code, lastSessionToken: sessionToken, completion: completion)
+        case .apple(let email, let code, let token):
+            completion(.failure(SoulSwiftError.refreshToken))
         }
     }
 

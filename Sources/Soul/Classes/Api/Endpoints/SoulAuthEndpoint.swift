@@ -7,6 +7,7 @@ enum SoulAuthEndpoint {
     case emailCodeRequest
     case emailCodeVerify
     case emailCodeExtend
+    case appleVerify
     case logout
 }
 
@@ -29,6 +30,8 @@ extension SoulAuthEndpoint: SoulEndpoint {
             return "/auth/emailcode/verify"
         case .emailCodeExtend:
             return "/auth/emailcode/extend"
+        case .appleVerify:
+            return "/auth/apple/verify"
         case .logout:
             return "/auth/logout"
         }

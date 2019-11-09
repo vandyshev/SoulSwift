@@ -8,6 +8,7 @@ enum AuthMethod: Codable {
     case password(login: String, password: String)
     case phone(phoneNumber: String, code: String)
     case email(email: String, code: String)
+    case apple(email: String?, code: String, token: String)
 
     enum CodingKeys: CodingKey {
         case method
@@ -17,6 +18,8 @@ enum AuthMethod: Codable {
         case phoneCode
         case email
         case emailCode
+        case appleCode
+        case appleToken
     }
 
     enum CodingError: Error {
@@ -38,6 +41,11 @@ enum AuthMethod: Codable {
             try container.encode("email", forKey: .method)
             try container.encode(email, forKey: .email)
             try container.encode(code, forKey: .emailCode)
+        case .apple(let email, let code, let token):
+            try container.encode("apple", forKey: .method)
+            try container.encode(email, forKey: .email)
+            try container.encode(code, forKey: .appleCode)
+            try container.encode(token, forKey: .appleToken)
         }
     }
 
@@ -57,6 +65,11 @@ enum AuthMethod: Codable {
             let email = try container.decode(String.self, forKey: .email)
             let code = try container.decode(String.self, forKey: .emailCode)
             self = .email(email: email, code: code)
+        case "apple":
+            let email = try container.decode(String.self, forKey: .email)
+            let code = try container.decode(String.self, forKey: .appleCode)
+            let token = try container.decode(String.self, forKey: .appleToken)
+            self = .apple(email: email, code: code, token: token)
         default:
             throw CodingError.credentialCodingError
         }
@@ -64,13 +77,15 @@ enum AuthMethod: Codable {
 }
 
 extension AuthMethod {
-    var account: String {
+    var account: String? {
         switch self {
         case .password(let login, _):
             return login
         case .phone(let phoneNumber, _):
             return phoneNumber
         case .email(let email, _):
+            return email
+        case .apple(let email, _, _):
             return email
         }
     }

@@ -1,4 +1,4 @@
-public struct MeParameters: Codable {
+public struct MyUserParameters: Codable {
     let filterable: FilterableParameters?
     let publicVisible: PublicVisibleParameters?
     let publicWritable: PublicWritableParameters?
@@ -20,6 +20,7 @@ public struct PublicWritableParameters: Codable {
 
 }
 
+// swiftlint:disable nesting
 public struct PrivateParameters: Codable {
     public struct SoulSettings: Codable {
         public struct ReceiveNotifications: Codable {

@@ -1,3 +1,4 @@
+// swiftlint:disable identifier_name
 public class SoulResponse: Decodable {
     let features: Features?
     let status: String?
@@ -9,7 +10,8 @@ public class SoulResponse: Decodable {
     let chat: Chat?
     let events: [Event]?
     let currentKing: User?
-    let bundles: [SoulBundle]?
+    let bundles: [String]?
+    let bundles_v2: [SoulBundle]?
     let items: [InventoryItem]?
     let album: Album?
     let albums: [Album]?
@@ -18,6 +20,7 @@ public class SoulResponse: Decodable {
     let user: User?
     let users: [User]?
     let contactRequest: ContactRequest?
+    let _meta: Meta?
 }
 
 extension Result where Success == SoulResponse, Failure == SoulSwiftError {

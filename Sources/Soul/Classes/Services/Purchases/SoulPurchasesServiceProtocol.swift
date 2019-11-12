@@ -18,7 +18,8 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
             needAuthorization: true
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.bundles })
+            // SoulSwift: Тут скорее всего будет nil
+            completion(result.map { $0.bundles_v2 })
         }
     }
 
@@ -28,7 +29,7 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
             needAuthorization: true
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.bundles, $0.items) })
+            completion(result.map { ($0.bundles_v2, $0.items) })
         }
     }
 
@@ -40,7 +41,7 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
         )
         request.setQueryParameters(["receipt": receipt])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.bundles, $0.items) })
+            completion(result.map { ($0.bundles_v2, $0.items) })
         }
     }
 }

@@ -4,7 +4,7 @@ public protocol SoulMeServiceProtocol {
      // PATCH: /me
     func setNotificationToken(apnsToken: String, completion: @escaping SoulResult<MyUser>.Completion)
      // PATCH: /me
-    func setParameters(parameters: MeParameters, completion: @escaping SoulResult<MyUser>.Completion)
+    func setParameters(parameters: MyUserParameters, completion: @escaping SoulResult<MyUser>.Completion)
     // DELETE: /me
     func deleteMe(completion: @escaping SoulResult<Void>.Completion)
 }
@@ -39,7 +39,7 @@ final class SoulMeService: SoulMeServiceProtocol {
         }
     }
 
-    func setParameters(parameters: MeParameters, completion: @escaping SoulResult<MyUser>.Completion) {
+    func setParameters(parameters: MyUserParameters, completion: @escaping SoulResult<MyUser>.Completion) {
         let request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulMeEndpoint.me,

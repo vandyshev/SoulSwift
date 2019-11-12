@@ -9,7 +9,7 @@ public extension SoulResult {
 }
 
 protocol SoulProviderProtocol: class {
-    func request(_ soulRequest: SoulRequest, completion: @escaping SoulResult<SoulResponse>.Completion)
+    func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, completion: @escaping SoulResult<Response>.Completion)
 }
 
 // swiftlint:disable line_length

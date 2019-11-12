@@ -21,8 +21,8 @@ class ViewController: UIViewController {
 
     private func initializeSoulSwift() {
         let configuration = SoulConfiguration(
-            baseURL: "https://testing-api.soulplatform.com/",
-            apiKey: "c5d5fee0d04e64b6cf2d898e83c21fc6",
+            baseURL: "https://pure-api.soulplatform.com/",
+            apiKey: "09561e912e8a1d5560ac1716f400aa93",
             appName: "Pure")
         SoulClient.shared.setup(withSoulConfiguration: configuration)
     }
@@ -82,14 +82,9 @@ class ViewController: UIViewController {
         SoulClient.shared.soulMeService?.me { result in
             switch result {
             case .success(let me):
-                print("me: \(me)")
+                dump(me)
             case .failure(let error):
-                switch error {
-                case .soulError(let apiError):
-                    print(apiError.userMessage)
-                default:
-                    break
-                }
+                dump(error)
             }
         }
     }

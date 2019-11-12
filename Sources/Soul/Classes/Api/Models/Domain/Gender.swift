@@ -1,53 +1,34 @@
-public enum Gender {
-    case none, male, female
+public enum Gender: Codable {
+    // SoulSwift: Возможно стоит удалить none
+    case none
+    case male
+    case female
 
-    func opposite() -> Gender {
-        switch self {
-        case .female:
-            return .male
-        case .male:
-            return .female
+    enum CodingKeys: String, CodingKey {
+        case gender
+    }
+
+    public init(from decoder: Decoder) throws {
+        let value = try decoder.singleValueContainer().decode(String.self)
+        switch value {
+        case "M", "m":
+            self = .male
+        case "F", "f":
+            self = .female
         default:
-            return .none
+            self = .none
         }
     }
 
-    var code: String {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
         switch self {
-        case .female:
-            return "F"
         case .male:
-            return "M"
+            try container.encode("m")
+        case .female:
+            try container.encode("f")
         default:
-            return "N"
-        }
-    }
-
-    static func forString(_ string: String?) -> Gender {
-        switch string {
-        case "f", "F":
-            return .female
-        case "m", "M":
-            return .male
-        default:
-            return .none
+            try container.encode("none")
         }
     }
 }
-
-extension Gender {
-    var isMale: Bool {
-        guard case .male = self else {
-            return false
-        }
-        return true
-    }
-    var isFemale: Bool {
-        guard case .female = self else {
-            return false
-        }
-        return true
-    }
-}
-
-extension Gender: Equatable { }

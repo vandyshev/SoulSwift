@@ -1,11 +1,10 @@
-// swiftlint:disable line_length
 public protocol SoulUsersServiceProtocol {
 
     // GET: /users/recommendations/list
-    func recommendationsList(uniqueToken: String?, viewingSession: String?, limit: Int?, completion: @escaping (Result<[User], SoulSwiftError>) -> Void)
+    func recommendationsList(uniqueToken: String?, viewingSession: String?, limit: Int?, completion: @escaping SoulResult<[User]>.Completion)
 
     // PATCH: /users/recommendations/filter
-    func setRecommendationsFilter(filter: Filter, settings: Settings, completion: @escaping (Result<[User], SoulSwiftError>) -> Void)
+    func setRecommendationsFilter(filter: Filter, settings: Settings, completion: @escaping SoulResult<[User]>.Completion)
 }
 
 final class SoulUsersService: SoulUsersServiceProtocol {
@@ -17,7 +16,7 @@ final class SoulUsersService: SoulUsersServiceProtocol {
     }
 
     // GET: /users/recommendations/list
-    func recommendationsList(uniqueToken: String?, viewingSession: String?, limit: Int?, completion: @escaping (Result<[User], SoulSwiftError>) -> Void) {
+    func recommendationsList(uniqueToken: String?, viewingSession: String?, limit: Int?, completion: @escaping SoulResult<[User]>.Completion) {
         var request = SoulRequest(
             soulEndpoint: SoulUsersEndpoint.recommendationsList,
             needAuthorization: true
@@ -31,7 +30,7 @@ final class SoulUsersService: SoulUsersServiceProtocol {
     }
 
     // PATCH: /users/recommendations/filter
-    func setRecommendationsFilter(filter: Filter, settings: Settings, completion: @escaping (Result<[User], SoulSwiftError>) -> Void) {
+    func setRecommendationsFilter(filter: Filter, settings: Settings, completion: @escaping SoulResult<[User]>.Completion) {
         var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulUsersEndpoint.recommendationsList,

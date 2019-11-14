@@ -1,6 +1,5 @@
-// swiftlint:disable line_length
 public protocol SoulEventsServiceProtocol {
-    func events(since: TimeInterval?, until: TimeInterval?, limit: Int?, ascending: Bool, completion: @escaping (Result<[Event], SoulSwiftError>) -> Void)
+    func events(since: TimeInterval?, until: TimeInterval?, limit: Int?, ascending: Bool, completion: @escaping SoulResult<[Event]>.Completion)
 }
 
 final class SoulEventsService: SoulEventsServiceProtocol {
@@ -11,7 +10,7 @@ final class SoulEventsService: SoulEventsServiceProtocol {
         self.soulProvider = soulProvider
     }
 
-    func events(since: TimeInterval?, until: TimeInterval?, limit: Int?, ascending: Bool, completion: @escaping (Result<[Event], SoulSwiftError>) -> Void) {
+    func events(since: TimeInterval?, until: TimeInterval?, limit: Int?, ascending: Bool, completion: @escaping SoulResult<[Event]>.Completion) {
         var request = SoulRequest(
             soulEndpoint: SoulEventsEndpoint.events,
             needAuthorization: true

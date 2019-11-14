@@ -1,12 +1,12 @@
 public protocol SoulChatsServiceProtocol {
     // TODO: Узнать у Soul, зачем тут по документации передавать myStatus
-    func chats(offset: Int?, limit: Int?, showExpired: Bool?, completion: @escaping (Result<[Chat], SoulSwiftError>) -> Void)
+    func chats(offset: Int?, limit: Int?, showExpired: Bool?, completion: @escaping SoulResult<[Chat]>.Completion)
     func getChat(withChatId chatId: String, completion: @escaping SoulResult<Chat>.Completion)
     func editChat(withChatId chatId: String, myStatus: String, completion: @escaping SoulResult<Chat>.Completion)
 }
 
 public extension SoulChatsServiceProtocol {
-    func chats(offset: Int? = 0, limit: Int? = 20, showExpired: Bool? = true, completion: @escaping (Result<[Chat], SoulSwiftError>) -> Void) {
+    func chats(offset: Int? = 0, limit: Int? = 20, showExpired: Bool? = true, completion: @escaping SoulResult<[Chat]>.Completion) {
         chats(offset: offset, limit: limit, showExpired: showExpired, completion: completion)
     }
 }
@@ -19,7 +19,7 @@ final class SoulChatsService: SoulChatsServiceProtocol {
         self.soulProvider = soulProvider
     }
 
-    func chats(offset: Int?, limit: Int?, showExpired: Bool?, completion: @escaping (Result<[Chat], SoulSwiftError>) -> Void) {
+    func chats(offset: Int?, limit: Int?, showExpired: Bool?, completion: @escaping SoulResult<[Chat]>.Completion) {
         var request = SoulRequest(
             soulEndpoint: SoulChatsEndpoint.chats,
             needAuthorization: true

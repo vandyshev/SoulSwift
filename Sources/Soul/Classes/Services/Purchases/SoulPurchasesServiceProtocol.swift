@@ -1,7 +1,7 @@
 public protocol SoulPurchasesServiceProtocol {
-    func allPurchases(completion: @escaping (Result<[SoulBundle], SoulSwiftError>) -> Void)
-    func myPurchases(completion: @escaping (Result<([SoulBundle], [InventoryItem]), SoulSwiftError>) -> Void)
-    func orderAppstore(receipt: String, completion: @escaping (Result<([SoulBundle], [InventoryItem]), SoulSwiftError>) -> Void)
+    func allPurchases(completion: @escaping SoulResult<[SoulBundle]>.Completion)
+    func myPurchases(completion: @escaping SoulResult<([SoulBundle], [InventoryItem])>.Completion)
+    func orderAppstore(receipt: String, completion: @escaping SoulResult<([SoulBundle], [InventoryItem])>.Completion)
 }
 
 final class SoulPurchasesService: SoulPurchasesServiceProtocol {
@@ -12,7 +12,7 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
         self.soulProvider = soulProvider
     }
 
-    func allPurchases(completion: @escaping (Result<[SoulBundle], SoulSwiftError>) -> Void) {
+    func allPurchases(completion: @escaping SoulResult<[SoulBundle]>.Completion) {
         let request = SoulRequest(
             soulEndpoint: SoulPurchasesEndpoint.all,
             needAuthorization: true
@@ -23,7 +23,7 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
         }
     }
 
-    func myPurchases(completion: @escaping (Result<([SoulBundle], [InventoryItem]), SoulSwiftError>) -> Void) {
+    func myPurchases(completion: @escaping SoulResult<([SoulBundle], [InventoryItem])>.Completion) {
         let request = SoulRequest(
             soulEndpoint: SoulPurchasesEndpoint.my,
             needAuthorization: true
@@ -33,7 +33,7 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
         }
     }
 
-    func orderAppstore(receipt: String, completion: @escaping (Result<([SoulBundle], [InventoryItem]), SoulSwiftError>) -> Void) {
+    func orderAppstore(receipt: String, completion: @escaping SoulResult<([SoulBundle], [InventoryItem])>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulPurchasesEndpoint.orderAppstore,

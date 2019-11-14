@@ -1,6 +1,6 @@
 public protocol SoulContactsServiceProtocol {
     // POST: /contacts/requests
-    func sendContactRequest(userId: String, completion: @escaping (Result<ContactRequest, SoulSwiftError>) -> Void)
+    func sendContactRequest(userId: String, completion: @escaping SoulResult<ContactRequest>.Completion)
     // POST: /contacts/requests/{requestId}/cancel
     func cancelContactRequest(requestId: String, completion: @escaping SoulResult<Void>.Completion)
     // POST: /contacts/requests/{requestId}/approve
@@ -12,7 +12,7 @@ public protocol SoulContactsServiceProtocol {
     // DELETE: /contacts/{userId}
     func deleteContact(userId: String, completion: @escaping SoulResult<Void>.Completion)
     // GET: /contacts/requests/last_sent/{chat_id}
-    func lastSentRequest(chatId: String, completion: @escaping (Result<ContactRequest?, SoulSwiftError>) -> Void)
+    func lastSentRequest(chatId: String, completion: @escaping SoulResult<ContactRequest?>.Completion)
 }
 
 final class SoulContactsService: SoulContactsServiceProtocol {
@@ -23,7 +23,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
         self.soulProvider = soulProvider
     }
 
-    func sendContactRequest(userId: String, completion: @escaping (Result<ContactRequest, SoulSwiftError>) -> Void) {
+    func sendContactRequest(userId: String, completion: @escaping SoulResult<ContactRequest>.Completion) {
         var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulContactsEndpoint.sendContactRequest,
@@ -91,7 +91,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
         }
     }
 
-    func lastSentRequest(chatId: String, completion: @escaping (Result<ContactRequest?, SoulSwiftError>) -> Void) {
+    func lastSentRequest(chatId: String, completion: @escaping SoulResult<ContactRequest?>.Completion) {
         var request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulContactsEndpoint.lastSentRequest(chatId: chatId),

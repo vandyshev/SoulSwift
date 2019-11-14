@@ -1,6 +1,6 @@
 public protocol SoulMeAlbumsServiceProtocol {
     // GET: /me/albums
-    func loadAlbums(offset: Int?, limit: Int?, completion: @escaping (Result<[Album], SoulSwiftError>) -> Void)
+    func loadAlbums(offset: Int?, limit: Int?, completion: @escaping SoulResult<[Album]>.Completion)
     // POST: /me/albums
     func addAlbum(parameters: AlbumParameters, completion: @escaping SoulResult<Album>.Completion)
     // GET: /me/albums/{albumName}
@@ -28,7 +28,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         self.soulProvider = soulProvider
     }
 
-    func loadAlbums(offset: Int?, limit: Int?, completion: @escaping (Result<[Album], SoulSwiftError>) -> Void) {
+    func loadAlbums(offset: Int?, limit: Int?, completion: @escaping SoulResult<[Album]>.Completion) {
         var request = SoulRequest(
             soulEndpoint: SoulMeEndpoint.albums,
             needAuthorization: true

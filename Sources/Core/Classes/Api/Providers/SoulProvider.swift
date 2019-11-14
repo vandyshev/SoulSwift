@@ -23,15 +23,18 @@ class SoulProvider: SoulProviderProtocol {
     private let soulApiVersionProvider: SoulApiVersionProviderProtocol
     private let soulUserAgentProvider: SoulUserAgentProviderProtocol
     private let soulRefreshTokenProvider: SoulRefreshTokenProviderProtocol
+    private let soulAdditionalInfoProvider: SoulAdditionalInfoProviderProtocol
 
     init(soulAuthorizationProvider: SoulAuthorizationProviderProtocol,
          soulVersionProvider: SoulApiVersionProviderProtocol,
          soulUserAgentVersionProvider: SoulUserAgentProviderProtocol,
-         soulRefreshTokenProvider: SoulRefreshTokenProviderProtocol) {
+         soulRefreshTokenProvider: SoulRefreshTokenProviderProtocol,
+         soulAdditionalInfoProvider: SoulAdditionalInfoProviderProtocol) {
         self.soulAuthorizationProvider = soulAuthorizationProvider
         self.soulApiVersionProvider = soulVersionProvider
         self.soulUserAgentProvider = soulUserAgentVersionProvider
         self.soulRefreshTokenProvider = soulRefreshTokenProvider
+        self.soulAdditionalInfoProvider = soulAdditionalInfoProvider
     }
 
     func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, completion: @escaping SoulResult<Response>.Completion) {
@@ -55,6 +58,7 @@ class SoulProvider: SoulProviderProtocol {
                     }
                 }
             } else {
+                sSelf.soulAdditionalInfoProvider.saveAdditionalInfo(data)
                 soulResponse(data, response, error)
             }
         }

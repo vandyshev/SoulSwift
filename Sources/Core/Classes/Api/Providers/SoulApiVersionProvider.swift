@@ -2,7 +2,7 @@ protocol SoulApiVersionProviderProtocol {
     func addApiVersion(_ request: URLRequest) -> URLRequest
 }
 
-struct SoulVersionProvider: SoulApiVersionProviderProtocol {
+class SoulVersionProvider: SoulApiVersionProviderProtocol {
 
     func addApiVersion(_ request: URLRequest) -> URLRequest {
         var request = request

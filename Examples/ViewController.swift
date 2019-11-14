@@ -31,7 +31,10 @@ class ViewController: UIViewController {
         SoulClient.shared.soulApplicationService?.features { result in
             switch result {
             case .success(let features):
-                print(features)
+                dump(features)
+                SoulClient.shared.soulApplicationService?.additionalInfo(completion: { (result) in
+                    dump(try? result.get())
+                })
             case .failure(let error):
                 switch error {
                 case .soulError(let apiError):

@@ -4,7 +4,7 @@ protocol SoulAuthorizationProviderProtocol {
     func authorize(_ request: URLRequest) -> URLRequest
 }
 
-struct SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
+class SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
 
     private let storageService: StorageServiceProtocol
 

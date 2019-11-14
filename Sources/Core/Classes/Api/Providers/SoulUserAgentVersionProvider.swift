@@ -9,7 +9,7 @@ protocol SoulUserAgentProviderProtocol {
     func addUserAgent(_ request: URLRequest) -> URLRequest
 }
 
-struct SoulUserAgentVersionProvider: SoulUserAgentProviderProtocol {
+class SoulUserAgentVersionProvider: SoulUserAgentProviderProtocol {
 
     func addUserAgent(_ request: URLRequest) -> URLRequest {
         var request = request

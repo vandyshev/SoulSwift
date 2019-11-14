@@ -1,9 +1,7 @@
 public protocol SoulApplicationServiceProtocol {
-    /// Application feature toggles from Soul
-    ///
-    /// - Parameter completion: collection of features
+    // GET: /application/features
     func features(completion: @escaping SoulResult<[Feature]>.Completion)
-    // SoulSwift: Result<AdditionalInfo?, SoulSwiftError>
+
     func additionalInfo(completion: @escaping SoulResult<AdditionalInfo?>.Completion)
 }
 

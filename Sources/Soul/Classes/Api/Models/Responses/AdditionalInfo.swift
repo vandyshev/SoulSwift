@@ -1,8 +1,8 @@
 public struct AdditionalInfo: Codable {
-    let serverTime: TimeInterval?
-    let clientCountryCode: String?
-    let clientCityName: String?
-    let clientLatitude: String?
-    let clientLongitude: String?
-    let isClientInEU: String?
+    public let serverTime: TimeInterval?
+    public let clientCountryCode: String?
+    public let clientCityName: String?
+    public let clientLatitude: String?
+    public let clientLongitude: String?
+    public let isClientInEU: String?
 }

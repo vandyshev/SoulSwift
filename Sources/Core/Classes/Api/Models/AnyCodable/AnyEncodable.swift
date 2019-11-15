@@ -1,27 +1,5 @@
 import Foundation
 
-/**
-A type-erased `Encodable` value.
-The `AnyEncodable` type forwards encoding responsibilities
-to an underlying value, hiding its specific underlying type.
-You can encode mixed-type values in dictionaries
-and other collections that require `Encodable` conformance
-by declaring their contained type to be `AnyEncodable`:
-    let dictionary: [String: AnyEncodable] = [
-        "boolean": true,
-        "integer": 1,
-        "double": 3.14159265358979323846,
-        "string": "string",
-        "array": [1, 2, 3],
-        "nested": [
-            "a": "alpha",
-            "b": "bravo",
-            "c": "charlie"
-        ]
-    ]
-    let encoder = JSONEncoder()
-    let json = try! encoder.encode(dictionary)
-*/
 public struct AnyEncodable: Encodable {
     public let value: Any
 
@@ -30,25 +8,18 @@ public struct AnyEncodable: Encodable {
     }
 }
 
-#if swift(>=4.2)
 @usableFromInline
-protocol _AnyEncodable {
+protocol AnyEncodableProtocol {
     var value: Any { get }
     init<T>(_ value: T?)
 }
-#else
-protocol _AnyEncodable {
-    var value: Any { get }
-    init<T>(_ value: T?)
-}
-#endif
 
-extension AnyEncodable: _AnyEncodable {}
+extension AnyEncodable: AnyEncodableProtocol {}
 
 // MARK: - Encodable
 
 // swiftlint:disable cyclomatic_complexity function_body_length
-extension _AnyEncodable {
+extension AnyEncodableProtocol {
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
 
@@ -91,10 +62,14 @@ extension _AnyEncodable {
             try container.encode(date)
         case let url as URL:
             try container.encode(url)
+        case let array as [AnyEncodable?]:
+            try container.encode(array)
+        case let dictionary as [String: AnyEncodable?]:
+            try container.encode(dictionary)
         case let array as [Any?]:
-            try container.encode(array.map { AnyCodable($0) })
+            try container.encode(array.map { AnyEncodable($0) })
         case let dictionary as [String: Any?]:
-            try container.encode(dictionary.mapValues { AnyCodable($0) })
+            try container.encode(dictionary.mapValues { AnyEncodable($0) })
         default:
             let context = EncodingError.Context(codingPath: container.codingPath, debugDescription: "AnyCodable value cannot be encoded")
             throw EncodingError.invalidValue(value, context)
@@ -210,7 +185,7 @@ extension AnyEncodable: ExpressibleByStringLiteral {}
 extension AnyEncodable: ExpressibleByArrayLiteral {}
 extension AnyEncodable: ExpressibleByDictionaryLiteral {}
 
-extension _AnyEncodable {
+extension AnyEncodableProtocol {
     public init(nilLiteral _: ()) {
         self.init(nil as Any?)
     }

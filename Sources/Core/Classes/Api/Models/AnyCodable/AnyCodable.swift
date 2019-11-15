@@ -21,7 +21,7 @@ public struct AnyCodable: Codable {
     }
 }
 
-extension AnyCodable: _AnyEncodable, _AnyDecodable {}
+extension AnyCodable: AnyEncodableProtocol, AnyDecodableProtocol {}
 
 // swiftlint:disable cyclomatic_complexity
 extension AnyCodable: Equatable {

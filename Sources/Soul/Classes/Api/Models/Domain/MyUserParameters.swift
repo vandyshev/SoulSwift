@@ -63,17 +63,6 @@ public struct PrivateParameters: Codable {
         }
     }
 
-    public struct UsageHistory: Codable {
-        public let records: [TimeInterval]?
-        public let total: Int?
-
-        public init(records: [TimeInterval]? = nil,
-                    total: Int? = nil) {
-            self.records = records
-            self.total = total
-        }
-    }
-
     public class Branch: Codable {
         public let clientId: String?
 
@@ -92,7 +81,6 @@ public struct PrivateParameters: Codable {
     public let availabilitySessionStart: TimeInterval?
     public let viewingSession: String?
     public let soulSettings: SoulSettings?
-    public let usageHistory: UsageHistory?
     public let distinctId: String?
     public let cleaned: Bool?
     public let hasWebSocketConnection: Bool?
@@ -106,7 +94,6 @@ public struct PrivateParameters: Codable {
                 availabilitySessionStart: TimeInterval? = nil,
                 viewingSession: String? = nil,
                 soulSettings: SoulSettings? = nil,
-                usageHistory: UsageHistory? = nil,
                 distinctId: String? = nil,
                 cleaned: Bool? = nil,
                 hasWebSocketConnection: Bool? = nil,
@@ -119,7 +106,6 @@ public struct PrivateParameters: Codable {
         self.availabilitySessionStart = availabilitySessionStart
         self.viewingSession = viewingSession
         self.soulSettings = soulSettings
-        self.usageHistory = usageHistory
         self.distinctId = distinctId
         self.cleaned = cleaned
         self.hasWebSocketConnection = hasWebSocketConnection
@@ -135,7 +121,6 @@ public struct PrivateParameters: Codable {
         case availabilitySessionStart = "availability_session_start"
         case viewingSession
         case soulSettings
-        case usageHistory
         case distinctId
         case cleaned
         case hasWebSocketConnection

@@ -32,9 +32,9 @@ extension AnyDecodableProtocol {
             self.init(double)
         } else if let string = try? container.decode(String.self) {
             self.init(string)
-        } else if let array = try? container.decode([AnyCodable].self) {
+        } else if let array = try? container.decode([AnyDecodable].self) {
             self.init(array.map { $0.value })
-        } else if let dictionary = try? container.decode([String: AnyCodable].self) {
+        } else if let dictionary = try? container.decode([String: AnyDecodable].self) {
             self.init(dictionary.mapValues { $0.value })
         } else {
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "AnyCodable value cannot be decoded")

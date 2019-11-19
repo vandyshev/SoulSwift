@@ -1,6 +1,5 @@
 // swiftlint:disable nesting
 public struct MyUser: Codable {
-    // TODO: SoulSwift: Rename to id
     public let id: String
     public let parameters: MyUserParameters?
     public let notificationTokens: NotificationTokens?

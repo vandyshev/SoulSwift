@@ -43,7 +43,7 @@ final class SoulMeService: SoulMeServiceProtocol {
         let request = SoulRequest(
             httpMethod: .PATCH,
             soulEndpoint: SoulMeEndpoint.me,
-            body: parameters,
+            body: ["parameters": parameters],
             needAuthorization: true
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in

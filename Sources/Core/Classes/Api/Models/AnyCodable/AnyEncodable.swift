@@ -24,10 +24,10 @@ extension AnyEncodableProtocol {
         var container = encoder.singleValueContainer()
 
         switch value {
-            #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
+        case let encodable as Encodable:
+            try encodable.encode(to: encoder)
         case let number as NSNumber:
             try encode(nsnumber: number, into: &container)
-            #endif
         case is NSNull, is Void:
             try container.encodeNil()
         case let bool as Bool:
@@ -76,7 +76,6 @@ extension AnyEncodableProtocol {
         }
     }
 
-    #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
     private func encode(nsnumber: NSNumber, into container: inout SingleValueEncodingContainer) throws {
         switch CFNumberGetType(nsnumber) {
         case .charType:
@@ -101,13 +100,10 @@ extension AnyEncodableProtocol {
             try container.encode(nsnumber.floatValue)
         case .doubleType, .float64Type, .cgFloatType:
             try container.encode(nsnumber.doubleValue)
-        #if swift(>=5.0)
         @unknown default:
             fatalError()
-        #endif
         }
     }
-    #endif
 }
 
 extension AnyEncodable: Equatable {

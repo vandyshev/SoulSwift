@@ -1,12 +1,25 @@
 import CommonCrypto
 
 protocol SoulAuthorizationProviderProtocol {
+    var isAuthorized: Bool { get }
+    var account: String? { get }
     func authorize(_ request: URLRequest) -> URLRequest
+    func saveAuthorization(method: AuthMethod, authorization: Authorization, me: MyUser)
 }
 
 class SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
 
-    private let storageService: StorageServiceProtocol
+    private var storageService: StorageServiceProtocol
+
+    var isAuthorized: Bool {
+        let userId = storageService.credential?.me.id ?? storageService.legacyUserId
+        let seesionToken = storageService.credential?.authorization.sessionToken ?? storageService.legacySessionToken
+        return userId != nil && storageService != nil
+    }
+
+    var account: String? {
+        return storageService.credential?.method.account
+    }
 
     init(storageService: StorageServiceProtocol) {
         self.storageService = storageService
@@ -19,9 +32,16 @@ class SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
         return request
     }
 
+    func saveAuthorization(method: AuthMethod, authorization: Authorization, me: MyUser) {
+        let credential = SoulCredential(method: method, authorization: authorization, me: me)
+        storageService.credential = credential
+        storageService.legacyUserId = me.id
+        storageService.legacySessionToken = authorization.sessionToken
+    }
+
     private func getAuthorization(_ request: URLRequest) -> String? {
-        guard let userId = storageService.credential?.me.id else { return nil }
-        guard var sessionToken = storageService.credential?.authorization.sessionToken else { return nil }
+        guard let userId = storageService.credential?.me.id ?? storageService.legacyUserId else { return nil }
+        guard var sessionToken = storageService.credential?.authorization.sessionToken ?? storageService.legacySessionToken else { return nil }
         guard let httpMethod = request.httpMethod else { return nil }
         guard let url = request.url else { return nil }
         guard let httpPath = httpPath(for: url) else { return nil }

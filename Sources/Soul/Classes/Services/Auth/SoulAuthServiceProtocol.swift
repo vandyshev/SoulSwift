@@ -33,19 +33,20 @@ public protocol SoulAuthServiceProtocol {
 final class SoulAuthService: SoulAuthServiceProtocol {
 
     private let soulProvider: SoulProviderProtocol
-    private var storageService: StorageServiceProtocol
+    private let soulAuthorizationProvider: SoulAuthorizationProviderProtocol
 
     var isAuthorized: Bool {
-        return storageService.credential != nil
+        return soulAuthorizationProvider.isAuthorized
     }
 
     var account: String? {
-        return storageService.credential?.method.account
+        return soulAuthorizationProvider.account
     }
 
-    init(soulProvider: SoulProviderProtocol, storageService: StorageServiceProtocol) {
+    init(soulProvider: SoulProviderProtocol,
+         soulAuthorizationProvider: SoulAuthorizationProviderProtocol) {
         self.soulProvider = soulProvider
-        self.storageService = storageService
+        self.soulAuthorizationProvider = soulAuthorizationProvider
     }
 
     func passwordRegister(login: String, password: String, completion: @escaping SoulResult<MyUser>.Completion) {
@@ -84,7 +85,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
             completion(
                 result.afterSaveAuthorization(
                     for: .password(login: login, password: password),
-                    with: self?.saveAuthorization
+                    with: self?.soulAuthorizationProvider.saveAuthorization
                 )
             )
         }
@@ -106,7 +107,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
             completion(
                 result.afterSaveAuthorization(
                     for: .password(login: login, password: password),
-                    with: self?.saveAuthorization
+                    with: self?.soulAuthorizationProvider.saveAuthorization
                 )
             )
         }
@@ -147,7 +148,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
             completion(
                 result.afterSaveAuthorization(
                     for: .phone(phoneNumber: phoneNumber, code: code),
-                    with: self?.saveAuthorization
+                    with: self?.soulAuthorizationProvider.saveAuthorization
                 )
             )
         }
@@ -187,7 +188,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
             completion(
                 result.afterSaveAuthorization(
                     for: .email(email: email, code: code),
-                    with: self?.saveAuthorization
+                    with: self?.soulAuthorizationProvider.saveAuthorization
                 )
             )
         }
@@ -211,7 +212,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
             completion(
                 result.afterSaveAuthorization(
                     for: .apple(email: email, code: code, token: token),
-                    with: self?.saveAuthorization
+                    with: self?.soulAuthorizationProvider.saveAuthorization
                 )
             )
         }
@@ -229,10 +230,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         }
     }
 
-    private func saveAuthorization(method: AuthMethod, authorization: Authorization, me: MyUser) {
-        let credential = SoulCredential(method: method, authorization: authorization, me: me)
-        storageService.credential = credential
-    }
+
 }
 
 private extension Result where Success == SoulResponse, Failure == SoulSwiftError {

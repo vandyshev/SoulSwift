@@ -1,5 +1,9 @@
+import Foundation
+
 private enum Constants {
     static let credential = "SOUL_SWIFT_CREDENTIAL"
+    static let legacyUserIdKey = "SL/USER_ID"
+    static let legacySessionTokenKey = "SL/SESSION_TOKEN"
 }
 
 private enum StorageServiceError: LocalizedError {
@@ -15,6 +19,10 @@ private enum StorageServiceError: LocalizedError {
 
 protocol StorageServiceProtocol {
     var credential: SoulCredential? { get set }
+    @available(*, deprecated, message: "Используется для совместимости c SoulSDK и Dream")
+    var legacyUserId: String? { get set }
+    @available(*, deprecated, message: "Используется для совместимости c SoulSDK и Dream")
+    var legacySessionToken: String? { get set }
 }
 
 final class StorageService: StorageServiceProtocol {
@@ -29,6 +37,22 @@ final class StorageService: StorageServiceProtocol {
         }
         set {
             try? save(object: newValue, for: Constants.credential)
+        }
+    }
+
+    var legacyUserId: String? {
+        get {
+            userDefaults.string(forKey: Constants.legacyUserIdKey)
+        } set {
+            userDefaults.set(newValue, forKey: Constants.legacyUserIdKey)
+        }
+    }
+    
+    var legacySessionToken: String? {
+        get {
+            userDefaults.string(forKey: Constants.legacySessionTokenKey)
+        } set {
+            userDefaults.set(newValue, forKey: Constants.legacySessionTokenKey)
         }
     }
 

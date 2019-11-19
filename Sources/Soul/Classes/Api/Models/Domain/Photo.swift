@@ -1,7 +1,7 @@
 public struct Photo: Codable {
-    let id: String
+    public let id: String
     let expiresTime: TimeInterval?
-    let original: Image?
+    let original: Image
     let thumbnails: [Image]?
 
     public struct Image: Codable {
@@ -9,5 +9,11 @@ public struct Photo: Codable {
         let url: String
         let width: Double
         let height: Double
+    }
+}
+
+public extension Photo {
+    var url: String {
+        return original.url
     }
 }

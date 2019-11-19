@@ -16,7 +16,6 @@ protocol SoulProviderProtocol: class {
 class SoulProvider: SoulProviderProtocol {
 
     private var session = URLSession(configuration: .default)
-    private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()
 
     private let soulAuthorizationProvider: SoulAuthorizationProviderProtocol
@@ -102,12 +101,13 @@ class SoulProvider: SoulProviderProtocol {
         var request = URLRequest(url: url)
         request.httpMethod = soulRequest.httpMethod.rawValue
 
-        if let body = soulRequest.body {
-            let encodable = AnyEncodable(body)
-            request.httpBody = try? encoder.encode(encodable)
-            let contentTypeHeaderName = "Content-Type"
-            if request.value(forHTTPHeaderField: contentTypeHeaderName) == nil {
-                request.setValue("application/json", forHTTPHeaderField: contentTypeHeaderName)
+        if let httpBody = soulRequest.httpBody {
+            request.httpBody = httpBody
+        }
+
+        if let httpHeaderFields = soulRequest.httpHeaderFields {
+            for (key, value) in httpHeaderFields {
+                request.setValue(value, forHTTPHeaderField: key)
             }
         }
 

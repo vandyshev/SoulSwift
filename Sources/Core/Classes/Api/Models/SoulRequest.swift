@@ -1,12 +1,5 @@
 class SoulRequest {
 
-    let baseURL: String
-    let httpMethod: HTTPMethod
-    let soulEndpoint: SoulEndpoint
-    let needAuthorization: Bool
-    var queryParameters: [String: String]?
-    var body: Encodable?
-
     enum HTTPMethod: String {
         case GET
         case POST
@@ -15,12 +8,42 @@ class SoulRequest {
         case DELETE
     }
 
+    private(set) var baseURL: String
+    private(set) var httpMethod: HTTPMethod
+    private(set) var soulEndpoint: SoulEndpoint
+    private(set) var needAuthorization: Bool
+    private(set) var queryParameters: [String: String]?
+    private(set) var httpBody: Data?
+    private(set) var httpHeaderFields: [String: String]?
+
+    private let encoder = JSONEncoder()
+    private lazy var boundary: String = {
+       return String(format: "%08X%08X", arc4random(), arc4random())
+    }()
+
     func setQueryParameters(_ parameters: [String: Any?]) {
         self.queryParameters = parameters.compactMapValuesToString()
     }
 
     func setBodyParameters(_ parameters: [String: Any?]) {
-        self.body = parameters.compactMapValuesToAnyEncodable()
+        setBodyEncodable(parameters.compactMapValuesToAnyEncodable())
+    }
+
+    func setBodyEncodable(_ body: Encodable?) {
+        httpBody = try? encoder.encode(AnyEncodable(body))
+        httpHeaderFields = ["Content-Type": "application/json"]
+    }
+
+    func setUploads(file: Data, name: String, fileName: String, mimeType: String) {
+        var httpBody = Data()
+        httpBody.append(Data("--\(boundary)\r\n".utf8))
+        httpBody.append(Data("Content-Disposition: form-data; name=\"\(name)\";filename=\"\(fileName)\"\r\n".utf8))
+        httpBody.append(Data("Content-Type: \(mimeType)\r\n\r\n".utf8))
+        httpBody.append(file)
+        httpBody.append(Data("\r\n".utf8))
+        httpBody.append(Data("--\(boundary)--\r\n".utf8))
+        self.httpBody = httpBody
+        httpHeaderFields = ["Content-Type": "multipart/form-data; boundary=\(boundary)"]
     }
 
     init(baseURL: String = SoulClient.shared.soulConfiguration.baseURL,
@@ -33,8 +56,8 @@ class SoulRequest {
         self.httpMethod = httpMethod
         self.soulEndpoint = soulEndpoint
         self.queryParameters = queryParameters
-        self.body = body
         self.needAuthorization = needAuthorization
+        setBodyEncodable(body)
     }
 }
 

@@ -87,13 +87,13 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
         }
     }
 
-    // TODO: multipart/form-data
     func addPhoto(albumName: String, photo: Data, offset: Int?, limit: Int?, completion: @escaping SoulResult<Photo>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulMeEndpoint.albumsAlbumName(albumName: albumName),
             needAuthorization: true
         )
+        request.setUploads(file: photo, name: "photo", fileName: "photo", mimeType: "image/png")
         request.setQueryParameters(["offset": offset, "limit": limit])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
             completion(result.map { $0.photo })

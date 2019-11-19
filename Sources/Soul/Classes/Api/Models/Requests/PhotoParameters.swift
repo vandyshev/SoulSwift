@@ -1,6 +1,16 @@
 public struct PhotoParameters: Encodable {
-    let order: Int?
-    let mainPhoto: Bool?
-    let album: String?
-    let expiresTime: TimeInterval?
+    public let order: Int?
+    public let mainPhoto: Bool?
+    public let album: String?
+    public let expiresTime: TimeInterval?
+
+    public init(order: Int? = nil,
+                mainPhoto: Bool? = nil,
+                album: String? = nil,
+                expiresTime: TimeInterval? = nil) {
+        self.order = order
+        self.mainPhoto = mainPhoto
+        self.album = album
+        self.expiresTime = expiresTime
+    }
 }

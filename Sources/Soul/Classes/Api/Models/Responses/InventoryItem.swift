@@ -1,11 +1,18 @@
 public struct InventoryItem: Decodable {
-    let id: String
-    let disableFreeToPlayLimits: Bool?
-    let disableAdvertisement: Bool?
-    let validBefore: TimeInterval?
-    let name: String?
-    let validBeforeStrict: TimeInterval?
-    let quantity: Int?
-    let type: String?
-    let description: String?
+    public let id: String
+    public let disableFreeToPlayLimits: Bool?
+    public let disableAdvertisement: Bool?
+    public let validBefore: TimeInterval?
+    public let name: String?
+    public let validBeforeStrict: TimeInterval?
+    public let quantity: Int?
+    public let type: InventoryItemType?
+    public let description: String?
+
+    public enum InventoryItemType: String, Decodable {
+        case consumable = "Consumable"
+        case nonConsumable = "Non-consumable"
+        case subscription = "Subscription"
+        case autorenewable = "Autorenewal"
+    }
 }

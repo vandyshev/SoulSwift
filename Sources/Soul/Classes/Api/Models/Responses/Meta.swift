@@ -1,7 +1,5 @@
 public struct Meta: Decodable {
-
-    let total: Int
-    let limit: Int
-    let offset: Int
-
+    public let total: Int
+    public let limit: Int
+    public let offset: Int
 }

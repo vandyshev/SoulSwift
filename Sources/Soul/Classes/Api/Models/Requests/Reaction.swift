@@ -1,4 +1,10 @@
 public struct Reaction: Encodable {
-    let value: String
-    let expiresTime: TimeInterval?
+    public let value: String
+    public let expiresTime: TimeInterval?
+
+    public init(value: String,
+                expiresTime: TimeInterval? = nil) {
+        self.value = value
+        self.expiresTime = expiresTime
+    }
 }

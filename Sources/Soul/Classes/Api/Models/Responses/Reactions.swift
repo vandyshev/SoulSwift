@@ -1,7 +1,7 @@
 public struct Reactions: Decodable {
 
-    let sentByMe: Reaction
-    let receivedFromUser: Reaction
+    let sentByMe: Reaction?
+    let receivedFromUser: Reaction?
 
     public struct Reaction: Decodable {
 
@@ -11,7 +11,14 @@ public struct Reactions: Decodable {
         public struct Likes: Decodable {
             let createdTime: TimeInterval?
             let expiresTime: TimeInterval?
-            let value: String?
+            let value: LikeReaction?
+
+            public enum LikeReaction: String, Decodable {
+                case like = "liked"
+                case dislike
+                case neutral
+                case instachat
+            }
         }
     }
 

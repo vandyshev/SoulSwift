@@ -1,9 +1,9 @@
 public struct Event: Decodable {
 
-    let recordId: String?
-    let time: TimeInterval?
-    let action: ActionType?
-    let object: ObjectType?
+    public let recordId: String?
+    public let time: TimeInterval?
+    public let action: ActionType?
+    public let object: ObjectType?
 
     enum CodingKeys: String, CodingKey {
         case recordId
@@ -37,6 +37,9 @@ public struct Event: Decodable {
     public enum ActionType: String, Decodable {
         case change
         case addition
+        case kicked
+        case photoRemoved = "photo_removed"
+        case banned
     }
 
     public init(from decoder: Decoder) throws {

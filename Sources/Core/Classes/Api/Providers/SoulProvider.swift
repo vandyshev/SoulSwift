@@ -1,3 +1,5 @@
+import Foundation
+
 private enum Constants {
     static let maxRetryCount = 5
 }
@@ -23,17 +25,26 @@ class SoulProvider: SoulProviderProtocol {
     private let soulUserAgentProvider: SoulUserAgentProviderProtocol
     private let soulRefreshTokenProvider: SoulRefreshTokenProviderProtocol
     private let soulAdditionalInfoProvider: SoulAdditionalInfoProviderProtocol
+    private let soulDateProvider: SoulDateProviderProtocol
+    private let soulMeProvider: SoulMeProviderProtocol
+    private let soulErrorProvider: SoulErrorProviderProtocol
 
     init(soulAuthorizationProvider: SoulAuthorizationProviderProtocol,
          soulVersionProvider: SoulApiVersionProviderProtocol,
          soulUserAgentVersionProvider: SoulUserAgentProviderProtocol,
          soulRefreshTokenProvider: SoulRefreshTokenProviderProtocol,
-         soulAdditionalInfoProvider: SoulAdditionalInfoProviderProtocol) {
+         soulAdditionalInfoProvider: SoulAdditionalInfoProviderProtocol,
+         soulDateProvider: SoulDateProviderProtocol,
+         soulMeProviderProtocol: SoulMeProviderProtocol,
+         soulErrorProvider: SoulErrorProviderProtocol) {
         self.soulAuthorizationProvider = soulAuthorizationProvider
         self.soulApiVersionProvider = soulVersionProvider
         self.soulUserAgentProvider = soulUserAgentVersionProvider
         self.soulRefreshTokenProvider = soulRefreshTokenProvider
         self.soulAdditionalInfoProvider = soulAdditionalInfoProvider
+        self.soulDateProvider = soulDateProvider
+        self.soulMeProvider = soulMeProviderProtocol
+        self.soulErrorProvider = soulErrorProvider
     }
 
     func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, completion: @escaping SoulResult<Response>.Completion) {
@@ -42,10 +53,14 @@ class SoulProvider: SoulProviderProtocol {
 
     func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, retryCount: Int, completion: @escaping SoulResult<Response>.Completion) {
         guard let urlRequest = urlRequest(soulRequest: soulRequest) else {
-            completion(.failure(SoulSwiftError.requestError))
+            let result: SoulResult<Response> = .failure(SoulSwiftError.requestError)
+            soulErrorProvider.handleError(result)
+            completion(result)
             return
         }
+        print("Soul Request: \(soulRequest.soulEndpoint.path)")
         let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            print("Soul Response: \(soulRequest.soulEndpoint.path)")
             guard let sSelf = self else { return }
             if sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response), retryCount > 0 {
                 sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf) { result in
@@ -57,38 +72,19 @@ class SoulProvider: SoulProviderProtocol {
                     }
                 }
             } else {
+                let result: SoulResult<Response> = sSelf.soulResponse(data, response, error)
                 sSelf.soulAdditionalInfoProvider.saveAdditionalInfo(data)
-                soulResponse(data, response, error)
+                sSelf.soulDateProvider.updateServerTimeDelta(data)
+                sSelf.soulMeProvider.updateMe(data)
+                sSelf.soulErrorProvider.handleError(result)
+                DispatchQueue.main.async {
+                    completion(result)
+                }
             }
         }
         task.resume()
 
-        func soulError(from data: Data?, and response: URLResponse?) -> SoulError? {
-            guard let response = response as? HTTPURLResponse else { return nil }
-            guard let data = data else { return nil }
-            if (200...299).contains(response.statusCode) { return nil }
-            return try? decoder.decode(SoulErrorResponse.self, from: data).error
-        }
 
-        func soulResponse(_ data: Data?, _ response: URLResponse?, _ error: Error?) {
-            let result: Result<Response, SoulSwiftError>
-            if let error = error {
-                result = .failure(SoulSwiftError.networkError(error))
-            } else if let error = soulError(from: data, and: response) {
-                result = .failure(SoulSwiftError.soulError(error))
-            } else if let data = data {
-                do {
-                    result = .success(try decoder.decode(Response.self, from: data))
-                } catch {
-                    result = .failure(SoulSwiftError.decoderError)
-                }
-            } else {
-                result = .failure(SoulSwiftError.unknown)
-            }
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        }
     }
 
     private func urlRequest(soulRequest: SoulRequest) -> URLRequest? {
@@ -118,5 +114,30 @@ class SoulProvider: SoulProviderProtocol {
             request = soulAuthorizationProvider.authorize(request)
         }
         return request
+    }
+
+    private func soulError(from data: Data?, and response: URLResponse?) -> SoulError? {
+        guard let response = response as? HTTPURLResponse else { return nil }
+        guard let data = data else { return nil }
+        if (200...299).contains(response.statusCode) { return nil }
+        return try? decoder.decode(SoulErrorResponse.self, from: data).error
+    }
+
+    private func soulResponse<Response: Decodable>(_ data: Data?, _ response: URLResponse?, _ error: Error?) -> SoulResult<Response> {
+        let result: Result<Response, SoulSwiftError>
+        if let error = error {
+            result = .failure(SoulSwiftError.networkError(error))
+        } else if let error = soulError(from: data, and: response) {
+            result = .failure(SoulSwiftError.soulError(error))
+        } else if let data = data {
+            do {
+                result = .success(try decoder.decode(Response.self, from: data))
+            } catch {
+                result = .failure(SoulSwiftError.decoderError)
+            }
+        } else {
+            result = .failure(SoulSwiftError.unknown)
+        }
+        return result
     }
 }

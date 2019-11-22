@@ -4,6 +4,7 @@ private enum Constants {
     static let credential = "SOUL_SWIFT_CREDENTIAL"
     static let legacyUserIdKey = "SL/USER_ID"
     static let legacySessionTokenKey = "SL/SESSION_TOKEN"
+    static let legacyServerTimeDeltaKey = "SL/SERVER_TIME_DELTA"
 }
 
 private enum StorageServiceError: LocalizedError {
@@ -23,6 +24,8 @@ protocol StorageServiceProtocol {
     var legacyUserId: String? { get set }
     @available(*, deprecated, message: "Используется для совместимости c SoulSDK и Dream")
     var legacySessionToken: String? { get set }
+    @available(*, deprecated, message: "Используется для совместимости c SoulSDK и Dream")
+    var legacyServerTimeDelta: TimeInterval? { get set }
 }
 
 final class StorageService: StorageServiceProtocol {
@@ -53,6 +56,14 @@ final class StorageService: StorageServiceProtocol {
             userDefaults.string(forKey: Constants.legacySessionTokenKey)
         } set {
             userDefaults.set(newValue, forKey: Constants.legacySessionTokenKey)
+        }
+    }
+
+    var legacyServerTimeDelta: TimeInterval? {
+        get {
+            userDefaults.double(forKey: Constants.legacyServerTimeDeltaKey)
+        } set {
+            userDefaults.set(newValue, forKey: Constants.legacyServerTimeDeltaKey)
         }
     }
 

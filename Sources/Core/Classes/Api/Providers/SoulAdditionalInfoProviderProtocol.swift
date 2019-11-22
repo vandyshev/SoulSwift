@@ -16,7 +16,6 @@ class SoulAdditionalInfoProvider: SoulAdditionalInfoProviderProtocol {
     func saveAdditionalInfo(_ data: Data?) {
         guard let data = data else { return }
         let response = try? decoder.decode(Response.self, from: data)
-        self.additionalInfo = response?.additionalInfo
+        additionalInfo = response?.additionalInfo
     }
-
 }

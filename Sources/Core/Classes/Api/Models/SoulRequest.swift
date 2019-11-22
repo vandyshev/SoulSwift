@@ -30,6 +30,7 @@ class SoulRequest {
     }
 
     func setBodyEncodable(_ body: Encodable?) {
+        guard let body = body else { return }
         httpBody = try? encoder.encode(AnyEncodable(body))
         httpHeaderFields = ["Content-Type": "application/json"]
     }

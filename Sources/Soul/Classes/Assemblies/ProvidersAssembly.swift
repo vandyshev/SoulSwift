@@ -8,6 +8,9 @@ final class ProvidersAssembly: Assembly {
         container.autoregister(SoulUserAgentProviderProtocol.self, initializer: SoulUserAgentVersionProvider.init).inObjectScope(.container)
         container.autoregister(SoulRefreshTokenProviderProtocol.self, initializer: SoulRefreshTokenProvider.init).inObjectScope(.container)
         container.autoregister(SoulAdditionalInfoProviderProtocol.self, initializer: SoulAdditionalInfoProvider.init).inObjectScope(.container)
+        container.autoregister(SoulDateProviderProtocol.self, initializer: SoulDateProvider.init).inObjectScope(.container)
+        container.autoregister(SoulMeProviderProtocol.self, initializer: SoulMeProvider.init).inObjectScope(.container)
+        container.autoregister(SoulErrorProviderProtocol.self, initializer: SoulErrorProvider.init).inObjectScope(.container)
         container.autoregister(SoulProviderProtocol.self, initializer: SoulProvider.init).inObjectScope(.container)
     }
 }

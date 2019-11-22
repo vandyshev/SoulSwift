@@ -2,6 +2,7 @@
 public protocol SoulAuthServiceProtocol {
     var isAuthorized: Bool { get }
     var account: String? { get }
+    var errorCompletion: ((Error) -> Void)? { get set}
 
     // POST: /auth/password/register
     func passwordRegister(login: String, password: String, completion: @escaping SoulResult<MyUser>.Completion)
@@ -42,6 +43,8 @@ final class SoulAuthService: SoulAuthServiceProtocol {
     var account: String? {
         return soulAuthorizationProvider.account
     }
+
+    var errorCompletion: ((Error) -> Void)?
 
     init(soulProvider: SoulProviderProtocol,
          soulAuthorizationProvider: SoulAuthorizationProviderProtocol) {

@@ -18,7 +18,7 @@ public protocol SoulAuthServiceProtocol {
     func phoneVerify(phoneNumber: String, code: String, method: PhoneRequestMethod, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
 
     // POST: /auth/emailcode/request
-    func emailCodeRequest(email: String, completion: @escaping SoulResult<EmailCodeRequestResponse>.Completion)
+    func emailCodeRequest(email: String, captchaToken: String?, completion: @escaping SoulResult<EmailCodeRequestResponse>.Completion)
     // POST: /auth/emailcode/verify
     func emailCodeVerify(email: String, code: String, completion: @escaping SoulResult<MyUser>.Completion)
     func emailCodeVerify(email: String, code: String, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
@@ -157,12 +157,13 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         }
     }
 
-    func emailCodeRequest(email: String, completion: @escaping SoulResult<EmailCodeRequestResponse>.Completion) {
+    func emailCodeRequest(email: String, captchaToken: String?, completion: @escaping SoulResult<EmailCodeRequestResponse>.Completion) {
         var request = SoulRequest(
             httpMethod: .POST,
             soulEndpoint: SoulAuthEndpoint.emailCodeRequest
         )
         request.setBodyParameters(["email": email,
+                                   "captchaToken": captchaToken,
                                    "anonymousUser": SoulClient.shared.soulConfiguration.anonymousUser,
                                    "apiKey": SoulClient.shared.soulConfiguration.apiKey])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in

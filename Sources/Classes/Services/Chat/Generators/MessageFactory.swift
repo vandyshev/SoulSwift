@@ -50,7 +50,10 @@ final class MessagesFactoryImpl: MessagesFactory {
         case let .location(latitude: latitude, longitude: longitude):
             return try createGeoMessage(messageId: messageId, lat: latitude, lng: longitude)
 
-        case .unknown, .system:
+        case let .system(dataRepresentation):
+            return try createSystemMessage(messageId: messageId, data: dataRepresentation)
+
+        case .unknown:
             throw MessagesFactoryError.contentTypeError
         }
     }
@@ -94,6 +97,20 @@ final class MessagesFactoryImpl: MessagesFactory {
                                   latitude: lat,
                                   longitude: lng,
                                   systemData: nil)
+        return message
+    }
+
+    private func createSystemMessage(messageId: String?, data: SystemDataRepresentation) throws -> ChatMessage {
+        let baseMessageData = try getBaseMessageData()
+        let message = ChatMessage(messageId: messageId ?? baseMessageData.messageId,
+                                  userId: baseMessageData.userId,
+                                  timestamp: baseMessageData.timeStamp,
+                                  text: "",
+                                  photoId: nil,
+                                  albumName: nil,
+                                  latitude: nil,
+                                  longitude: nil,
+                                  systemData: data)
         return message
     }
 

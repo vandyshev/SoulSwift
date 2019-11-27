@@ -24,6 +24,11 @@ extension SystemDataRepresentation: Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        assertionFailure()
+        var container = try encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(type, forKey: .type)
+        var dictContainer = try container.nestedContainer(keyedBy: DictionaryCodingKeys.self, forKey: .data)
+        if let dict = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any] {
+            try dictContainer.encodeUnknownValues(dict: dict)
+        }
     }
 }

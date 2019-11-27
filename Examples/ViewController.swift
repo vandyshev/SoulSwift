@@ -48,7 +48,7 @@ class ViewController: UIViewController {
 
     @IBAction func emailRequest(_ sender: Any) {
         guard let email = emailTextField.text else { return }
-        SoulClient.shared.soulAuthService?.emailCodeRequest(email: email, completion: { result in
+        SoulClient.shared.soulAuthService?.emailCodeRequest(email: email, captchaToken: nil, completion: { result in
             switch result {
             case .success(let me):
                 print(me)

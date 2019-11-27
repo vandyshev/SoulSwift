@@ -4,19 +4,19 @@ public protocol SoulUsersServiceProtocol {
     func recommendationsList(uniqueToken: String?, viewingSession: String?, limit: Int?, completion: @escaping SoulResult<[User]>.Completion)
 
     // PATCH: /users/recommendations/filter
-    func setRecommendationsFilter(filter: Filter?, settings: Settings?, completion: @escaping SoulResult<[User]>.Completion)
+    func setRecommendationsFilter(filter: Filter?, settings: Settings?, completion: @escaping SoulResult<Void>.Completion)
 
-    // GET: /users/recommendations/set/{filterName}
-    func recommendationsSetFilterName(filterName: String,
-                                      offset: Int?,
-                                      limit: Int?,
-                                      before: TimeInterval?,
-                                      since: TimeInterval?,
-                                      countOnly: Bool?,
-                                      completion: @escaping SoulResult<([User], Meta)>.Completion)
+    // GET: /users/set/{filterName}
+    func setFilterName(filterName: String,
+                       offset: Int?,
+                       limit: Int?,
+                       before: TimeInterval?,
+                       since: TimeInterval?,
+                       countOnly: Bool?,
+                       completion: @escaping SoulResult<([User], Meta)>.Completion)
 
-    // PATCH: /users/recommendations/set/{filterName}/filter
-    func setRecommendationsFilter(filterName: String, user: Filter?, completion: @escaping SoulResult<[User]>.Completion)
+    // PATCH: /users/set/{filterName}/filter
+    func setFilterNameFilter(filterName: String, user: Filter?, completion: @escaping SoulResult<Void>.Completion)
 }
 
 final class SoulUsersService: SoulUsersServiceProtocol {
@@ -42,28 +42,28 @@ final class SoulUsersService: SoulUsersServiceProtocol {
     }
 
     // PATCH: /users/recommendations/filter
-    func setRecommendationsFilter(filter: Filter?, settings: Settings?, completion: @escaping SoulResult<[User]>.Completion) {
+    func setRecommendationsFilter(filter: Filter?, settings: Settings?, completion: @escaping SoulResult<Void>.Completion) {
         var request = SoulRequest(
             httpMethod: .PATCH,
-            soulEndpoint: SoulUsersEndpoint.recommendationsList,
+            soulEndpoint: SoulUsersEndpoint.recommendationsFilter,
             needAuthorization: true
         )
-        request.setBodyParameters(["filter": filter, "settings": settings])
+        request.setBodyParameters(["filter": filter?.filter, "settings": settings?.settings])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.users })
+            completion(result.map { _ in })
         }
     }
 
-    // GET: /users/recommendations/set/{filterName}
-    func recommendationsSetFilterName(filterName: String,
-                                      offset: Int?,
-                                      limit: Int?,
-                                      before: TimeInterval?,
-                                      since: TimeInterval?,
-                                      countOnly: Bool?,
-                                      completion: @escaping SoulResult<([User], Meta)>.Completion) {
+    // GET: /users/set/{filterName}
+    func setFilterName(filterName: String,
+                       offset: Int?,
+                       limit: Int?,
+                       before: TimeInterval?,
+                       since: TimeInterval?,
+                       countOnly: Bool?,
+                       completion: @escaping SoulResult<([User], Meta)>.Completion) {
         var request = SoulRequest(
-            soulEndpoint: SoulUsersEndpoint.recommendationsSetFilterName(filterName: filterName),
+            soulEndpoint: SoulUsersEndpoint.setFilterName(filterName: filterName),
             needAuthorization: true
         )
         request.setQueryParameters(["count_only": countOnly,
@@ -76,16 +76,16 @@ final class SoulUsersService: SoulUsersServiceProtocol {
         }
     }
 
-    // PATCH: /users/recommendations/set/{filterName}/filter
-    func setRecommendationsFilter(filterName: String, user: Filter?, completion: @escaping SoulResult<[User]>.Completion) {
+    // PATCH: /users/set/{filterName}/filter
+    func setFilterNameFilter(filterName: String, user: Filter?, completion: @escaping SoulResult<Void>.Completion) {
         var request = SoulRequest(
             httpMethod: .PATCH,
-            soulEndpoint: SoulUsersEndpoint.recommendationsSetFilterNameFilter(filterName: filterName),
+            soulEndpoint: SoulUsersEndpoint.setFilterNameFilter(filterName: filterName),
             needAuthorization: true
         )
-        request.setBodyParameters(["user": user])
+        request.setBodyParameters(["user": user?.filter])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.users })
+            completion(result.map { _ in })
         }
     }
 }

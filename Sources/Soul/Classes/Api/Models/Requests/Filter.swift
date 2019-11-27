@@ -1,4 +1,4 @@
-public struct Filter: Encodable {
+public struct Filter {
     let filter: [String: AnyEncodable]
 
     public init(filter: [String: AnyEncodable]) {

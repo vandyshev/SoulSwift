@@ -2,7 +2,7 @@
 public protocol SoulAuthServiceProtocol {
     var isAuthorized: Bool { get }
     var account: String? { get }
-    var errorCompletion: ((Error) -> Void)? { get set}
+    var errorCompletion: ((SoulSwiftError) -> Void)? { get set}
 
     // POST: /auth/password/register
     func passwordRegister(login: String, password: String, completion: @escaping SoulResult<MyUser>.Completion)
@@ -35,6 +35,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
 
     private let soulProvider: SoulProviderProtocol
     private let soulAuthorizationProvider: SoulAuthorizationProviderProtocol
+    private var soulErrorProvider: SoulErrorProviderProtocol
 
     var isAuthorized: Bool {
         return soulAuthorizationProvider.isAuthorized
@@ -44,12 +45,18 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         return soulAuthorizationProvider.account
     }
 
-    var errorCompletion: ((Error) -> Void)?
+    var errorCompletion: ((SoulSwiftError) -> Void)? {
+        didSet {
+            soulErrorProvider.errorCompletion = { [weak self] in self?.errorCompletion?($0) }
+        }
+    }
 
     init(soulProvider: SoulProviderProtocol,
-         soulAuthorizationProvider: SoulAuthorizationProviderProtocol) {
+         soulAuthorizationProvider: SoulAuthorizationProviderProtocol,
+         soulErrorProvider: SoulErrorProviderProtocol) {
         self.soulProvider = soulProvider
         self.soulAuthorizationProvider = soulAuthorizationProvider
+        self.soulErrorProvider = soulErrorProvider
     }
 
     func passwordRegister(login: String, password: String, completion: @escaping SoulResult<MyUser>.Completion) {
@@ -229,8 +236,9 @@ final class SoulAuthService: SoulAuthServiceProtocol {
             needAuthorization: true
         )
         request.setQueryParameters(["full": full])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { _ in })
+        soulProvider.request(request, retryCount: 0) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+            self?.soulAuthorizationProvider.removeAuthorization()
+            completion(.success(()))
         }
     }
 

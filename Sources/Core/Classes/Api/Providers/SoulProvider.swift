@@ -1,7 +1,7 @@
 import Foundation
 
 private enum Constants {
-    static let maxRetryCount = 5
+    static let maxRetryCount = 3
 }
 
 public typealias SoulResult<T> = Result<T, SoulSwiftError>
@@ -12,6 +12,7 @@ public extension SoulResult {
 
 protocol SoulProviderProtocol: class {
     func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, completion: @escaping SoulResult<Response>.Completion)
+    func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, retryCount: Int, completion: @escaping SoulResult<Response>.Completion)
 }
 
 // swiftlint:disable line_length
@@ -58,9 +59,9 @@ class SoulProvider: SoulProviderProtocol {
             completion(result)
             return
         }
-        print("Soul Request: \(soulRequest.soulEndpoint.path)")
+        print("Soul Request: \(soulRequest.debugDescription)")
         let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
-            print("Soul Response: \(soulRequest.soulEndpoint.path)")
+            print("Soul Response: \(soulRequest.debugDescription)")
             guard let sSelf = self else { return }
             if sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response), retryCount > 0 {
                 sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf) { result in
@@ -72,19 +73,32 @@ class SoulProvider: SoulProviderProtocol {
                     }
                 }
             } else {
-                let result: SoulResult<Response> = sSelf.soulResponse(data, response, error)
-                sSelf.soulAdditionalInfoProvider.saveAdditionalInfo(data)
-                sSelf.soulDateProvider.updateServerTimeDelta(data)
-                sSelf.soulMeProvider.updateMe(data)
-                sSelf.soulErrorProvider.handleError(result)
                 DispatchQueue.main.async {
+                    let result: SoulResult<Response> = sSelf.soulResponse(data, response, error)
+                    sSelf.soulAdditionalInfoProvider.saveAdditionalInfo(data)
+                    sSelf.soulDateProvider.updateServerTimeDelta(data)
+                    sSelf.soulMeProvider.updateMe(data)
+                    sSelf.soulErrorProvider.handleError(result)
                     completion(result)
                 }
             }
         }
         task.resume()
+    }
 
-
+    func refreshTokenRequest<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, completion: @escaping SoulResult<Response>.Completion) {
+        guard let urlRequest = urlRequest(soulRequest: soulRequest) else {
+            completion(.failure(SoulSwiftError.requestError))
+            return
+        }
+        print("Soul Refresh Token Request: \(soulRequest.debugDescription)")
+        let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            print("Soul Refresh Token Response: \(soulRequest.debugDescription)")
+            guard let sSelf = self else { return }
+            let result: SoulResult<Response> = sSelf.soulResponse(data, response, error)
+            completion(result)
+        }
+        task.resume()
     }
 
     private func urlRequest(soulRequest: SoulRequest) -> URLRequest? {

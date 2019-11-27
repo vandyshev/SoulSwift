@@ -1,15 +1,18 @@
-import CommonCrypto
+import CryptoSwift
+import Foundation
 
 protocol SoulAuthorizationProviderProtocol {
     var isAuthorized: Bool { get }
     var account: String? { get }
     func authorize(_ request: URLRequest) -> URLRequest
     func saveAuthorization(method: AuthMethod, authorization: Authorization, me: MyUser)
+    func removeAuthorization()
 }
 
 class SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
 
     private var storageService: StorageServiceProtocol
+    private var soulDateProvider: SoulDateProviderProtocol
 
     var isAuthorized: Bool {
         let userId = storageService.credential?.me.id ?? storageService.legacyUserId
@@ -21,8 +24,10 @@ class SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
         return storageService.credential?.method.account
     }
 
-    init(storageService: StorageServiceProtocol) {
+    init(storageService: StorageServiceProtocol,
+         soulDateProvider: SoulDateProviderProtocol) {
         self.storageService = storageService
+        self.soulDateProvider = soulDateProvider
     }
 
     func authorize(_ request: URLRequest) -> URLRequest {
@@ -39,31 +44,35 @@ class SoulAuthorizationProvider: SoulAuthorizationProviderProtocol {
         storageService.legacySessionToken = authorization.sessionToken
     }
 
+    func removeAuthorization() {
+        storageService.credential = nil
+        storageService.legacyUserId = nil
+        storageService.legacySessionToken = nil
+    }
+
     private func getAuthorization(_ request: URLRequest) -> String? {
         guard let userId = storageService.credential?.me.id ?? storageService.legacyUserId else { return nil }
         guard var sessionToken = storageService.credential?.authorization.sessionToken ?? storageService.legacySessionToken else { return nil }
         guard let httpMethod = request.httpMethod else { return nil }
         guard let url = request.url else { return nil }
         guard let httpPath = httpPath(for: url) else { return nil }
-        let httpBody = String(data: request.httpBody ?? Data(), encoding: .utf8) ?? ""
-        // TODO: adjust timestamp
-        let unixtime = "\(Int(round(Date().timeIntervalSince1970)))"
-        let digest = hmacSHA256(from: "\(httpMethod)+\(httpPath)+\(httpBody)+\(unixtime)", key: sessionToken)
+        let httpBody = request.httpBody.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        let adjustedTimestamp = soulDateProvider.currentAdjustedDate.timeIntervalSince1970
+        let unixtime = "\(Int(round(adjustedTimestamp)))"
+        guard let digest = hmacSHA256(from: "\(httpMethod)+\(httpPath)+\(httpBody)+\(unixtime)", key: sessionToken) else { return nil }
         return "hmac \(userId):\(unixtime):\(digest)"
     }
 
     private func httpPath(for url: URL) -> String? {
-        var urlComponents = URLComponents()
-        urlComponents.path = url.path
-        urlComponents.query = url.query
-        urlComponents.fragment = url.fragment
-        return urlComponents.url?.absoluteString
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        urlComponents?.scheme = nil
+        urlComponents?.host = nil
+        return urlComponents?.url?.absoluteString
     }
 
-    private func hmacSHA256(from string: String, key: String) -> String {
-        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
-        CCHmac(CCHmacAlgorithm(kCCHmacAlgSHA256), key, key.count, string, string.count, &digest)
-        let data = Data(bytes: digest)
-        return data.map { String(format: "%02hhx", $0) }.joined()
+    private func hmacSHA256(from string: String, key: String) -> String? {
+        guard let data = string.data(using: .utf8) else { return nil }
+        let key: [UInt8] = Array(key.utf8)
+        return try? HMAC(key: key, variant: .sha256).authenticate(data.bytes).toHexString()
     }
 }

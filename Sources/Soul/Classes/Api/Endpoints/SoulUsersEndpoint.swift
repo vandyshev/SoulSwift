@@ -5,8 +5,8 @@ enum SoulUsersEndpoint {
     case recommendationsFilter
     case recommendationsIncognitoFilter
     case recommendationsIncognitoList
-    case recommendationsSetFilterName(filterName: String)
-    case recommendationsSetFilterNameFilter(filterName: String)
+    case setFilterName(filterName: String)
+    case setFilterNameFilter(filterName: String)
     case usersUserId(userId: String)
     case usersUserIdReactionsSent(userId: String, reactionType: String)
     case usersUserIdFlag(userId: String)
@@ -30,10 +30,10 @@ extension SoulUsersEndpoint: SoulEndpoint {
             return "/users/recommendations/incognito/filter"
         case .recommendationsIncognitoList:
             return "/users/recommendations/incognito/list"
-        case .recommendationsSetFilterName(let filterName):
-            return "/users/recommendations/set/\(filterName)"
-        case .recommendationsSetFilterNameFilter(let filterName):
-            return "/users/recommendations/set/\(filterName)/filter"
+        case .setFilterName(let filterName):
+            return "/users/set/\(filterName)"
+        case .setFilterNameFilter(let filterName):
+            return "/users/set/\(filterName)/filter"
         case .usersUserId(let userId):
             return "/users/\(userId)"
         case .usersUserIdReactionsSent(let userId, let reactionType):

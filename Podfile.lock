@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (4.8.2)
+  - CryptoSwift (1.0.0)
   - Moya (13.0.1):
     - Moya/Core (= 13.0.1)
   - Moya/Core (13.0.1):
@@ -12,7 +13,8 @@ PODS:
     - SoulSwift/Core (= 0.2.7)
     - SoulSwift/Dream (= 0.2.7)
     - SoulSwift/Soul (= 0.2.7)
-  - SoulSwift/Core (0.2.7)
+  - SoulSwift/Core (0.2.7):
+    - CryptoSwift (~> 1.0)
   - SoulSwift/Dream (0.2.7):
     - Moya (~> 13.0)
     - SoulSwift/Core
@@ -34,6 +36,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
+    - CryptoSwift
     - Moya
     - Nimble
     - Quick
@@ -48,11 +51,12 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
+  CryptoSwift: d81eeaa59dc5a8d03720fe919a6fd07b51f7439f
   Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
   Nimble: 622629381bda1dd5678162f21f1368cec7cbba60
   Quick: 4be43f6634acfa727dd106bdf3929ce125ffa79d
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
-  SoulSwift: 00455ef7d4c5a42ed1950856e66f7d34e634d6bd
+  SoulSwift: b639623c12c7354784d26683292f54004d51060b
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   Swinject: cf7458774b1b00323080a9c67e47a1ee7f9d2af1
   SwinjectAutoregistration: d0de7e48db3601b8b130f2f84e5a8399e0224135

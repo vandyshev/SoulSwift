@@ -67,7 +67,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
                                    "code": code,
                                    "apiKey": SoulClient.shared.soulConfiguration.apiKey,
                                    "lastSessionToken": lastSessionToken])
-        provider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+        provider.refreshTokenRequest(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
             completion(
                 result.afterSaveAuthorization(
                     for: .phone(phoneNumber: phoneNumber, code: code),
@@ -86,7 +86,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
                                    "code": code,
                                    "apiKey": SoulClient.shared.soulConfiguration.apiKey,
                                    "lastSessionToken": lastSessionToken])
-        provider.request(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+        provider.refreshTokenRequest(request) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
             completion(
                 result.afterSaveAuthorization(
                     for: .email(email: email, code: code),

@@ -41,7 +41,7 @@ TODO: Add long description of the pod here.
   
   s.subspec 'Core' do |ss|
     ss.source_files = 'Sources/Core/Classes/**/*'
-    # ss.dependency 'Swinject', '~> 2.5'
+    ss.dependency 'CryptoSwift', '~> 1.0'
     # ss.dependency 'SwinjectAutoregistration', '~> 2.5'
   end
 

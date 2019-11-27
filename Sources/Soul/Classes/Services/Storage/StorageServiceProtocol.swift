@@ -7,17 +7,6 @@ private enum Constants {
     static let legacyServerTimeDeltaKey = "SL/SERVER_TIME_DELTA"
 }
 
-private enum StorageServiceError: LocalizedError {
-    case wrongKeyType
-
-    var errorDescription: String? {
-        switch self {
-        case .wrongKeyType:
-            return "Wrong key type, please use String only"
-        }
-    }
-}
-
 protocol StorageServiceProtocol {
     var credential: SoulCredential? { get set }
     @available(*, deprecated, message: "Используется для совместимости c SoulSDK и Dream")
@@ -36,10 +25,14 @@ final class StorageService: StorageServiceProtocol {
 
     var credential: SoulCredential? {
         get {
-            return try? fetchObject(for: Constants.credential)
+            return fetchObject(for: Constants.credential)
         }
         set {
-            try? save(object: newValue, for: Constants.credential)
+            if let value = newValue {
+                save(object: newValue, for: Constants.credential)
+            } else {
+                removeObject(for: Constants.credential)
+            }
         }
     }
 
@@ -67,29 +60,23 @@ final class StorageService: StorageServiceProtocol {
         }
     }
 
-    private func save<Key, Element>(object: Element, for key: Key) throws where Key: Hashable, Element: Encodable {
-        try save(objects: [object], for: key)
+    private func save<Element>(object: Element, for key: String) where Element: Encodable {
+        save(objects: [object], for: key)
     }
 
-    private func save<Key, Element>(objects: [Element], for key: Key) throws where Key: Hashable, Element: Encodable {
-        try objects.forEach {
-            let data = try jsonEncoder.encode($0)
-            guard let stringKey = key as? String else {
-                throw StorageServiceError.wrongKeyType
-            }
-            userDefaults.set(data, forKey: stringKey)
+    private func save<Element>(objects: [Element], for key: String) where Element: Encodable {
+        objects.forEach {
+            let data = try? jsonEncoder.encode($0)
+            userDefaults.set(data, forKey: key)
         }
     }
 
-    private func fetchObject<Key, Element>(for key: Key) throws -> Element where Key: Hashable, Element: Decodable {
-        guard let stringKey = key as? String else {
-            throw StorageServiceError.wrongKeyType
-        }
+    private func removeObject(for key: String) {
+        userDefaults.removeObject(forKey: key)
+    }
 
-        guard let data = userDefaults.data(forKey: stringKey) else {
-            throw StorageServiceError.wrongKeyType
-        }
-
-        return try jsonDecoder.decode(Element.self, from: data)
+    private func fetchObject<Element>(for key: String) -> Element? where Element: Decodable {
+        guard let data = userDefaults.data(forKey: key) else { return nil }
+        return try? jsonDecoder.decode(Element.self, from: data)
     }
 }

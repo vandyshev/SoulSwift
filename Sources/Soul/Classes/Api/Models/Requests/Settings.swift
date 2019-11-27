@@ -1,4 +1,4 @@
-public struct Settings: Encodable {
+public struct Settings {
     let settings: [String: AnyEncodable]
 
     public init(settings: [String: AnyEncodable]) {

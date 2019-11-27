@@ -1,3 +1,5 @@
+import Foundation
+
 class SoulRequest {
 
     enum HTTPMethod: String {
@@ -77,7 +79,7 @@ extension Dictionary where Key == String {
         return compactMapValues { value -> String? in
             switch value {
             case let value as String: return value
-            case let value as Bool: return value ? "true" : "false"
+            case let value as Bool: return value ? "1" : "0"
             case let value as Int: return String(value)
             case let value as Float: return String(value)
             case let value as Double: return String(value)
@@ -86,5 +88,11 @@ extension Dictionary where Key == String {
             }
         }
     }
+}
 
+extension SoulRequest: CustomDebugStringConvertible {
+    var debugDescription: String {
+        let httpBodyString = httpBody.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        return "Soul Request:\n\(httpMethod.rawValue)\n\(baseURL)\n\(soulEndpoint.path)\n\(httpBodyString)\n"
+    }
 }

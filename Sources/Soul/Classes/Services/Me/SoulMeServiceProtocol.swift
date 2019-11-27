@@ -1,4 +1,5 @@
 public protocol SoulMeServiceProtocol {
+    var meUpdated: ((MyUser) -> Void)? { get set }
     // GET: /me
     func me(completion: @escaping SoulResult<MyUser>.Completion)
      // PATCH: /me
@@ -11,10 +12,19 @@ public protocol SoulMeServiceProtocol {
 
 final class SoulMeService: SoulMeServiceProtocol {
 
-    let soulProvider: SoulProviderProtocol
+    var meUpdated: ((MyUser) -> Void)? {
+        didSet {
+            soulMeProvider.meUpdated = { [weak self] in self?.meUpdated?($0) }
+        }
+    }
 
-    init(soulProvider: SoulProviderProtocol) {
+    private var soulProvider: SoulProviderProtocol
+    private var soulMeProvider: SoulMeProviderProtocol
+
+    init(soulProvider: SoulProviderProtocol,
+         soulMeProvider: SoulMeProviderProtocol) {
         self.soulProvider = soulProvider
+        self.soulMeProvider = soulMeProvider
     }
 
     func me(completion: @escaping SoulResult<MyUser>.Completion) {

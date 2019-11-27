@@ -17,6 +17,7 @@ final class SoulApplicationService: SoulApplicationServiceProtocol {
     }
 
     func features(completion: @escaping SoulResult<[Feature]>.Completion) {
+        // SoulSwift: Добавить needAuthorization: true если авторизован
         let queryParameters = [
             "anonymousUser": SoulClient.shared.soulConfiguration.anonymousUser,
             "apiKey": SoulClient.shared.soulConfiguration.apiKey

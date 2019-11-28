@@ -51,7 +51,7 @@ final class SoulUserService: SoulUserServiceProtocol {
         request.setBodyParameters(["reason": reason,
                                    "comment": comment,
                                    "screen": screen])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }

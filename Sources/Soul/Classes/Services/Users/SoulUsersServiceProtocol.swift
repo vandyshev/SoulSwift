@@ -49,7 +49,7 @@ final class SoulUsersService: SoulUsersServiceProtocol {
             needAuthorization: true
         )
         request.setBodyParameters(["filter": filter?.filter, "settings": settings?.settings])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }
@@ -84,7 +84,7 @@ final class SoulUsersService: SoulUsersServiceProtocol {
             needAuthorization: true
         )
         request.setBodyParameters(["user": user?.filter])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }

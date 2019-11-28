@@ -41,7 +41,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
             soulEndpoint: SoulContactsEndpoint.cancelContactRequest(requestId: requestId),
             needAuthorization: true
         )
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }
@@ -52,7 +52,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
             soulEndpoint: SoulContactsEndpoint.approveContactRequest(requestId: requestId),
             needAuthorization: true
         )
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }
@@ -63,7 +63,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
             soulEndpoint: SoulContactsEndpoint.declineContactRequest(requestId: requestId),
             needAuthorization: true
         )
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }
@@ -75,7 +75,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
             needAuthorization: true
         )
         request.setBodyParameters(["nickname": nickname])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }
@@ -86,7 +86,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
             soulEndpoint: SoulContactsEndpoint.deleteContact(userId: userId),
             needAuthorization: true
         )
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }

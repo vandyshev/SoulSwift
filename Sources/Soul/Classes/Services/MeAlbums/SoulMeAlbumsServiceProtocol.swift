@@ -82,7 +82,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
             needAuthorization: true
         )
         request.setQueryParameters(["offset": offset, "limit": limit])
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }
@@ -128,7 +128,7 @@ final class SoulMeAlbumsService: SoulMeAlbumsServiceProtocol {
             soulEndpoint: SoulMeEndpoint.albumsAlbumNamePhotoId(albumName: albumName, photoId: photoId),
             needAuthorization: true
         )
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }

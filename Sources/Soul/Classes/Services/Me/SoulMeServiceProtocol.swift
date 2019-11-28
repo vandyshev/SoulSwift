@@ -67,7 +67,7 @@ final class SoulMeService: SoulMeServiceProtocol {
             soulEndpoint: SoulMeEndpoint.me,
             needAuthorization: true
         )
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
         }
     }

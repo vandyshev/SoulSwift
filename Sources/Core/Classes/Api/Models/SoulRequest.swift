@@ -93,6 +93,6 @@ extension Dictionary where Key == String {
 extension SoulRequest: CustomDebugStringConvertible {
     var debugDescription: String {
         let httpBodyString = httpBody.flatMap { String(data: $0, encoding: .utf8) } ?? ""
-        return "Soul Request:\n\(httpMethod.rawValue)\n\(baseURL)\n\(soulEndpoint.path)\n\(httpBodyString)\n"
+        return "\(httpMethod.rawValue)\n\(baseURL)\n\(soulEndpoint.path)\n\(httpBodyString)\n"
     }
 }

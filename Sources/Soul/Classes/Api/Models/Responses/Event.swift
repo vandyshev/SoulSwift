@@ -44,9 +44,8 @@ public struct Event: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        recordId = try container.decode(String.self, forKey: .recordId)
-        time = try container.decode(TimeInterval.self, forKey: .time)
-
+        recordId = try container.decodeIfPresent(String.self, forKey: .recordId)
+        time = try container.decodeIfPresent(TimeInterval.self, forKey: .time)
         let typeContainer = try container.nestedContainer(keyedBy: EventTypeCodingKeys.self, forKey: .type)
         action = try typeContainer.decode(ActionType.self, forKey: .action)
 

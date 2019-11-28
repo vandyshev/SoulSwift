@@ -34,7 +34,7 @@ class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
                 sSelf.isTokenRefreshing = false
                 while sSelf.requestStorage.count > 0 {
                     let item = sSelf.requestStorage.removeFirst()
-                    completion(result)
+                    item(result)
                 }
             }
         }

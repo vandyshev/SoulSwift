@@ -10,9 +10,6 @@ public class SoulResponse: Decodable {
     let chat: Chat?
     let events: [Event]?
     let currentKing: User?
-    let bundles: [String]?
-    let bundles_v2: [SoulBundle]?
-    let items: [InventoryItem]?
     let album: Album?
     let albums: [Album]?
     let photo: Photo?

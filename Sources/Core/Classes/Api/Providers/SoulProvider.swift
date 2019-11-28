@@ -29,6 +29,7 @@ class SoulProvider: SoulProviderProtocol {
     private let soulDateProvider: SoulDateProviderProtocol
     private let soulMeProvider: SoulMeProviderProtocol
     private let soulErrorProvider: SoulErrorProviderProtocol
+    private let soulDebugProvider: SoulDebugProviderProtocol
 
     init(soulAuthorizationProvider: SoulAuthorizationProviderProtocol,
          soulVersionProvider: SoulApiVersionProviderProtocol,
@@ -37,7 +38,8 @@ class SoulProvider: SoulProviderProtocol {
          soulAdditionalInfoProvider: SoulAdditionalInfoProviderProtocol,
          soulDateProvider: SoulDateProviderProtocol,
          soulMeProviderProtocol: SoulMeProviderProtocol,
-         soulErrorProvider: SoulErrorProviderProtocol) {
+         soulErrorProvider: SoulErrorProviderProtocol,
+         soulDebugProvider: SoulDebugProviderProtocol) {
         self.soulAuthorizationProvider = soulAuthorizationProvider
         self.soulApiVersionProvider = soulVersionProvider
         self.soulUserAgentProvider = soulUserAgentVersionProvider
@@ -46,6 +48,7 @@ class SoulProvider: SoulProviderProtocol {
         self.soulDateProvider = soulDateProvider
         self.soulMeProvider = soulMeProviderProtocol
         self.soulErrorProvider = soulErrorProvider
+        self.soulDebugProvider = soulDebugProvider
     }
 
     func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, completion: @escaping SoulResult<Response>.Completion) {
@@ -59,9 +62,8 @@ class SoulProvider: SoulProviderProtocol {
             completion(result)
             return
         }
-        print("Soul Request: \(soulRequest.debugDescription)")
+        soulDebugProvider.debug(urlRequest)
         let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
-            print("Soul Response: \(soulRequest.debugDescription)")
             guard let sSelf = self else { return }
             if sSelf.soulRefreshTokenProvider.isNeedRefreshToken(for: response), retryCount > 0 {
                 sSelf.soulRefreshTokenProvider.refreshToken(provider: sSelf) { result in
@@ -79,6 +81,7 @@ class SoulProvider: SoulProviderProtocol {
                     sSelf.soulDateProvider.updateServerTimeDelta(data)
                     sSelf.soulMeProvider.updateMe(data)
                     sSelf.soulErrorProvider.handleError(result)
+                    sSelf.soulDebugProvider.debug(urlRequest, data, result)
                     completion(result)
                 }
             }
@@ -91,11 +94,11 @@ class SoulProvider: SoulProviderProtocol {
             completion(.failure(SoulSwiftError.requestError))
             return
         }
-        print("Soul Refresh Token Request: \(soulRequest.debugDescription)")
+        soulDebugProvider.debug(urlRequest)
         let task = session.dataTask(with: urlRequest) { [weak self] (data, response, error) in
-            print("Soul Refresh Token Response: \(soulRequest.debugDescription)")
             guard let sSelf = self else { return }
             let result: SoulResult<Response> = sSelf.soulResponse(data, response, error)
+            sSelf.soulDebugProvider.debug(urlRequest, data, result)
             completion(result)
         }
         task.resume()

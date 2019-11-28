@@ -27,8 +27,11 @@ public protocol SoulAuthServiceProtocol {
     func appleVerify(email: String?, code: String, token: String, userStatus: Int, completion: @escaping SoulResult<MyUser>.Completion)
     func appleVerify(email: String?, code: String, token: String, userStatus: Int, merge: Bool?, mergePreference: MergePreference?, completion: @escaping SoulResult<MyUser>.Completion)
 
+    // Please use deauthorize if error
     // POST: /auth/logout
     func logout(full: Bool?, completion: @escaping SoulResult<Void>.Completion)
+    // Just remove authorization
+    func deauthorize()
 }
 
 final class SoulAuthService: SoulAuthServiceProtocol {
@@ -237,12 +240,14 @@ final class SoulAuthService: SoulAuthServiceProtocol {
         )
         request.setQueryParameters(["full": full])
         soulProvider.request(request, retryCount: 0) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
-            self?.soulAuthorizationProvider.removeAuthorization()
+            self?.deauthorize()
             completion(.success(()))
         }
     }
 
-
+    func deauthorize() {
+        soulAuthorizationProvider.removeAuthorization()
+    }
 }
 
 private extension Result where Success == SoulResponse, Failure == SoulSwiftError {

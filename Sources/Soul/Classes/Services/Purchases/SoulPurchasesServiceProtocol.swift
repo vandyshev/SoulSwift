@@ -24,9 +24,9 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
             soulEndpoint: SoulPurchasesEndpoint.all,
             needAuthorization: true
         )
-        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request) { (result: Result<Bundles, SoulSwiftError>) in
             // SoulSwift: Тут скорее всего будет nil
-            completion(result.map { $0.bundles_v2 })
+            completion(result.map { $0.bundles })
         }
     }
 

@@ -11,6 +11,7 @@ final class ProvidersAssembly: Assembly {
         container.autoregister(SoulDateProviderProtocol.self, initializer: SoulDateProvider.init).inObjectScope(.container)
         container.autoregister(SoulMeProviderProtocol.self, initializer: SoulMeProvider.init).inObjectScope(.container)
         container.autoregister(SoulErrorProviderProtocol.self, initializer: SoulErrorProvider.init).inObjectScope(.container)
+        container.autoregister(SoulDebugProviderProtocol.self, initializer: SoulDebugProvider.init).inObjectScope(.container)
         container.autoregister(SoulProviderProtocol.self, initializer: SoulProvider.init).inObjectScope(.container)
     }
 }

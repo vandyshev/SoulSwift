@@ -1,6 +1,6 @@
-public struct Coordinates: Codable {
-    let latitude: Double
-    let longitude: Double
+public struct Coordinates: Codable, Equatable {
+    public let latitude: Double
+    public let longitude: Double
 
     public init(latitude: Double, longitude: Double) {
         self.latitude = latitude

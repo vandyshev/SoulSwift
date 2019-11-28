@@ -10,6 +10,13 @@ public struct AnyCodable: Codable {
 
 extension AnyCodable: AnyEncodableProtocol, AnyDecodableProtocol {}
 
+extension AnyCodable {
+    public var dictionary: [String: Any]? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: .allowFragments)).flatMap { $0 as? [String: Any] }
+    }
+}
+
 // swiftlint:disable cyclomatic_complexity
 extension AnyCodable: Equatable {
     public static func == (lhs: AnyCodable, rhs: AnyCodable) -> Bool {

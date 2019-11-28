@@ -87,6 +87,7 @@ public struct PrivateParameters: Codable {
     public let retention: Bool?
     public let consents: AnyCodable?
     public let branch: Branch?
+    public let fakeLocation: Coordinates?
 
     public init(isAgreeToReceiveNewsAndStories: Bool? = nil,
                 nosoul: Bool? = nil,
@@ -99,7 +100,8 @@ public struct PrivateParameters: Codable {
                 hasWebSocketConnection: Bool? = nil,
                 retention: Bool? = nil,
                 consents: AnyCodable? = nil,
-                branch: Branch? = nil) {
+                branch: Branch? = nil,
+                fakeLocation: Coordinates? = nil) {
         self.isAgreeToReceiveNewsAndStories = isAgreeToReceiveNewsAndStories
         self.nosoul = nosoul
         self.availabilitySessionId = availabilitySessionId
@@ -112,6 +114,7 @@ public struct PrivateParameters: Codable {
         self.retention = retention
         self.consents = consents
         self.branch = branch
+        self.fakeLocation = fakeLocation
     }
 
     enum CodingKeys: String, CodingKey {
@@ -127,5 +130,6 @@ public struct PrivateParameters: Codable {
         case retention
         case consents
         case branch
+        case fakeLocation
     }
 }

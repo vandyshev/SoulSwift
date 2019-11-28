@@ -5,7 +5,7 @@ public struct Reactions: Decodable {
 
     public struct Reaction: Decodable {
 
-        let likes: Likes
+        let likes: Likes?
 
         // swiftlint:disable nesting
         public struct Likes: Decodable {

@@ -1,6 +1,6 @@
 public struct Event: Decodable {
 
-    public let recordId: String?
+    public let recordId: Int?
     public let time: TimeInterval?
     public let action: ActionType?
     public let object: ObjectType?
@@ -44,7 +44,7 @@ public struct Event: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        recordId = try container.decodeIfPresent(String.self, forKey: .recordId)
+        recordId = try container.decodeIfPresent(Int.self, forKey: .recordId)
         time = try container.decodeIfPresent(TimeInterval.self, forKey: .time)
         let typeContainer = try container.nestedContainer(keyedBy: EventTypeCodingKeys.self, forKey: .type)
         action = try typeContainer.decode(ActionType.self, forKey: .action)

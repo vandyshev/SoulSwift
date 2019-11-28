@@ -1,8 +1,10 @@
+import Foundation
+
 public enum SoulSwiftError: Swift.Error {
     case requestError
     case decoderError
     case refreshToken
-    case soulError(SoulError)
+    case soulError(HTTPURLResponse, SoulError)
     case networkError(Swift.Error)
     case unknown
 }

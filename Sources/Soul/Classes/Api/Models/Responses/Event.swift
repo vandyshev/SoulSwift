@@ -1,9 +1,10 @@
+import Foundation
+
 public struct Event: Decodable {
 
     public let recordId: Int?
     public let time: TimeInterval?
-    public let action: ActionType?
-    public let object: ObjectType?
+    public let event: TypedEvent?
 
     enum CodingKeys: String, CodingKey {
         case recordId
@@ -12,29 +13,69 @@ public struct Event: Decodable {
         case object
     }
 
-    enum EventTypeCodingKeys: String, CodingKey {
+    enum TypeCodingKeys: String, CodingKey {
         case object
         case action
     }
 
-    public enum ObjectType {
-        case user(User)
-        case endpoint(Endpoint)
-        case chat(Chat)
-        case reactions(Reactions)
-        case me(MyUser)
+    enum ObjectTypes: String, Decodable {
+        case user
+        case endpoint
+        case chat
+        case reactions
+        case me
+    }
 
-        // swiftlint:disable nesting
-        enum CodingKeys: String, CodingKey {
-            case user
-            case endpoint
-            case chat
-            case reactions
-            case me
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        recordId = try container.decodeIfPresent(Int.self, forKey: .recordId)
+        time = try container.decodeIfPresent(TimeInterval.self, forKey: .time)
+        let typeContainer = try container.nestedContainer(keyedBy: TypeCodingKeys.self, forKey: .type)
+        let objectType = try typeContainer.decode(ObjectTypes.self, forKey: .object)
+        switch objectType {
+        case .me:
+            let me = try container.decode(MyUser.self, forKey: .object)
+            let action = try typeContainer.decode(TypedEvent.MyUserAction.self, forKey: .action)
+            event = .me(TypedEvent.MyUserEvent(me: me, action: action))
+        case .user:
+            let user = try container.decode(User.self, forKey: .object)
+            let action = try typeContainer.decode(TypedEvent.UserAction.self, forKey: .action)
+            event = .user(TypedEvent.UserEvent(user: user, action: action))
+        case .endpoint:
+            let endpoint = try container.decode(Endpoint.self, forKey: .object)
+            let action = try typeContainer.decode(TypedEvent.EndpointAction.self, forKey: .action)
+            event = .endpoint(TypedEvent.EndpointEvent(endpoint: endpoint, action: action))
+        case .chat:
+            let chat = try container.decode(Chat.self, forKey: .object)
+            let action = try typeContainer.decode(TypedEvent.ChatAction.self, forKey: .action)
+            event = .chat(TypedEvent.ChatEvent(chat: chat, action: action))
+        case .reactions:
+            let reactions = try container.decode(Reactions.self, forKey: .object)
+            let action = try typeContainer.decode(TypedEvent.ReactionsAction.self, forKey: .action)
+            event = .reactions(TypedEvent.ReactionsEvent(reactions: reactions, action: action))
+        }
+    }
+}
+
+public enum TypedEvent {
+
+    case user(UserEvent)
+    case endpoint(EndpointEvent)
+    case chat(ChatEvent)
+    case reactions(ReactionsEvent)
+    case me(MyUserEvent)
+
+    public struct UserEvent {
+        public let user: User
+        public let action: UserAction
+
+        public init(user: User, action: UserAction) {
+            self.user = user
+            self.action = action
         }
     }
 
-    public enum ActionType: String, Decodable {
+    public enum UserAction: String, Decodable {
         case change
         case addition
         case kicked
@@ -42,37 +83,64 @@ public struct Event: Decodable {
         case banned
     }
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        recordId = try container.decodeIfPresent(Int.self, forKey: .recordId)
-        time = try container.decodeIfPresent(TimeInterval.self, forKey: .time)
-        let typeContainer = try container.nestedContainer(keyedBy: EventTypeCodingKeys.self, forKey: .type)
-        action = try typeContainer.decode(ActionType.self, forKey: .action)
+    public struct EndpointEvent {
+        public let endpoint: Endpoint
+        public let action: EndpointAction
 
-        let objectType = try typeContainer.decode(String.self, forKey: .object)
-        switch objectType {
-        case ObjectType.CodingKeys.me.rawValue:
-            let me = try container.decode(MyUser.self, forKey: .object)
-            object = .me(me)
-        case ObjectType.CodingKeys.user.rawValue:
-            let user = try container.decode(User.self, forKey: .object)
-            object = .user(user)
-        case ObjectType.CodingKeys.endpoint.rawValue:
-            let endpoint = try container.decode(Endpoint.self, forKey: .object)
-            object = .endpoint(endpoint)
-        case ObjectType.CodingKeys.chat.rawValue:
-            let chat = try container.decode(Chat.self, forKey: .object)
-            object = .chat(chat)
-        case ObjectType.CodingKeys.reactions.rawValue:
-            let reactions = try container.decode(Reactions.self, forKey: .object)
-            object = .reactions(reactions)
-        default:
-            object = nil
+        public init(endpoint: Endpoint, action: EndpointAction) {
+            self.endpoint = endpoint
+            self.action = action
         }
     }
-}
 
-public struct Endpoint: Decodable {
-    let type: String
-    let uri: String
+    public enum EndpointAction: String, Decodable {
+        case new
+        case unknown
+    }
+
+    public struct ChatEvent {
+        public let chat: Chat
+        public let action: ChatAction
+
+        public init(chat: Chat, action: ChatAction) {
+            self.chat = chat
+            self.action = action
+        }
+    }
+
+    public enum ChatAction: String, Decodable {
+        case change
+        case addition
+        case remove
+    }
+
+    public struct ReactionsEvent {
+        public let reactions: Reactions
+        public let action: ReactionsAction
+
+        public init(reactions: Reactions, action: ReactionsAction) {
+            self.reactions = reactions
+            self.action = action
+        }
+    }
+
+    public enum ReactionsAction: String, Decodable {
+        case change
+        case addition
+    }
+
+    public struct MyUserEvent {
+        public let me: MyUser
+        public let action: MyUserAction
+
+        public init(me: MyUser, action: MyUserAction) {
+            self.me = me
+            self.action = action
+        }
+    }
+
+    public enum MyUserAction: String, Decodable {
+        case change
+        case addition
+    }
 }

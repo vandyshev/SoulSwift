@@ -4,31 +4,31 @@ import UIKit
 public struct ChatMessage: Equatable {
 
     /// `id`  - message unique identifier
-    let messageId: String
+    public let messageId: String
 
     /// `u`   - message creator identifer
-    let userId: String
+    public let userId: String
 
     /// `t`   - unix timestamp
-    let timestamp: UnixTimeStamp
+    public let timestamp: UnixTimeStamp
 
     /// `m`   - message content
-    let text: String
+    public let text: String
 
     /// `p`   - photo id
-    let photoId: String?
+    public let photoId: String?
 
     /// `pa`  - album name
-    let albumName: String?
+    public let albumName: String?
 
     /// `lat` - latitude
-    let latitude: Double?
+    public let latitude: Double?
 
     /// `lng` - longitude
-    let longitude: Double?
+    public let longitude: Double?
 
     /// `s` - system data
-    let systemData: SystemDataRepresentation?
+    public let systemData: SystemDataRepresentation?
 }
 
 extension ChatMessage: Codable {
@@ -62,7 +62,7 @@ extension ChatMessage {
         return !isSystemMessage && !isPhotoMessage && !isLocationMessage
     }
 
-    var content: MessageContent {
+    public var content: MessageContent {
         if let lat = latitude, let lng = longitude {
             return .location(latitude: lat, longitude: lng)
         } else if let photoId = photoId, let albumName = albumName {

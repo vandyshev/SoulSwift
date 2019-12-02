@@ -1,3 +1,7 @@
+import Foundation
+
+public typealias UnixTimeStamp = Double
+
 // swiftlint:disable identifier_name
 public class SoulResponse: Decodable {
     let features: Features?

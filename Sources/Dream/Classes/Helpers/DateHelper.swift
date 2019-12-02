@@ -1,9 +1,7 @@
 import UIKit
 
-public typealias UnixTimeStamp = Double
-
 extension UnixTimeStamp {
-    var date: Date {
+    public var date: Date {
         return Date(timeIntervalSince1970: self)
     }
 }

@@ -3,25 +3,25 @@ import Foundation
 /// Chat History Object
 public struct ChatHistoryObject {
     /// `id` - chat history object identifier
-    let identifier: Int
+    public let identifier: Int
 
     /// `user_id` - user identifier
-    let userIdentifier: String
+    public let userIdentifier: String
 
     /// `message_id` - message identifier
-    let messageID: String
+    public let messageID: String
 
     /// `channel` - channel identifier
-    let channel: String
+    public let channel: String
 
     /// `sent_at` - date when message was sent
-    let sentAt: Date
+    public let sentAt: Date
 
     /// `message` - message object
-    let message: ChatMessage
+    public let message: ChatMessage
 
     /// `read_status` - is message read
-    let isRead: Bool
+    public let isRead: Bool
 }
 
 extension ChatHistoryObject: Codable {

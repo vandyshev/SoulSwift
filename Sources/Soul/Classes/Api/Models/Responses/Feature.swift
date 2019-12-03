@@ -16,6 +16,7 @@ public enum Feature {
     case keepCardsInFeed([GenderComboType])
     case subscriptionPaygateVersion(SubscriptionPaygateVersion)
     case localPushes(Bool)
+    case showRestorePurchases(Bool)
 }
 
 public enum GenderComboType: String, Decodable {
@@ -64,6 +65,7 @@ struct Features: Decodable {
         case keepCardsInFeed = "keep_cards_in_feed"
         case subscriptionPaygateVersion = "paygate_variant"
         case localPushes = "local_pushes"
+        case showRestorePurchases = "show_restore_purchases"
     }
 
     enum NestedCodingKeys: String, CodingKey {
@@ -165,6 +167,11 @@ struct Features: Decodable {
         if let nestedContainer = try? container.nestedContainer(keyedBy: NestedCodingKeys.self, forKey: .localPushes),
             let enabled = try? nestedContainer.decode(Bool.self, forKey: .enabled) {
             features.append(Feature.localPushes(enabled))
+        }
+
+        if let nestedContainer = try? container.nestedContainer(keyedBy: NestedCodingKeys.self, forKey: .showRestorePurchases),
+            let enabled = try? nestedContainer.decode(Bool.self, forKey: .enabled) {
+            features.append(Feature.showRestorePurchases(enabled))
         }
 
         self.features = features

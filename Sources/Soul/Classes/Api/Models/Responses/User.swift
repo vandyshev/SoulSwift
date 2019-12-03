@@ -2,7 +2,7 @@ public struct User: Decodable {
     public let id: String
     public let parameters: MyUserParameters?
     public let albums: [Album]?
-    public let chats: [Chat]?
+    public let chats: [String]?
     public let reactions: Reactions?
 
     enum CodingKeys: String, CodingKey {

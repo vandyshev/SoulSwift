@@ -25,13 +25,13 @@ final class SoulContactsService: SoulContactsServiceProtocol {
 
     func sendContactRequest(userId: String, completion: @escaping SoulResult<ContactRequest>.Completion) {
         var request = SoulRequest(
-            httpMethod: .PATCH,
+            httpMethod: .POST,
             soulEndpoint: SoulContactsEndpoint.sendContactRequest,
             needAuthorization: true
         )
         request.setBodyParameters(["userId": userId])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.contactRequest })
+            completion(result.map { $0.request })
         }
     }
 
@@ -93,12 +93,12 @@ final class SoulContactsService: SoulContactsServiceProtocol {
 
     func lastSentRequest(chatId: String, completion: @escaping SoulResult<ContactRequest?>.Completion) {
         var request = SoulRequest(
-            httpMethod: .PATCH,
+            httpMethod: .GET,
             soulEndpoint: SoulContactsEndpoint.lastSentRequest(chatId: chatId),
             needAuthorization: true
         )
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { $0.contactRequest })
+            completion(result.map { $0.request })
         }
     }
 }

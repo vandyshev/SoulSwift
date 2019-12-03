@@ -20,34 +20,50 @@ public class SoulResponse: Decodable {
     let photos: [Photo]?
     let user: User?
     let users: [User]?
-    let contactRequest: ContactRequest?
+    let request: ContactRequest?
     let _meta: Meta?
+
+        enum CodingKeys: String, CodingKey {
+            case features
+            case status
+            case providerId
+            case authorization
+            case additionalInfo
+            case me
+            case chats
+            case chat
+            case events
+            case currentKing
+            case album
+            case albums
+            case photo
+            case photos
+            case user
+            case users
+            case request
+            case _meta
+        }
+    
+        required public init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            features = try container.decode(Features.self, forKey: .features)
+            status = nil
+            providerId = nil
+            authorization = nil
+            additionalInfo = nil
+            me = nil
+            chats = nil
+            chat = nil
+            events = nil
+            currentKing = nil
+            album = nil
+            albums = nil
+            photo = nil
+            photos = nil
+            user = nil
+            users = nil
+            request = nil
+            _meta = nil
+        }
 }
 
-extension Result where Success == SoulResponse, Failure == SoulSwiftError {
-    func map<NewSuccess>(_ transform: (Success) -> NewSuccess?) -> Result<NewSuccess, Failure> {
-        switch self {
-        case .success(let response):
-            if let newSuccess = transform(response) {
-                return .success(newSuccess)
-            } else {
-                return .failure(SoulSwiftError.decoderError)
-            }
-        case .failure(let error):
-            return .failure(error)
-        }
-    }
-
-    func map<NewSuccess1, NewSuccess2>(_ transform: (Success) -> (NewSuccess1?, NewSuccess2?)) -> Result<(NewSuccess1, NewSuccess2), Failure> {
-        switch self {
-        case .success(let response):
-            if let newSuccess0 = transform(response).0, let newSuccess1 = transform(response).1 {
-                return .success((newSuccess0, newSuccess1))
-            } else {
-                return .failure(SoulSwiftError.decoderError)
-            }
-        case .failure(let error):
-            return .failure(error)
-        }
-    }
-}

@@ -22,7 +22,7 @@ public struct Event: Decodable {
         case user
         case endpoint
         case chat
-        case reactions
+        case reaction
         case me
     }
 
@@ -49,7 +49,7 @@ public struct Event: Decodable {
             let chat = try container.decode(Chat.self, forKey: .object)
             let action = try typeContainer.decode(TypedEvent.ChatAction.self, forKey: .action)
             event = .chat(TypedEvent.ChatEvent(chat: chat, action: action))
-        case .reactions:
+        case .reaction:
             let reactions = try container.decode(Reactions.self, forKey: .object)
             let action = try typeContainer.decode(TypedEvent.ReactionsAction.self, forKey: .action)
             event = .reactions(TypedEvent.ReactionsEvent(reactions: reactions, action: action))

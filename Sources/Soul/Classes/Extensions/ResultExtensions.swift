@@ -7,7 +7,7 @@ extension Result where Success == SoulResponse, Failure == SoulSwiftError {
             if let newSuccess = transform(response) {
                 return .success(newSuccess)
             } else {
-                return .failure(SoulSwiftError.decoderError)
+                return .failure(SoulSwiftError.transformError(TransformError(from: Success.self, to: NewSuccess.self)))
             }
         case .failure(let error):
             return .failure(error)
@@ -20,7 +20,7 @@ extension Result where Success == SoulResponse, Failure == SoulSwiftError {
             if let newSuccess0 = transform(response).0, let newSuccess1 = transform(response).1 {
                 return .success((newSuccess0, newSuccess1))
             } else {
-                return .failure(SoulSwiftError.decoderError)
+                return .failure(SoulSwiftError.transformError(TransformError(from: Success.self, to: NewSuccess1.self, NewSuccess2.self)))
             }
         case .failure(let error):
             return .failure(error)

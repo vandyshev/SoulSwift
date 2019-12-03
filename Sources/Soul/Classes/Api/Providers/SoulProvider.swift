@@ -150,8 +150,8 @@ class SoulProvider: SoulProviderProtocol {
         } else if let data = data {
             do {
                 result = .success(try decoder.decode(Response.self, from: data))
-            } catch {
-                result = .failure(SoulSwiftError.decoderError)
+            } catch let error {
+                result = .failure(SoulSwiftError.decoderError(error as? DecodingError))
             }
         } else {
             result = .failure(SoulSwiftError.unknown)

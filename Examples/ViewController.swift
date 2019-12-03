@@ -8,7 +8,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-//        setenv("CFNETWORK_DIAGNOSTICS", "3", 1)
+        // setenv("CFNETWORK_DIAGNOSTICS", "3", 1)
         initializeSoulSwift()
     }
 
@@ -37,7 +37,7 @@ class ViewController: UIViewController {
                 })
             case .failure(let error):
                 switch error {
-                case .soulError(let apiError):
+                case .soulError(_, let apiError):
                     print(apiError.userMessage)
                 default:
                     break
@@ -54,7 +54,7 @@ class ViewController: UIViewController {
                 print(me)
             case .failure(let error):
                 switch error {
-                case .soulError(let apiError):
+                case .soulError(_, let apiError):
                     print(apiError.userMessage)
                 default:
                     break
@@ -72,7 +72,7 @@ class ViewController: UIViewController {
                 print(me)
             case .failure(let error):
                 switch error {
-                case .soulError(let apiError):
+                case .soulError(_, let apiError):
                     print(apiError.userMessage)
                 default:
                     break

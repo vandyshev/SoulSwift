@@ -72,7 +72,7 @@ final class SoulUsersService: SoulUsersServiceProtocol {
                                     "before": before,
                                     "since": since])
         soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
-            completion(result.map { ($0.users, $0._meta) })
+            completion(result.map { ($0.users, $0.meta) })
         }
     }
 

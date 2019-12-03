@@ -8,6 +8,9 @@ public protocol SoulUserServiceProtocol {
 
     // POST: /users/{userId}/flag
     func usersFlag(userId: String, reason: String, comment: String?, screen: String?, completion: @escaping SoulResult<Void>.Completion)
+
+    // GET: /users/{userId}/albums/{albumName}/{photoId}
+    func photo(userId: String, albumName: String, photoId: String, completion: @escaping SoulResult<Photo>.Completion)
 }
 
 final class SoulUserService: SoulUserServiceProtocol {
@@ -53,6 +56,17 @@ final class SoulUserService: SoulUserServiceProtocol {
                                    "screen": screen])
         soulProvider.request(request) { (result: Result<EmptyResponse, SoulSwiftError>) in
             completion(result.map { _ in })
+        }
+    }
+
+    // GET: /users/{userId}/albums/{albumName}/{photoId}
+    func photo(userId: String, albumName: String, photoId: String, completion: @escaping SoulResult<Photo>.Completion) {
+        let request = SoulRequest(
+            soulEndpoint: SoulUsersEndpoint.usersUserIdAlbumsAlbumNamePhotoId(userId: userId, albumName: albumName, photoId: photoId),
+            needAuthorization: true
+        )
+        soulProvider.request(request) { (result: Result<SoulResponse, SoulSwiftError>) in
+            completion(result.map { $0.photo })
         }
     }
 }

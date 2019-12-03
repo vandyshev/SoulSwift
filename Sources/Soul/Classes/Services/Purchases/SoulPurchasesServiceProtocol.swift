@@ -76,7 +76,7 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
         )
         request.setBodyParameters(["itemId": itemId,
                                    "quantity": quantity,
-                                   "consumptionId": consumptionId,
+                                   "consumptionId": consumptionId
         ])
         soulProvider.request(request) { (result: Result<Inventory, SoulSwiftError>) in
             completion(result)

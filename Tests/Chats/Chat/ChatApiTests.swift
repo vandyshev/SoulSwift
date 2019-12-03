@@ -93,7 +93,6 @@ class URLTests: XCTestCase {
         guard let authString = authHelper.authString(withAuthConfig: authConfig) else {
             fatalError()
         }
-        // swiftlint:disable line_length
         let expected = "hmac \(Constants.fakeUserID):\(Int(Constants.defaultTimeInterval)):571e880688d17e39376599c0266d0f77172ac7ccd67ea21c176812465058a4b0"
         XCTAssertEqual(expected, authString)
     }

@@ -42,7 +42,7 @@ public class SoulResponse: Decodable {
         case request
         case meta = "_meta"
     }
-    
+
     required public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         features = try container.decodeIfPresent(Features.self, forKey: .features)
@@ -65,4 +65,3 @@ public class SoulResponse: Decodable {
         meta = try container.decodeIfPresent(Meta.self, forKey: .meta)
     }
 }
-

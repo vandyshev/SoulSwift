@@ -1,3 +1,4 @@
+// swiftlint:disable function_parameter_count
 public protocol SoulUsersServiceProtocol {
 
     // GET: /users/recommendations/list

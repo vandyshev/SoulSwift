@@ -3,6 +3,8 @@ private enum Constants {
     static let bundleVersionKey = "CFBundleVersion"
     static let bundleShortVersionStringKey = "CFBundleShortVersionString"
     static let simulatorModelIdentifierKey = "SIMULATOR_MODEL_IDENTIFIER"
+    static let soulSwiftBundleIdentifier = "org.cocoapods.SoulSwift"
+    static let soulSwiftName = "SoulSwift"
 }
 
 protocol SoulUserAgentProviderProtocol {
@@ -24,25 +26,28 @@ class SoulUserAgentVersionProvider: SoulUserAgentProviderProtocol {
         let systemVersion = UIDevice.current.systemVersion // 8.3
         let model = modelIdentifier() // iPhone 5S
         let buildVersion = stringFromBundle(for: Constants.bundleVersionKey) ?? "" // 1234
-
-        let correctedAppVersion: String = {
-            // appVersion may have suffix, for example 1.2.3-production. We don't need it here
-            if let range = appVersion.range(of: "-") {
-                return appVersion.substring(with: range)
-            }
-            return appVersion
-        }()
-
+        let soulSwiftName = Constants.soulSwiftName // SoulSwift
+        let soulSwiftVersion = stringFromBundle(bundleIdentifier: Constants.soulSwiftBundleIdentifier, for: Constants.bundleShortVersionStringKey) ?? "" // 1.2.3-production
         let language = NSLocale.current.identifier
 
-        // TODO: Добавить получение SoulSwift/1.0.0 из Info.plist
-        // swiftlint:disable line_length
-        let userAgent = "\(appName)/\(correctedAppVersion) (\(systemName) \(systemVersion); \(model); \(language); b\(buildVersion)) SoulSwift/1.0.0 (\(systemName))"
+        let userAgent = "\(appName)/\(corrected(appVersion)) (\(systemName) \(systemVersion); \(model); \(language); b\(buildVersion)) \(soulSwiftName)/\(corrected(soulSwiftVersion)) (\(systemName))"
         return userAgent
     }
 
-    private func stringFromBundle(for key: String) -> String? {
-        return Bundle.main.object(forInfoDictionaryKey: key) as? String
+    private func corrected(_ version: String) -> String {
+        if let range = version.range(of: "-") {
+            return version.substring(with: range)
+        } else {
+            return version
+        }
+    }
+
+    private func stringFromBundle(bundleIdentifier: String? = nil, for key: String) -> String? {
+        if let identifier = bundleIdentifier {
+            return Bundle(identifier: identifier)?.object(forInfoDictionaryKey: key) as? String
+        } else {
+            return Bundle.main.object(forInfoDictionaryKey: key) as? String
+        }
     }
 
     private func modelIdentifier() -> String {

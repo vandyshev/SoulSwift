@@ -15,7 +15,6 @@ protocol SoulProviderProtocol: class {
     func request<Request: SoulRequest, Response: Decodable>(_ soulRequest: Request, retryCount: Int, completion: @escaping SoulResult<Response>.Completion)
 }
 
-// swiftlint:disable line_length
 class SoulProvider: SoulProviderProtocol {
 
     private var session = URLSession(configuration: .default)

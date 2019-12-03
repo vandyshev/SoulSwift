@@ -1,4 +1,4 @@
-// swiftlint:disable function_parameter_count line_length
+// swiftlint:disable function_parameter_count
 public protocol SoulAuthServiceProtocol {
     var isAuthorized: Bool { get }
     var account: String? { get }
@@ -239,7 +239,7 @@ final class SoulAuthService: SoulAuthServiceProtocol {
             needAuthorization: true
         )
         request.setQueryParameters(["full": full])
-        soulProvider.request(request, retryCount: 0) { [weak self] (result: Result<SoulResponse, SoulSwiftError>) in
+        soulProvider.request(request, retryCount: 0) { [weak self] (_: Result<SoulResponse, SoulSwiftError>) in
             self?.deauthorize()
             completion(.success(()))
         }

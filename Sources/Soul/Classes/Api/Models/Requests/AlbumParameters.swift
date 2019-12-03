@@ -8,7 +8,7 @@ public struct AlbumParameters: Encodable {
     public init(name: String,
                 order: Int? = nil,
                 privacy: AlbumParametersPrivacy? = nil,
-                parameters: [String : AnyCodable]? = nil,
+                parameters: [String: AnyCodable]? = nil,
                 expiresTime: TimeInterval? = nil) {
         self.name = name
         self.order = order

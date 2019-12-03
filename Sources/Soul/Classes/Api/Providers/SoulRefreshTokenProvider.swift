@@ -6,7 +6,7 @@ protocol SoulRefreshTokenProviderProtocol {
     func isNeedRefreshToken(for response: URLResponse?) -> Bool
     func refreshToken(provider: SoulProvider, completion: @escaping RefreshTokenCompletion)
 }
-// swiftlint:disable line_length
+
 class SoulRefreshTokenProvider: SoulRefreshTokenProviderProtocol {
 
     var isTokenRefreshing = false

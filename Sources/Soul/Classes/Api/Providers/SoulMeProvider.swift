@@ -8,7 +8,7 @@ private struct Response: Codable {
 }
 
 class SoulMeProvider: SoulMeProviderProtocol {
-    
+
     var meUpdated: ((MyUser) -> Void)?
 
     private let decoder = JSONDecoder()

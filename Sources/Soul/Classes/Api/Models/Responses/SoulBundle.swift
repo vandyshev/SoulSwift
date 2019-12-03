@@ -1,3 +1,4 @@
+// swiftlint:disable nesting
 public struct SoulBundle: Decodable {
     public let bundleName: String
     public let hasTrial: Bool

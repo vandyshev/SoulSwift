@@ -43,7 +43,7 @@ final class StorageService: StorageServiceProtocol {
             userDefaults.set(newValue, forKey: Constants.legacyUserIdKey)
         }
     }
-    
+
     var legacySessionToken: String? {
         get {
             userDefaults.string(forKey: Constants.legacySessionTokenKey)

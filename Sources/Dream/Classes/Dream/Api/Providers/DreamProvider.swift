@@ -4,9 +4,3 @@ protocol DreamProviderProtocol {
 }
 
 class DreamProvider: SoulProvider, DreamProviderProtocol {}
-
-//extension DreamProvider: DreamProviderProtocol {
-//    func request(_ dreamRequest: DreamRequest, completion: @escaping (Result<DreamResponse, SoulSwiftError>) -> Void) {
-//        super.request(dreamRequest, completion: completion)
-//    }
-//}

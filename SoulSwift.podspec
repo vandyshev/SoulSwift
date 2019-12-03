@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/vandyshev/SoulSwift.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/e_vandyshev'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.0'
   s.swift_version = '5.0'
 
   s.subspec 'Soul' do |ss|

@@ -28,10 +28,10 @@ public struct Event: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        recordId = try container.decodeIfPresent(Int.self, forKey: .recordId)
-        time = try container.decodeIfPresent(TimeInterval.self, forKey: .time)
         let typeContainer = try container.nestedContainer(keyedBy: TypeCodingKeys.self, forKey: .type)
         let objectType = try typeContainer.decode(ObjectTypes.self, forKey: .object)
+        recordId = try container.decodeIfPresent(Int.self, forKey: .recordId)
+        time = try container.decodeIfPresent(TimeInterval.self, forKey: .time)
         switch objectType {
         case .me:
             let me = try container.decode(MyUser.self, forKey: .object)
@@ -94,8 +94,8 @@ public enum TypedEvent {
     }
 
     public enum EndpointAction: String, Decodable {
-        case new
-        case unknown
+        case addition
+        case change
     }
 
     public struct ChatEvent {

@@ -46,7 +46,7 @@ final class SoulPurchasesService: SoulPurchasesServiceProtocol {
             soulEndpoint: SoulPurchasesEndpoint.orderAppstore,
             needAuthorization: true
         )
-        request.setQueryParameters(["receipt": receipt])
+        request.setBodyParameters(["receipt": receipt])
         soulProvider.request(request) { (result: Result<Inventory, SoulSwiftError>) in
             completion(result)
         }

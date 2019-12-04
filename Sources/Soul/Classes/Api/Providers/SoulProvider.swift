@@ -149,7 +149,7 @@ class SoulProvider: SoulProviderProtocol {
         } else if let data = data {
             do {
                 result = .success(try decoder.decode(Response.self, from: data))
-            } catch let error {
+            } catch {
                 result = .failure(SoulSwiftError.decoderError(error as? DecodingError))
             }
         } else {

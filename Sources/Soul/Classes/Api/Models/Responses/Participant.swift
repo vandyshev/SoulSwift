@@ -4,7 +4,7 @@ public struct Participant: Decodable {
     public let userId: String
     public let status: Status?
     public var user: User?
-    public var contactNickName: String?
+    public var contact: Contact?
 
     public enum Status: String, Decodable {
         case active = "active"

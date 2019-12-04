@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SoulSwift'
-  s.version          = '1.0.0'
+  s.version          = '1.0.1'
   s.summary          = 'SoulSwift for soulplatform.com'
 
   s.homepage         = 'https://github.com/vandyshev/SoulSwift'

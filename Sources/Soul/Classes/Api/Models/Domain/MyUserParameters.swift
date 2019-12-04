@@ -44,8 +44,8 @@ public struct PublicWritableParameters: Codable {
 
 // swiftlint:disable nesting
 public struct PrivateParameters: Codable {
-    public class SoulSettings: Codable {
-        public class ReceiveNotifications: Codable {
+    public struct SoulSettings: Codable {
+        public struct ReceiveNotifications: Codable {
             public let reaction: Bool?
             public let chat: Bool?
 
@@ -63,7 +63,8 @@ public struct PrivateParameters: Codable {
         }
     }
 
-    public class Branch: Codable {
+    public struct Branch: Codable {
+
         public let clientId: String?
 
         public init(clientId: String? = nil) {

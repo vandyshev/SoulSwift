@@ -2,4 +2,13 @@ included:
   - Sources
   - Examples
   - Tests
-line_length: 150
+line_length: 200
+identifier_name:
+  excluded:
+    - me
+    - a
+    - b
+    - id
+    - my
+    - from
+    - to

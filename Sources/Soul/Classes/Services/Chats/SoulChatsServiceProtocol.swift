@@ -1,5 +1,4 @@
 public protocol SoulChatsServiceProtocol {
-    // TODO: Узнать у Soul, зачем тут по документации передавать myStatus
     func chats(offset: Int?, limit: Int?, showExpired: Bool?, completion: @escaping SoulResult<[Chat]>.Completion)
     func getChat(withChatId chatId: String, completion: @escaping SoulResult<Chat>.Completion)
     func editChat(withChatId chatId: String, myStatus: String, completion: @escaping SoulResult<Chat>.Completion)

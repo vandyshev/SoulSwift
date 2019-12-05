@@ -9,14 +9,14 @@ PODS:
   - Nimble (8.0.4)
   - Quick (2.2.0)
   - Result (4.1.0)
-  - SoulSwift (1.0.1):
-    - SoulSwift/Dream (= 1.0.1)
-    - SoulSwift/Soul (= 1.0.1)
-  - SoulSwift/Dream (1.0.1):
+  - SoulSwift (1.0.2):
+    - SoulSwift/Dream (= 1.0.2)
+    - SoulSwift/Soul (= 1.0.2)
+  - SoulSwift/Dream (1.0.2):
     - Moya (~> 13.0)
     - SoulSwift/Soul
     - Starscream (~> 3.0.2)
-  - SoulSwift/Soul (1.0.1):
+  - SoulSwift/Soul (1.0.2):
     - CryptoSwift (~> 1.0)
     - Swinject (~> 2.5)
     - SwinjectAutoregistration (~> 2.5)
@@ -53,7 +53,7 @@ SPEC CHECKSUMS:
   Nimble: 18d5360282923225d62b09d781f63abc1a0111fc
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
-  SoulSwift: a197baca6f6830c967ba44bc5a8aeafa5a114523
+  SoulSwift: ef2a96dbbda03c891bd0252ff4a750ae6455f849
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
   Swinject: ddf78b8486dd9b71a667b852cad919ab4484478e
   SwinjectAutoregistration: d0de7e48db3601b8b130f2f84e5a8399e0224135

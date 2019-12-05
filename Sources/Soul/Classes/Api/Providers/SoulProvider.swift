@@ -132,19 +132,25 @@ class SoulProvider: SoulProviderProtocol {
         return request
     }
 
-    private func soulError(from data: Data?, and response: URLResponse?) -> SoulSwiftError? {
-        guard let response = response as? HTTPURLResponse else { return nil }
-        guard let data = data else { return nil }
-        if (200...299).contains(response.statusCode) { return nil }
-        guard let soulError = try? decoder.decode(SoulErrorResponse.self, from: data).error else { return nil }
-        return .soulError(response, soulError)
+    private func soulError(_ data: Data?, _ response: URLResponse?, _ error: Error?) -> SoulSwiftError? {
+        if let error = error {
+            return .networkError(error)
+        } else if let response = response as? HTTPURLResponse {
+            if (200...299).contains(response.statusCode) {
+                return nil
+            } else if let data = data, let soulError = try? decoder.decode(SoulErrorResponse.self, from: data).error {
+                return .soulError(response, soulError)
+            } else {
+                return .responseError(response)
+            }
+        } else {
+            return nil
+        }
     }
 
     private func soulResponse<Response: Decodable>(_ data: Data?, _ response: URLResponse?, _ error: Error?) -> SoulResult<Response> {
         let result: Result<Response, SoulSwiftError>
-        if let error = error {
-            result = .failure(SoulSwiftError.networkError(error))
-        } else if let error = soulError(from: data, and: response) {
+        if let error = soulError(data, response, error) {
             result = .failure(error)
         } else if let data = data {
             do {

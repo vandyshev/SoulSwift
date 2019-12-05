@@ -28,31 +28,36 @@ public struct Event: Decodable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let typeContainer = try container.nestedContainer(keyedBy: TypeCodingKeys.self, forKey: .type)
-        let objectType = try typeContainer.decode(ObjectTypes.self, forKey: .object)
-        recordId = try container.decodeIfPresent(Int.self, forKey: .recordId)
-        time = try container.decodeIfPresent(TimeInterval.self, forKey: .time)
-        switch objectType {
-        case .me:
-            let me = try container.decode(MyUser.self, forKey: .object)
-            let action = try typeContainer.decode(TypedEvent.MyUserAction.self, forKey: .action)
-            event = .me(TypedEvent.MyUserEvent(me: me, action: action))
-        case .user:
-            let user = try container.decode(User.self, forKey: .object)
-            let action = try typeContainer.decode(TypedEvent.UserAction.self, forKey: .action)
-            event = .user(TypedEvent.UserEvent(user: user, action: action))
-        case .endpoint:
-            let endpoint = try container.decode(Endpoint.self, forKey: .object)
-            let action = try typeContainer.decode(TypedEvent.EndpointAction.self, forKey: .action)
-            event = .endpoint(TypedEvent.EndpointEvent(endpoint: endpoint, action: action))
-        case .chat:
-            let chat = try container.decode(Chat.self, forKey: .object)
-            let action = try typeContainer.decode(TypedEvent.ChatAction.self, forKey: .action)
-            event = .chat(TypedEvent.ChatEvent(chat: chat, action: action))
-        case .reaction:
-            let reactions = try container.decode(Reactions.self, forKey: .object)
-            let action = try typeContainer.decode(TypedEvent.ReactionsAction.self, forKey: .action)
-            event = .reactions(TypedEvent.ReactionsEvent(reactions: reactions, action: action))
+        recordId = try? container.decodeIfPresent(Int.self, forKey: .recordId)
+        time = try? container.decodeIfPresent(TimeInterval.self, forKey: .time)
+
+        do {
+            let typeContainer = try container.nestedContainer(keyedBy: TypeCodingKeys.self, forKey: .type)
+            let objectType = try typeContainer.decode(ObjectTypes.self, forKey: .object)
+            switch objectType {
+            case .me:
+                let me = try container.decode(MyUser.self, forKey: .object)
+                let action = try typeContainer.decode(TypedEvent.MyUserAction.self, forKey: .action)
+                event = .me(TypedEvent.MyUserEvent(me: me, action: action))
+            case .user:
+                let user = try container.decode(User.self, forKey: .object)
+                let action = try typeContainer.decode(TypedEvent.UserAction.self, forKey: .action)
+                event = .user(TypedEvent.UserEvent(user: user, action: action))
+            case .endpoint:
+                let endpoint = try container.decode(Endpoint.self, forKey: .object)
+                let action = try typeContainer.decode(TypedEvent.EndpointAction.self, forKey: .action)
+                event = .endpoint(TypedEvent.EndpointEvent(endpoint: endpoint, action: action))
+            case .chat:
+                let chat = try container.decode(Chat.self, forKey: .object)
+                let action = try typeContainer.decode(TypedEvent.ChatAction.self, forKey: .action)
+                event = .chat(TypedEvent.ChatEvent(chat: chat, action: action))
+            case .reaction:
+                let reactions = try container.decode(Reactions.self, forKey: .object)
+                let action = try typeContainer.decode(TypedEvent.ReactionsAction.self, forKey: .action)
+                event = .reactions(TypedEvent.ReactionsEvent(reactions: reactions, action: action))
+            }
+        } catch {
+            event = nil
         }
     }
 }

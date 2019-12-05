@@ -37,7 +37,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
 
     func cancelContactRequest(requestId: String, completion: @escaping SoulResult<Void>.Completion) {
         var request = SoulRequest(
-            httpMethod: .PATCH,
+            httpMethod: .POST,
             soulEndpoint: SoulContactsEndpoint.cancelContactRequest(requestId: requestId),
             needAuthorization: true
         )
@@ -48,7 +48,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
 
     func approveContactRequest(requestId: String, completion: @escaping SoulResult<Void>.Completion) {
         var request = SoulRequest(
-            httpMethod: .PATCH,
+            httpMethod: .POST,
             soulEndpoint: SoulContactsEndpoint.approveContactRequest(requestId: requestId),
             needAuthorization: true
         )
@@ -59,7 +59,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
 
     func declineContactRequest(requestId: String, completion: @escaping SoulResult<Void>.Completion) {
         var request = SoulRequest(
-            httpMethod: .PATCH,
+            httpMethod: .POST,
             soulEndpoint: SoulContactsEndpoint.declineContactRequest(requestId: requestId),
             needAuthorization: true
         )
@@ -82,7 +82,7 @@ final class SoulContactsService: SoulContactsServiceProtocol {
 
     func deleteContact(userId: String, completion: @escaping SoulResult<Void>.Completion) {
         var request = SoulRequest(
-            httpMethod: .PATCH,
+            httpMethod: .DELETE,
             soulEndpoint: SoulContactsEndpoint.deleteContact(userId: userId),
             needAuthorization: true
         )

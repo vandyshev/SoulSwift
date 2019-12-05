@@ -3,6 +3,7 @@ import UIKit
 protocol EventFactory {
     func createReadEvent(lastReadMessageTimestamp: UnixTimeStamp) throws -> ReadEvent
     func createDeliveryConfirmation(deliveredMessageId: String, userIdInMessage: String) throws -> DeliveryConfirmationEvent
+    func createScreenshotEvent() throws -> SecurityEvent
 }
 
 enum EventFactoryError: Error {
@@ -48,5 +49,15 @@ final class EventFactoryImpl: EventFactory {
                                          senderId: senderId,
                                          deliveredMessageId: deliveredMessageId,
                                          userId: userIdInMessage)
+    }
+
+    func createScreenshotEvent() throws -> SecurityEvent {
+        guard let userId = storage.userID else {
+            throw EventFactoryError.cannotCreateEvent
+        }
+        let time = dateService.currentAdjustedUnixTimeStamp
+        return SecurityEvent(time: time,
+                             userId: userId,
+                             security: .screenshot)
     }
 }

@@ -7,6 +7,7 @@ enum EventType: Equatable {
     case messageFailed(MessageFailedEvent)
     case readEvent(ReadEvent)
     case deliveryConfirmation(DeliveryConfirmationEvent)
+    case security(SecurityEvent)
 }
 
 extension EventType {
@@ -24,6 +25,9 @@ extension EventType {
     }
     init(_ deliveryConfirmation: DeliveryConfirmationEvent) {
         self = .deliveryConfirmation(deliveryConfirmation)
+    }
+    init(_ securityEvent: SecurityEvent) {
+        self = .security(securityEvent)
     }
 }
 
@@ -52,6 +56,10 @@ extension EventType: Codable {
             self = .deliveryConfirmation(deliveryConfirmation)
             return
         }
+        if let securityEvent = try? SecurityEvent(from: decoder) {
+            self = .security(securityEvent)
+            return
+        }
         throw EventCodingError.decoding
     }
 
@@ -67,6 +75,8 @@ extension EventType: Codable {
             try readEvent.encode(to: encoder)
         case let .deliveryConfirmation(deliveryConfirmation):
             try deliveryConfirmation.encode(to: encoder)
+        case let .security(security):
+            try security.encode(to: encoder)
         }
     }
 }

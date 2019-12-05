@@ -13,6 +13,8 @@ protocol ChatServiceMessageSender {
     func sendDeliveryConfirmationEvent(deliveredMessageId: String,
                                        userIdInMessage: String,
                                        channel: String) throws
+
+    func sendScreenshotEvent(channel: String) throws
 }
 
 final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
@@ -76,6 +78,18 @@ final class ChatServiceMessageSenderImpl: ChatServiceMessageSender {
         let event: ReadEvent
         do {
             event = try eventFactory.createReadEvent(lastReadMessageTimestamp: lastReadMessageTimestamp)
+        } catch {
+            handleError(error)
+            throw error
+        }
+        let eventType = EventType(event)
+        try sendEvent(eventType, channel: channel)
+    }
+
+    func sendScreenshotEvent(channel: String) throws {
+        let event: SecurityEvent
+        do {
+            event = try eventFactory.createScreenshotEvent()
         } catch {
             handleError(error)
             throw error

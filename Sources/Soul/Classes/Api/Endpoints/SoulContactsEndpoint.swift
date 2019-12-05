@@ -14,11 +14,11 @@ extension SoulContactsEndpoint: SoulEndpoint {
         case .sendContactRequest:
             return "/contacts/requests"
         case .cancelContactRequest(let requestId):
-            return "/contacts/\(requestId)/cancel"
+            return "/contacts/requests/\(requestId)/cancel"
         case .approveContactRequest(let requestId):
-            return "/contacts/\(requestId)/approve"
+            return "/contacts/requests/\(requestId)/approve"
         case .declineContactRequest(let requestId):
-            return "/contacts/\(requestId)/decline"
+            return "/contacts/requests/\(requestId)/decline"
         case .editContactName(let userId):
             return "/contacts/\(userId)"
         case .deleteContact(let userId):

@@ -19,6 +19,8 @@ public protocol ChatManager: AnyObject {
 
     func sendReadEvent(to channel: String, lastMessageDate: Date)
 
+    func sendScreenshotEvent(to channel: String)
+
     func subscribe(to channel: String, observer: AnyObject, onMessageEvent: @escaping (MessageEventType) -> Void)
     func subscribe(to channel: String, observer: AnyObject, onMessage: @escaping (Message) -> Void)
     func unsubscribe(from channel: String, observer: AnyObject)
@@ -147,6 +149,10 @@ final class ChatManagerImpl: ChatManager {
         try? chatServiceMessageSender.sendReadEvent(lastReadMessageTimestamp: timestamp, channel: channel)
     }
 
+    func sendScreenshotEvent(to channel: String) {
+        try? chatServiceMessageSender.sendScreenshotEvent(channel: channel)
+    }
+
     func subscribe(to channel: String, observer: AnyObject, onMessage: @escaping (Message) -> Void) {
         chatServiceObserver.subscribeToMessages(inChannel: channel,
                                                 observer: observer) { [weak self] messagePayload in
@@ -184,7 +190,7 @@ final class ChatManagerImpl: ChatManager {
             case .readEvent(let event):
                 onMessageEvent(.read(timestamp: event.lastReadMessageTimestamp))
 
-            case .historySync:
+            case .historySync, .security:
                 break
             }
         }

@@ -2,9 +2,9 @@ PODS:
   - CryptoSwift (1.3.0)
   - Nimble (8.0.4)
   - Quick (2.2.0)
-  - SoulSwift (1.0.3):
-    - SoulSwift/Soul (= 1.0.3)
-  - SoulSwift/Soul (1.0.3):
+  - SoulSwift (1.0.5):
+    - SoulSwift/Soul (= 1.0.5)
+  - SoulSwift/Soul (1.0.5):
     - CryptoSwift (~> 1.0)
     - Swinject (~> 2.5)
     - SwinjectAutoregistration (~> 2.5)
@@ -33,7 +33,7 @@ SPEC CHECKSUMS:
   CryptoSwift: 1283821600233bdbeb96d7b389c3288c3bf77211
   Nimble: 18d5360282923225d62b09d781f63abc1a0111fc
   Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
-  SoulSwift: 0cae89722e3e9380176b0695013a336d51b1219b
+  SoulSwift: 8e5aa5d079d2dde93d13ce53f480f86386d1322e
   Swinject: ddf78b8486dd9b71a667b852cad919ab4484478e
   SwinjectAutoregistration: 330f5012642a8b5c89a8a4adb0c5e52df07382c0
 

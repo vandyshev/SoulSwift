@@ -32,16 +32,8 @@ class ViewController: UIViewController {
             switch result {
             case .success(let features):
                 dump(features)
-                SoulClient.shared.soulApplicationService?.additionalInfo(completion: { (result) in
-                    dump(try? result.get())
-                })
             case .failure(let error):
-                switch error {
-                case .soulError(_, let apiError):
-                    print(apiError.userMessage)
-                default:
-                    break
-                }
+                dump(error)
             }
         }
     }
@@ -51,14 +43,9 @@ class ViewController: UIViewController {
         SoulClient.shared.soulAuthService?.emailCodeRequest(email: email, captchaToken: nil, completion: { result in
             switch result {
             case .success(let me):
-                print(me)
+                dump(me)
             case .failure(let error):
-                switch error {
-                case .soulError(_, let apiError):
-                    print(apiError.userMessage)
-                default:
-                    break
-                }
+                dump(error)
             }
         })
     }
@@ -69,14 +56,9 @@ class ViewController: UIViewController {
         SoulClient.shared.soulAuthService?.emailCodeVerify(email: email, code: code, completion: { result in
             switch result {
             case .success(let me):
-                print(me)
+                dump(me)
             case .failure(let error):
-                switch error {
-                case .soulError(_, let apiError):
-                    print(apiError.userMessage)
-                default:
-                    break
-                }
+                dump(error)
             }
         })
     }

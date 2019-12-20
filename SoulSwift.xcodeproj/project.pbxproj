@@ -13,11 +13,6 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		65F3C617262397DA7B388446 /* Pods_SoulSwift_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC2CD5BDA3D29CB693EEAA56 /* Pods_SoulSwift_Example.framework */; };
-		7E0D328023216784008F79F6 /* ChatApiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327923216784008F79F6 /* ChatApiTests.swift */; };
-		7E0D328123216784008F79F6 /* ChatMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327A23216784008F79F6 /* ChatMappingTests.swift */; };
-		7E0D328223216784008F79F6 /* DateServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327B23216784008F79F6 /* DateServiceMock.swift */; };
-		7E0D328323216784008F79F6 /* ChatClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327C23216784008F79F6 /* ChatClientTests.swift */; };
-		7E0D328423216784008F79F6 /* FakeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327D23216784008F79F6 /* FakeStorage.swift */; };
 		7E0D328523216784008F79F6 /* ApplicationServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0D327F23216784008F79F6 /* ApplicationServiceTests.swift */; };
 		EFF2D32C28E51FCA84402F80 /* Pods_SoulSwift_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3E1DE2AEEB2304281EFC3B5 /* Pods_SoulSwift_Tests.framework */; };
 /* End PBXBuildFile section */
@@ -46,11 +41,6 @@
 		607FACE51AFB9204008FA782 /* SoulSwift_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SoulSwift_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7BEFF74E7D8D958AD3648074 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		7E0D327923216784008F79F6 /* ChatApiTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatApiTests.swift; sourceTree = "<group>"; };
-		7E0D327A23216784008F79F6 /* ChatMappingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMappingTests.swift; sourceTree = "<group>"; };
-		7E0D327B23216784008F79F6 /* DateServiceMock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateServiceMock.swift; sourceTree = "<group>"; };
-		7E0D327C23216784008F79F6 /* ChatClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatClientTests.swift; sourceTree = "<group>"; };
-		7E0D327D23216784008F79F6 /* FakeStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeStorage.swift; sourceTree = "<group>"; };
 		7E0D327F23216784008F79F6 /* ApplicationServiceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApplicationServiceTests.swift; sourceTree = "<group>"; };
 		AC2CD5BDA3D29CB693EEAA56 /* Pods_SoulSwift_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SoulSwift_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE9475118BBE221A369061AC /* SoulSwift.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = SoulSwift.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -125,7 +115,6 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				7E0D327723216784008F79F6 /* Chats */,
 				7E0D327E23216784008F79F6 /* Core */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
@@ -148,26 +137,6 @@
 				7BEFF74E7D8D958AD3648074 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
-			sourceTree = "<group>";
-		};
-		7E0D327723216784008F79F6 /* Chats */ = {
-			isa = PBXGroup;
-			children = (
-				7E0D327823216784008F79F6 /* Chat */,
-				7E0D327B23216784008F79F6 /* DateServiceMock.swift */,
-				7E0D327C23216784008F79F6 /* ChatClientTests.swift */,
-				7E0D327D23216784008F79F6 /* FakeStorage.swift */,
-			);
-			path = Chats;
-			sourceTree = "<group>";
-		};
-		7E0D327823216784008F79F6 /* Chat */ = {
-			isa = PBXGroup;
-			children = (
-				7E0D327923216784008F79F6 /* ChatApiTests.swift */,
-				7E0D327A23216784008F79F6 /* ChatMappingTests.swift */,
-			);
-			path = Chat;
 			sourceTree = "<group>";
 		};
 		7E0D327E23216784008F79F6 /* Core */ = {
@@ -253,12 +222,13 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = RHNS5FUTR8;
+						DevelopmentTeam = V2L7ZBYNZU;
 						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
-						DevelopmentTeam = RHNS5FUTR8;
+						DevelopmentTeam = V2L7ZBYNZU;
 						LastSwiftMigration = 1020;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -331,23 +301,15 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SoulSwift_Example/Pods-SoulSwift_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/Moya/Moya.framework",
-				"${BUILT_PRODUCTS_DIR}/Result/Result.framework",
 				"${BUILT_PRODUCTS_DIR}/SoulSwift/SoulSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
 				"${BUILT_PRODUCTS_DIR}/SwinjectAutoregistration/SwinjectAutoregistration.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Moya.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Result.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SoulSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwinjectAutoregistration.framework",
 			);
@@ -434,11 +396,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E0D328523216784008F79F6 /* ApplicationServiceTests.swift in Sources */,
-				7E0D328123216784008F79F6 /* ChatMappingTests.swift in Sources */,
-				7E0D328223216784008F79F6 /* DateServiceMock.swift in Sources */,
-				7E0D328323216784008F79F6 /* ChatClientTests.swift in Sources */,
-				7E0D328023216784008F79F6 /* ChatApiTests.swift in Sources */,
-				7E0D328423216784008F79F6 /* FakeStorage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -582,13 +539,16 @@
 			baseConfigurationReference = 5EE9E3C31F67842D255D7F5C /* Pods-SoulSwift_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = RHNS5FUTR8;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V2L7ZBYNZU;
 				INFOPLIST_FILE = "$(SRCROOT)/Examples/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.soulplatform.demo.SoulSwift;
+				PRODUCT_BUNDLE_IDENTIFIER = engineer.vandyshev.demo.SoulSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -598,13 +558,16 @@
 			baseConfigurationReference = 375295F4FC3421929B52E4EB /* Pods-SoulSwift_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = RHNS5FUTR8;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = V2L7ZBYNZU;
 				INFOPLIST_FILE = "$(SRCROOT)/Examples/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
-				PRODUCT_BUNDLE_IDENTIFIER = com.soulplatform.demo.SoulSwift;
+				PRODUCT_BUNDLE_IDENTIFIER = engineer.vandyshev.demo.SoulSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
@@ -613,7 +576,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F61AA9F30CFBE949F522525D /* Pods-SoulSwift_Tests.debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = RHNS5FUTR8;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				DEVELOPMENT_TEAM = V2L7ZBYNZU;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -632,7 +596,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2E48A2B555C095721817FC91 /* Pods-SoulSwift_Tests.release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = RHNS5FUTR8;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				DEVELOPMENT_TEAM = V2L7ZBYNZU;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

@@ -26,11 +26,4 @@ Pod::Spec.new do |s|
     ss.dependency 'Swinject', '~> 2.5'
     ss.dependency 'SwinjectAutoregistration', '~> 2.5'
   end
-
-  s.subspec 'Dream' do |ss|
-    ss.source_files = 'Sources/Dream/Classes/**/*'
-    ss.dependency "SoulSwift/Soul"
-    ss.dependency 'Starscream', '~> 3.0.2'
-    ss.dependency 'Moya', '~> 13.0'
-  end
 end

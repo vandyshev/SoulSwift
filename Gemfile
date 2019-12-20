@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'cocoapods', '~> 1.6.0.beta.2'
+gem 'cocoapods'
 gem 'cocoapods-keys'
 
-gem 'fui', '~> 0.3.0'
+gem 'fui'
 gem 'xcpretty'
 gem 'xcpretty-json-formatter'
-gem 'second_curtain', '~> 0.2.3'
+gem 'second_curtain'
 gem 'xcov'
 gem 'fastlane'
 

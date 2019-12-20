@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SoulSwift'
-  s.version          = '1.0.3'
+  s.version          = '1.0.4'
   s.summary          = 'SoulSwift for soulplatform.com'
 
   s.homepage         = 'https://github.com/vandyshev/SoulSwift'
@@ -25,12 +25,5 @@ Pod::Spec.new do |s|
     ss.dependency 'CryptoSwift', '~> 1.0'
     ss.dependency 'Swinject', '~> 2.5'
     ss.dependency 'SwinjectAutoregistration', '~> 2.5'
-  end
-
-  s.subspec 'Dream' do |ss|
-    ss.source_files = 'Sources/Dream/Classes/**/*'
-    ss.dependency "SoulSwift/Soul"
-    ss.dependency 'Starscream', '~> 3.0.2'
-    ss.dependency 'Moya', '~> 13.0'
   end
 end
